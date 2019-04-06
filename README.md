@@ -5,12 +5,13 @@ The generated time series preserve any probability distribution and any linear a
 ## Install
 To install the lastes version of the package run:
 
+`
 if (!require('devtools')) {install.packages('devtools'); library(devtools)} 
 
 install_github('strnda/CoSMoS', upgrade = 'never')
 
 library(CoSMoS)
-?`CoSMoS-package`
+`
 
 # Funding
 The package was partly funded by the Global institute for Water Security (GIWS; https://www.usask.ca/water/) and the Global Water Futures (GWF; https://gwf.usask.ca/) program.
