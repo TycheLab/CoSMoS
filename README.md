@@ -1,9 +1,9 @@
-# CoSMoS
+# CoSMoS - Complete Stochastic Modelling Solution
 CoSMoS is an R package that makes time series generation with desired properties easy. Just choose the characteristics of the time series you want to generate, and it will do the rest.
 The generated time series preserve any probability distribution and any linear autocorrelation structure. Users can generate as many and as long time series from processes such as precipitation, wind, temperature, relative humidity etc. It is based on a framework that unified, extended, and improved a modelling strategy that generates time series by transforming “parent” Gaussian time series having specific characteristics (Papalexiou, 2018).
 
 ## Install
-To install the lastes version of the package run:
+To install the latest version of the package run:
 
 ```r
 if (!require('devtools')) {install.packages('devtools'); library(devtools)} 
