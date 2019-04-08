@@ -17,7 +17,7 @@ ARp(margdist, margarg, acsvalue, actfpara, n, p = NULL, p0 = 0)
 
 \item{n}{number of values}
 
-\item{p}{integer - model order (if logical - limits maximum model order according to auto-correlation structure values)}
+\item{p}{integer - model order (if NULL - limits maximum model order according to auto-correlation structure values)}
 
 \item{p0}{probability zero}
 }
@@ -40,7 +40,7 @@ pnts <- actpnts(margdist = dist, margarg = distarg, p0 = p0)
 fit <- fitactf(pnts)
 
 ## define target auto-correlation structure and model order
-order <- 750
+order <- 1000
 acsvalue <- acs(id = 'weibull', t = 0:order, scale = 10, shape = .75)
 
 ## limit ACS lag (recomended)
@@ -49,18 +49,16 @@ system.time(val <- ARp(margdist = dist,
                        acsvalue = acsvalue,
                        actfpara = fit,
                        n = 5000,
-                       p = TRUE,
                        p0 = p0))
 \donttest{
-## nolimit
+## order w/o limit
 system.time(val <- ARp(margdist = dist,
                        margarg = distarg,
                        acsvalue = acsvalue,
                        actfpara = fit,
                        n = 5000,
                        p = order,
-                       p0 = p0,
-                       limitorder = FALSE))
+                       p0 = p0))
 }
 
 ## see the result
