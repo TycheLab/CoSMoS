@@ -14,7 +14,7 @@ checksimulation(TS, distbounds = c(-Inf, Inf), plot = FALSE)
 \item{plot}{logical - plot the result? (if TRUE, saved as an attribute 'plot')}
 }
 \description{
-Check simulation function compares generated time series sample statistics with the theoretically expected values.
+Compares generated time series sample statistics with the theoretically expected values.
 }
 \examples{
 

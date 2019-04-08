@@ -5,7 +5,7 @@
 \title{Generate timeseries}
 \usage{
 generateTS(margdist, margarg, n, p, p0 = 0, TSn = 1,
-  distbounds = c(-Inf, Inf), limitorder = TRUE, acsvalue = NULL)
+  distbounds = c(-Inf, Inf), acsvalue = NULL)
 }
 \arguments{
 \item{margdist}{target marginal distribution}
@@ -14,7 +14,7 @@ generateTS(margdist, margarg, n, p, p0 = 0, TSn = 1,
 
 \item{n}{number of values}
 
-\item{p}{model order}
+\item{p}{integer - model order (if logical - limits maximum model order according to auto-correlation structure values)}
 
 \item{p0}{probability zero}
 
@@ -22,38 +22,109 @@ generateTS(margdist, margarg, n, p, p0 = 0, TSn = 1,
 
 \item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
 
-\item{limitorder}{logical (limit maximum model order according to auto-correlation structure values)}
-
 \item{acsvalue}{target auto-correlation structure (from lag 0)}
 }
 \description{
 Generates timeseries with given properties, just provide (1) the target marginal distribution and its parameters, (2) the target autocorrelation structure or individual autocorrelation values up to a desired lag, and (3) the probablility zero if you wish to simulate an intermittent process.
 }
+\details{
+A step-by-step guide:
+\itemize{
+\item First define the target marginal (margdist), that is, the probability distribution of the generated data. For example set margdist = 'ggamma' if you wish to generate data following the Generalized Gamma distribution, or, margidst = 'burrXII' for Burr type XII distribution, etc. For a full list of the distributions we support see the help vignette:
+\code{vignette('vignette', package = 'CoSMoS')}.
+\item Define the parameters’ values (margarg) of the distribution you selected. For example the Generalized Gamma has one scale and two shape parameters so set the desired value, e.g., margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8). Note distributions might have different number of parameters and different type of parameters (location, scale, shape). To see the parameters of each distribution we support see the help vignette:
+\code{vignette('vignette', package = 'CoSMoS')}.
+\item If you wish your time series to be intermittent (e.g., precipitation) then define the probability zero. Just set for example p0 = 0.9 if you wish your generated data to have 90% of zero values (e.g., dry days).
+\item Define your linear autocorrelations.
+\itemize{
+\item You can use a parametric autocorrelation structure (see section 3.2 in Papalexiou 2018). We support the following autocorrelation structures (acs) weibull, paretoII, fgn and burrXII. seealso \link[CoSMoS]{acs} examples.
+\item Otherwise, you can supply specific lag autocorrelations from lag 0, e.g., acs = list (1, 0.9, 0.8, 0.7); this will generate a process with lag1, 2 and 3 autocorrelation equal with 0.9, 0.8 and 0.7.
+}
+\item Define the order to the autoregressive model p. For example if you aim to preserve the first 10 lag correlation then just set p = 10. Otherwise set it p = NULL and the model will decide the value of p in order to preserve the whole autocorrelation structure.
+\item Lastly just define the time series length, e.g., n = 1000 and number of time series you wish to generate, e.g., TSn =10.
+}
+
+Play around with the following given examples which will make the whole process a piece of cake.
+}
 \examples{
 
 library(CoSMoS)
 
-## define target and marginal distributions and arguments
-x <- generateTS(margdist = 'burrXII',
+## Case1:
+## You wish to generate 3 time series of size 1000 each
+## that follow the Generalized Gamma distribution with parameters
+## scale = 1, shape1 = 0.8, shape2 = 0.8
+## and autocorrelation structure the ParetoII
+## with parameters scale = 1 and shape = .75
+x <- generateTS(margdist = 'ggamma',
                 margarg = list(scale = 1,
-                               shape1 = .75,
-                               shape2 = .25),
-                acsvalue = acs(id = 'weibull',
+                               shape1 = .8,
+                               shape2 = .8),
+                acsvalue = acs(id = 'paretoII',
                                t = 0:30,
-                               scale = 10,
+                               scale = 1,
                                shape = .75),
-                n = 1000, p = 30, p0 = .5, TSn = 3)
+                n = 1000,
+                p = 30,
+                TSn = 3)
 
 ## see the results
-dta <- data.frame(n = seq_along(x[[1]]), do.call(cbind, x))
-names(dta)[2:(length(x) + 1)] <- paste('timeseries', 1:length(x), sep = '_')
+plot(x)
 
-m.dta <- melt(dta, id.vars = 'n')
+## Case2:
+## You wish to generate time series the same distributin
+## and autocorrelations as is Case1 but intermittent
+## with probability zero equal to 90\%
+y <- generateTS(margdist = 'ggamma',
+                margarg = list(scale = 1,
+                               shape1 = .8,
+                               shape2 = .8),
+                acsvalue = acs(id = 'paretoII',
+                               t = 0:30,
+                               scale = 1,
+                               shape = .75),
+                p0 = .9,
+                n = 1000,
+                p = 30,
+                TSn = 3)
 
-ggplot(m.dta, aes(x = n, y = value)) +
-  geom_line() +
-  labs(x = '') +
-  facet_wrap(~variable, ncol = 1) +
-  theme_classic()
+## see the results
+plot(y)
+
+## Case3:
+## You wish to generate a time series of size 1000
+## that follows the Beta distribution (e.g., relative humitidy)
+## with parameters shape1 = 0.8, shape2 = 0.8, is defined from 0 to 1
+## and autocorrelation structure the ParetoII
+## with parameters scale = 1 and shape = .75
+z <- generateTS(margdist = 'beta',
+                margarg = list(shape1 = .2,
+                               shape2 = .8),
+                distbounds = c(0, 1),
+                acsvalue = acs(id = 'paretoII',
+                               t = 0:30,
+                               scale = 1,
+                               shape = .75),
+                n = 1000,
+                p = 20)
+
+## see the results
+plot(z)
+
+## Case4:
+## Same in previous case but now you provide specific
+## autocorrelation values for the first three lags,
+## ie.., lag 1 to 3 equal to 0.9, 0.8 and 0.7
+
+z <- generateTS(margdist = 'beta',
+                margarg = list(shape1 = .2,
+                               shape2 = .8),
+                distbounds = c(0, 1),
+                acsvalue = c(1, .9, .8, .7),
+                n = 1000,
+                p = TRUE)
+
+## see the results
+plot(z)
 
 }

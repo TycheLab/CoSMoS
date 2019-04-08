@@ -14,6 +14,11 @@ actfdiscrete(rhox, b, c)
 \item{c}{2nd line parameter}
 }
 \description{
-ACTF auto-correlation transformation function for discrete distributions
+Provides tranformation for discrete distributions, based on two parameters
+}
+\examples{
+
+actfdiscrete(.4, .2, 1)
+
 }
 \keyword{internal}

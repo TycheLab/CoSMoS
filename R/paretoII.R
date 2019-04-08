@@ -1,6 +1,6 @@
 #' Pareto type II distribution
 #'
-#' Density, distribution function, quantile function, random value generation
+#' Provides density, distribution function, quantile function, random value generation
 #' and raw moments of order \emph{r} for the Pareto type II distribution.
 #'
 #' @param x,q	            vector of quantiles.
@@ -19,8 +19,23 @@
 #' @concept Univariate
 #' @concept Continuous
 #'
-#' @import stats
+#' @import stats ggplot2
 #' @export
+#'
+#' @examples
+#'
+#' ## plot the density
+#'
+#' ggplot(data.frame(x = c(0, 20)),
+#'        aes(x)) +
+#'   stat_function(fun = dparetoII,
+#'                 args = list(scale = 1,
+#'                             shape = .3),
+#'                 colour = 'royalblue4') +
+#'   labs(x = '',
+#'        y = 'Density') +
+#'   theme_classic()
+#'
 
 dparetoII <- function(x, scale, shape, log = FALSE) { ## density
 

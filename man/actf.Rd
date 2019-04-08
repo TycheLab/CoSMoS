@@ -14,6 +14,11 @@ actf(rhox, b, c)
 \item{c}{2nd line parameter}
 }
 \description{
-ACTF auto-correlation transformation function
+Provides tranformation for continuous distributions, based on two parameters
+}
+\examples{
+
+actf(.4, 1, 0)
+
 }
 \keyword{internal}

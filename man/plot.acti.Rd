@@ -12,7 +12,7 @@
 \item{...}{other arguments}
 }
 \description{
-Plot method for class acti - autocorrelation tranformation integral
+Visualizes the autocorrelation tranformation integral
 (there are two possible methods for plotting - base graphics and ggplot2 package)
 }
 \examples{

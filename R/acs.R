@@ -1,6 +1,6 @@
 #' AutoCorrelation Structure
 #'
-#' The acs represents a parametric function that describes the values of the linear autocorrelation up to desired lags. For more details on the parametric autocorrelation structures see section 3.2 in \href{https://doi.org/10.1016/j.advwatres.2018.02.013}{(Papalexiou 2018)}
+#' Provides a parametric function that describes the values of the linear autocorrelation up to desired lags. For more details on the parametric autocorrelation structures see section 3.2 in \href{https://doi.org/10.1016/j.advwatres.2018.02.013}{(Papalexiou 2018)}
 #'
 #' @param id autocorrelation tructure id
 #' @param ... other arguments (t as lag and acs parameters)

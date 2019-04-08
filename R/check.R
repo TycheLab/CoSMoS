@@ -1,6 +1,6 @@
 #' Check model function
 #'
-#' The check model function generates a synthetic time series with the given properties and compares its sample statistics with the theoretically expected values.
+#' Generates a synthetic time series with the given properties and compares its sample statistics with the theoretically expected values.
 #'
 #' @inheritParams generateTS
 #' @param plot logical - plot the result? (if TRUE, saved as an attribute 'plot')
@@ -15,7 +15,7 @@
 #'
 #' library(CoSMoS)
 #'
-#' \dontrun{
+#' \donttest{
 #' ## check your model
 #' checkmodel(margdist = 'ggamma',
 #'            margarg = list(shape1 = 3,
@@ -30,7 +30,7 @@
 #'                           scale = 10))
 #' }
 #'
-checkmodel <- function(margdist, margarg, n, p, p0 = .6, acsvalue, TSn = 1, distbounds = c(-Inf, Inf), limitorder = TRUE, plot = FALSE, returnTS = FALSE) {
+checkmodel <- function(margdist, margarg, n, p, p0 = .6, acsvalue, TSn = 1, distbounds = c(-Inf, Inf), plot = FALSE, returnTS = FALSE) {
 
   suppressWarnings({x <- generateTS(margdist = margdist,
                                     margarg = margarg,
@@ -90,7 +90,7 @@ checkmodel <- function(margdist, margarg, n, p, p0 = .6, acsvalue, TSn = 1, dist
 
 #' Check generated timeseries
 #'
-#' Check simulation function compares generated time series sample statistics with the theoretically expected values.
+#' Compares generated time series sample statistics with the theoretically expected values.
 #'
 #' @param TS generated timeseries
 #' @inheritParams checkmodel

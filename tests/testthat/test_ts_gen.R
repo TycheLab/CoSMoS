@@ -31,12 +31,11 @@ test_that('test random values deneration using AR1 and ARp models', {
              acsvalue = acsvalue,
              actfpara = fit,
              n = 10000,
-             p = order,
              p0 = p0)
   attributes(val) <- NULL
 
   expect_equal(val[1:10],
-               c(0.0153, 0, 0, 0, 0, 0.4425, 0.9881, 0.5591, 1.4386, 1.6012),
+               c(0.1333, 0.4907, 0.8089, 0.2326, 0, 0, 0.0967, 1.1822, 1.9728, 1.2610),
     tolerance = .01)
 })
 

@@ -4,8 +4,7 @@
 \alias{ARp}
 \title{Autoregressive model of order \emph{p}}
 \usage{
-ARp(margdist, margarg, acsvalue, actfpara, n, p = 1, p0 = 0,
-  limitorder = TRUE)
+ARp(margdist, margarg, acsvalue, actfpara, n, p = NULL, p0 = 0)
 }
 \arguments{
 \item{margdist}{target marginal distribution}
@@ -18,11 +17,9 @@ ARp(margdist, margarg, acsvalue, actfpara, n, p = 1, p0 = 0,
 
 \item{n}{number of values}
 
-\item{p}{model order}
+\item{p}{integer - model order (if logical - limits maximum model order according to auto-correlation structure values)}
 
 \item{p0}{probability zero}
-
-\item{limitorder}{logical (limit maximum model order according to auto-correlation structure values)}
 }
 \description{
 Generates time series from an Autoregressive model of order \emph{p}
@@ -52,9 +49,9 @@ system.time(val <- ARp(margdist = dist,
                        acsvalue = acsvalue,
                        actfpara = fit,
                        n = 5000,
-                       p = order,
+                       p = TRUE,
                        p0 = p0))
-\dontrun{
+\donttest{
 ## nolimit
 system.time(val <- ARp(margdist = dist,
                        margarg = distarg,

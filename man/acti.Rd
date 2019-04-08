@@ -20,6 +20,6 @@ acti(x, y, dist, distarg, rhoz, p0)
 \item{p0}{probability od zero values}
 }
 \description{
-ACTI - autocorrelation transformation integral function
+Expretion supplied to double integral
 }
 \keyword{internal}

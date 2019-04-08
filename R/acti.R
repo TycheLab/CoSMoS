@@ -1,5 +1,7 @@
 #' ACTI - autocorrelation transformation integral function
 #'
+#' Expretion supplied to double integral
+#'
 #' @param x x-plain value
 #' @param y y-plain value
 #' @param dist distribution
@@ -20,7 +22,7 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 
 #' AutoCorrelation Transformed Points
 #'
-#' Transforming a gaussian process in order to match a target marginal lowers its autocorrelation values. The actpnts evaluates the corresponding autocorrelations for the given target marginal for a set of gaussian correlations, i.e., it returns  (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x and \rho_z} represent, respectively, the autocorrelations of the target and gaussian process.
+#' Transforms a gaussian process in order to match a target marginal lowers its autocorrelation values. The actpnts evaluates the corresponding autocorrelations for the given target marginal for a set of gaussian correlations, i.e., it returns  (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x and \rho_z} represent, respectively, the autocorrelations of the target and gaussian process.
 #'
 #' @param margdist target marginal distribution
 #' @param margarg list of marginal distribution arguments
@@ -112,17 +114,17 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 #'
 fitactf <- function(actpnts, discrete = FALSE) {
 
-  fit <- nls(rhoz ~ do.call(ifelse(discrete, ## actf fit using nls
-                                   'actfdiscrete',
-                                   'actf'),
-                            args = list(rhox, b, c)),
-             data = list(rhoz = actpnts$rhoz,
-                         rhox = actpnts$rhox),
-             start = c(b = 1, c = 0),
-             lower = c(b = .001, c = 0),
-             algorithm = 'port',
-             control = nls.control(maxiter = 50000,
-                                   warnOnly = TRUE))
+  suppressWarnings(fit <- nls(rhoz ~ do.call(ifelse(discrete, ## actf fit using nls
+                                                    'actfdiscrete',
+                                                    'actf'),
+                                             args = list(rhox, b, c)),
+                              data = list(rhoz = actpnts$rhoz,
+                                          rhox = actpnts$rhox),
+                              start = c(b = 1, c = 0),
+                              lower = c(b = .001, c = 0),
+                              algorithm = 'port',
+                              control = nls.control(maxiter = 50000,
+                                                    warnOnly = TRUE)))
 
   structure(.Data = list(actfcoef = coefficients(fit),
                          actfpoints = actpnts),

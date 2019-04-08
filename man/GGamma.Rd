@@ -35,8 +35,23 @@ mggamma(r, scale, shape1, shape2)
 \item{r}{raw moment order}
 }
 \description{
-Density, distribution function, quantile function, random value generation,
+Provides density, distribution function, quantile function, random value generation,
 and raw moments of order \emph{r} for the generalized gamma distribution.
+}
+\examples{
+
+## plot the density
+
+ggplot(data.frame(x = c(0, 20)),
+       aes(x)) +
+  stat_function(fun = dggamma,
+                args = list(scale = 5,
+                            shape1 = .25,
+                            shape2 = .75),
+                colour = 'royalblue4') +
+  labs(x = '',
+       y = 'Density') +
+  theme_classic()
 }
 \concept{Continuous}
 \concept{Univariate}

@@ -1,6 +1,6 @@
 #' AutoCorrelation Transformation Function visualisation
 #'
-#' Plot method for class acti - autocorrelation tranformation integral
+#' Visualizes the autocorrelation tranformation integral
 #' (there are two possible methods for plotting - base graphics and ggplot2 package)
 #'
 #' @param x fitactf result object

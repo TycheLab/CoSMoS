@@ -4,10 +4,9 @@
 #'
 #' @inheritParams actpnts
 #' @param n number of values
-#' @param p model order
+#' @param p integer - model order (if logical - limits maximum model order according to auto-correlation structure values)
 #' @param actfpara auto-correlation structure transformation parameters
 #' @param acsvalue target auto-correlation structure (from lag 0)
-#' @param limitorder logical (limit maximum model order according to auto-correlation structure values)
 #' @param p0 probability zero
 #'
 #' @import stats ggplot2
@@ -38,9 +37,9 @@
 #'                        acsvalue = acsvalue,
 #'                        actfpara = fit,
 #'                        n = 5000,
-#'                        p = order,
+#'                        p = TRUE,
 #'                        p0 = p0))
-#' \dontrun{
+#' \donttest{
 #' ## nolimit
 #' system.time(val <- ARp(margdist = dist,
 #'                        margarg = distarg,
@@ -60,21 +59,18 @@
 #'        y = 'value') +
 #'   theme_classic()
 #'
-ARp <- function(margdist, margarg, acsvalue, actfpara, n, p = 1, p0 = 0, limitorder = TRUE) {
+ARp <- function(margdist, margarg, acsvalue, actfpara, n, p = NULL, p0 = 0) {
 
   transacsvalue <- actf(acsvalue,
                         b = actfpara$actfcoef[1],
                         c = actfpara$actfcoef[2])
 
-  if (limitorder) { ## limit ARp order by the ACS values
+  if (is.null(p)) { ## limit ARp order by the ACS values
 
-    temp <- length(transacsvalue[transacsvalue > .01])
+    temp <- length(transacsvalue[transacsvalue > .01]) - 1
 
-    if (p > temp) { ## workaround - if p is lower than the possible limit, limit nothing
-
-      p <- temp
-      message(paste('Order "p" limited to ', p))
-    }
+    p <- temp
+    message(paste('Order "p" limited to ', p))
   }
 
   P <- matrix(NA, p, p) ## cov matrix generation

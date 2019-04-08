@@ -1,6 +1,6 @@
 #' Burr Type III distribution
 #'
-#' Density, distribution function, quantile function, random value generation,
+#' Provides density, distribution function, quantile function, random value generation,
 #' and raw moments of order \emph{r} for the Burr Type III distribution.
 #'
 #' @param x,q	                  vector of quantiles.
@@ -19,8 +19,23 @@
 #' @concept Univariate
 #' @concept Continuous
 #'
-#' @import stats
+#' @import stats ggplot2
 #' @export
+#'
+#' @examples
+#'
+#' ## plot the density
+#'
+#' ggplot(data.frame(x = c(1, 15)),
+#'        aes(x)) +
+#'   stat_function(fun = dburrIII,
+#'                 args = list(scale = 5,
+#'                             shape1 = .25,
+#'                             shape2 = .75),
+#'                 colour = 'royalblue4') +
+#'   labs(x = '',
+#'        y = 'Density') +
+#'   theme_classic()
 
 dburrIII <- function(x, scale, shape1, shape2, log = FALSE) { ## density
 
