@@ -37,10 +37,9 @@
 #'                        acsvalue = acsvalue,
 #'                        actfpara = fit,
 #'                        n = 5000,
-#'                        p = TRUE,
 #'                        p0 = p0))
 #' \donttest{
-#' ## nolimit
+#' ## order w/o limit
 #' system.time(val <- ARp(margdist = dist,
 #'                        margarg = distarg,
 #'                        acsvalue = acsvalue,

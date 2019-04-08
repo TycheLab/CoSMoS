@@ -55,6 +55,8 @@
 #' ## see the results
 #' plot(x)
 #'
+#' \donttest{
+#'
 #' ## Case2:
 #' ## You wish to generate time series the same distributin
 #' ## and autocorrelations as is Case1 but intermittent
@@ -110,6 +112,8 @@
 #'
 #' ## see the results
 #' plot(z)
+#'
+#'}
 #'
 generateTS <- function(margdist, margarg, n, p, p0 = 0, TSn = 1, distbounds = c(-Inf, Inf), acsvalue = NULL) {
 
