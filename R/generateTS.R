@@ -167,7 +167,9 @@ generateTS <- function(margdist, margarg, n, p, p0 = 0, TSn = 1, distbounds = c(
 #'                 n = 1000, p = 30, p0 = .5, TSn = 3)
 #'
 #' ## generate new values with same parameters
-#' regenerateTS(x)
+#' r <- regenerateTS(x)
+#'
+#' plot(r)
 #'
 regenerateTS <- function(ts, TSn = 1) {
 

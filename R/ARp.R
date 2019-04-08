@@ -28,7 +28,7 @@
 #' fit <- fitactf(pnts)
 #'
 #' ## define target auto-correlation structure and model order
-#' order <- 750
+#' order <- 1000
 #' acsvalue <- acs(id = 'weibull', t = 0:order, scale = 10, shape = .75)
 #'
 #' ## limit ACS lag (recomended)
@@ -46,8 +46,7 @@
 #'                        actfpara = fit,
 #'                        n = 5000,
 #'                        p = order,
-#'                        p0 = p0,
-#'                        limitorder = FALSE))
+#'                        p0 = p0))
 #' }
 #'
 #' ## see the result
