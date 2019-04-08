@@ -115,7 +115,7 @@
 #'
 #'}
 #'
-generateTS <- function(margdist, margarg, n, p, p0 = 0, TSn = 1, distbounds = c(-Inf, Inf), acsvalue = NULL) {
+generateTS <- function(margdist, margarg, n, p = NULL, p0 = 0, TSn = 1, distbounds = c(-Inf, Inf), acsvalue = NULL) {
 
   pnts <- actpnts(margdist = margdist, ## estimate act points
                   margarg = margarg,

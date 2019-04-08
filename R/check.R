@@ -30,7 +30,7 @@
 #'                           scale = 10))
 #' }
 #'
-checkmodel <- function(margdist, margarg, n, p, p0 = .6, acsvalue, TSn = 1, distbounds = c(-Inf, Inf), plot = FALSE, returnTS = FALSE) {
+checkmodel <- function(margdist, margarg, n, p = NULL, p0 = .6, acsvalue, TSn = 1, distbounds = c(-Inf, Inf), plot = FALSE, returnTS = FALSE) {
 
   suppressWarnings({x <- generateTS(margdist = margdist,
                                     margarg = margarg,

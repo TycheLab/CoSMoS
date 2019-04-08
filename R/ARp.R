@@ -4,7 +4,7 @@
 #'
 #' @inheritParams actpnts
 #' @param n number of values
-#' @param p integer - model order (if logical - limits maximum model order according to auto-correlation structure values)
+#' @param p integer - model order (if NULL - limits maximum model order according to auto-correlation structure values)
 #' @param actfpara auto-correlation structure transformation parameters
 #' @param acsvalue target auto-correlation structure (from lag 0)
 #' @param p0 probability zero
@@ -63,11 +63,16 @@ ARp <- function(margdist, margarg, acsvalue, actfpara, n, p = NULL, p0 = 0) {
                         b = actfpara$actfcoef[1],
                         c = actfpara$actfcoef[2])
 
-  if (is.null(p)) { ## limit ARp order by the ACS values
+  if(length(transacsvalue) - 1 < p) {
+
+    stop(paste0('Please supply ACS of length up to order p = ', p, ', or leave argument p = NULL'))
+  }
+
+  if (any(c(is.null(p), p > 1000))) { ## limit ARp order by the ACS values or by hard cap 1000
 
     temp <- length(transacsvalue[transacsvalue > .01]) - 1
 
-    p <- temp
+    p <- ifelse(p > 1000, 1000, temp)
     message(paste('Order "p" limited to ', p))
   }
 

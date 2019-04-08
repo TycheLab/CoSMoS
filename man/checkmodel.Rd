@@ -4,8 +4,9 @@
 \alias{checkmodel}
 \title{Check model function}
 \usage{
-checkmodel(margdist, margarg, n, p, p0 = 0.6, acsvalue, TSn = 1,
-  distbounds = c(-Inf, Inf), plot = FALSE, returnTS = FALSE)
+checkmodel(margdist, margarg, n, p = NULL, p0 = 0.6, acsvalue,
+  TSn = 1, distbounds = c(-Inf, Inf), plot = FALSE,
+  returnTS = FALSE)
 }
 \arguments{
 \item{margdist}{target marginal distribution}
@@ -14,7 +15,7 @@ checkmodel(margdist, margarg, n, p, p0 = 0.6, acsvalue, TSn = 1,
 
 \item{n}{number of values}
 
-\item{p}{integer - model order (if logical - limits maximum model order according to auto-correlation structure values)}
+\item{p}{integer - model order (if NULL - limits maximum model order according to auto-correlation structure values)}
 
 \item{p0}{probability zero}
 

@@ -4,7 +4,7 @@
 \alias{generateTS}
 \title{Generate timeseries}
 \usage{
-generateTS(margdist, margarg, n, p, p0 = 0, TSn = 1,
+generateTS(margdist, margarg, n, p = NULL, p0 = 0, TSn = 1,
   distbounds = c(-Inf, Inf), acsvalue = NULL)
 }
 \arguments{
@@ -14,7 +14,7 @@ generateTS(margdist, margarg, n, p, p0 = 0, TSn = 1,
 
 \item{n}{number of values}
 
-\item{p}{integer - model order (if logical - limits maximum model order according to auto-correlation structure values)}
+\item{p}{integer - model order (if NULL - limits maximum model order according to auto-correlation structure values)}
 
 \item{p0}{probability zero}
 
@@ -71,6 +71,8 @@ x <- generateTS(margdist = 'ggamma',
 ## see the results
 plot(x)
 
+\donttest{
+
 ## Case2:
 ## You wish to generate time series the same distributin
 ## and autocorrelations as is Case1 but intermittent
@@ -126,5 +128,7 @@ z <- generateTS(margdist = 'beta',
 
 ## see the results
 plot(z)
+
+}
 
 }
