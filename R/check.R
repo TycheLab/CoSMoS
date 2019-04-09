@@ -30,6 +30,20 @@
 #'                           scale = 10))
 #' }
 #'
+#' \dontshow{
+#' checkmodel(margdist = 'ggamma',
+#'            margarg = list(shape1 = 3,
+#'                           shape2 = .5,
+#'                           scale = 10),
+#'            n = 1000,
+#'            p = 30,
+#'            p0 = 0,
+#'            acsvalue = acs(id = 'weibull',
+#'                           t = 0:30,
+#'                           shape = .5,
+#'                           scale = 10))
+#' }
+#'
 checkmodel <- function(margdist, margarg, n, p = NULL, p0 = .6, acsvalue, TSn = 1, distbounds = c(-Inf, Inf), plot = FALSE, returnTS = FALSE) {
 
   suppressWarnings({x <- generateTS(margdist = margdist,
