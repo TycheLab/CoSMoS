@@ -106,11 +106,11 @@ knitr::kable(chck)
 
 # Available distributions in CoSMoS package
 
-Package CoSMoS supports majority of continuous distributions available in R with defined quantile and probability density function. We provide also four widely used distributions (Burr type III and XII, Generalized gamma and Pareto type II distribution)
+Package CoSMoS supports majority of continuous distributions available in R with defined quantile and probability density functions. We also provide four widely used distributions - Burr type III and XII, Generalized gamma and Pareto type II distribution.
 
 ## Burr type III distribution
 
-distribution argument/name - 'burrIII'
+distribution argument/name - burrIII    
 parameters - list(scale, shape1, shape2)
 
 $$f_{\text{BrIII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}-1} \left(\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}}{\gamma _1}+1\right){}^{-\gamma _1 \gamma _2-1}}{\beta } \\ F_{\text{BrIII}}(x)=\left(\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}}{\gamma _1}+1\right){}^{-\gamma _1 \gamma _2} \\ Q_{\text{BrIII}}(u)=\beta  \left(\gamma _1 \left(u^{-\frac{1}{\gamma _1 \gamma _2}}-1\right)\right){}^{-\gamma _2} \\
@@ -118,7 +118,7 @@ m_{\text{BrIII}}(q)=\frac{\beta ^q \gamma _1^{\gamma _2 (-q)} \Gamma \left(\left
 
 ## Burr type XII distribution
 
-distribution argument/name - 'burrXII'
+distribution argument/name - burrXII     
 parameters - list(scale, shape1, shape2)
 
 $$f_{\text{BrXII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{\gamma _1-1} \left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right){}^{-\frac{1}{\gamma _1 \gamma _2}-1}}{\beta } \\
@@ -129,7 +129,7 @@ m_{\text{BrXII}}(q)=\frac{\beta ^q \gamma _2^{-\frac{q}{\gamma _1}-1} B\left(\fr
 
 ## Generalized gamma distribution
 
-distribution argument/name - 'ggamma'
+distribution argument/name - ggamma    
 parameters - list(scale, shape1, shape2)
 
 $$f_{\mathcal{G}\mathcal{G}}(x)=\frac{\gamma _2 e^{-\left(\frac{x}{\beta }\right)^{\gamma _2}} \left(\frac{x}{\beta }\right)^{\gamma _1-1}}{\beta  \Gamma \left(\frac{\gamma _1}{\gamma _2}\right)} \\
@@ -139,7 +139,7 @@ m_{\mathcal{G}\mathcal{G}}(q)=\frac{\beta ^q \Gamma \left(\frac{q}{\gamma _2}+\f
 
 ## Paretto type II distribution
 
-distribution argument/name - 'burrIII'
+distribution argument/name - burrIII     
 parameters - list(scale, shape)
 
 $$f_{\text{PII}}(x)=\frac{\left(\frac{\gamma  x}{\beta }+1\right)^{-\frac{1}{\gamma }-1}}{\beta } \\
@@ -149,4 +149,4 @@ m_{\text{PII}}(q)=\frac{\Gamma (q+1) \left(\frac{\beta }{\gamma }\right)^q \Gamm
 
 # References
 
- @references Papalexiou, S.M., 2018. Unified theory for stochastic modelling of hydroclimatic processes: Preserving marginal distributions, correlation structures, and intermittency. Advances in Water Resources 115, 234-252. [link](https://doi.org/10.1016/j.advwatres.2018.02.013)
+Papalexiou, S.M., 2018. Unified theory for stochastic modelling of hydroclimatic processes: Preserving marginal distributions, correlation structures, and intermittency. Advances in Water Resources 115, 234-252. [link](https://doi.org/10.1016/j.advwatres.2018.02.013)
