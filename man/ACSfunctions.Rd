@@ -19,4 +19,23 @@ acfweibull(t, scale, shape)
 \description{
 Autocorrelation structure functions
 }
+\examples{
+
+t <- 1
+
+H <- .75
+scale <- .2
+shape <- .3
+shape1 <- .5
+shape2 <- .2
+
+acfburrXII(t, scale, shape1, shape2)
+
+acfparetoII(t, scale, shape)
+
+acffgn(t, H)
+
+acfweibull(t, scale, shape)
+
+}
 \keyword{internal}

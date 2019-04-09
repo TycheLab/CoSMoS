@@ -55,6 +55,25 @@ acs <- function(id, ...) {
 #' @keywords internal
 #' @name ACSfunctions
 #' @export
+#'
+#' @examples
+#'
+#' t <- 1
+#'
+#' H <- .75
+#' scale <- .2
+#' shape <- .3
+#' shape1 <- .5
+#' shape2 <- .2
+#'
+#' acfburrXII(t, scale, shape1, shape2)
+#'
+#' acfparetoII(t, scale, shape)
+#'
+#' acffgn(t, H)
+#'
+#' acfweibull(t, scale, shape)
+#'
 
 acfburrXII <- function(t, scale, shape1, shape2) {
 
@@ -70,7 +89,6 @@ acfburrXII <- function(t, scale, shape1, shape2) {
 #' @keywords internal
 #' @rdname ACSfunctions
 #' @export
-
 
 acfparetoII <- function(t, scale, shape) {
 

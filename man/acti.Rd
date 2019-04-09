@@ -22,4 +22,9 @@ acti(x, y, dist, distarg, rhoz, p0)
 \description{
 Expretion supplied to double integral
 }
+\examples{
+
+acti(1, -1, 'norm', list(), .3, 0)
+
+}
 \keyword{internal}

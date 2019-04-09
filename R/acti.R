@@ -13,6 +13,10 @@
 #' @import pracma stats
 #' @keywords internal
 #'
+#' @examples
+#'
+#' acti(1, -1, 'norm', list(), .3, 0)
+#'
 acti <- function(x, y, dist, distarg, rhoz, p0) {
 
   do.call(paste0('q', dist), args = c(list(p = (erfc(-x/sqrt(2))/2 - p0)/(1 - p0)), distarg))*
