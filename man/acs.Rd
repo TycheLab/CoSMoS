@@ -16,7 +16,7 @@ Provides a parametric function that describes the values of the linear autocorre
 }
 \examples{
 
-library(CoSMoS); library(reshape2); library(ggplot2)
+library(CoSMoS); library(ggplot2)
 
 ## specify lag
 t <- 0:10

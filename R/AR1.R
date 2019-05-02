@@ -7,6 +7,7 @@
 #' @param mean mean
 #' @param sd standard deviation
 #'
+#' @keywords internal
 #' @export
 #' @import stats ggplot2
 #'

@@ -7,12 +7,12 @@
 #'
 #' @name acs
 #'
-#' @import reshape2 ggplot2
+#' @import ggplot2
 #' @export
 #'
 #' @examples
 #'
-#' library(CoSMoS); library(reshape2); library(ggplot2)
+#' library(CoSMoS); library(ggplot2)
 #'
 #' ## specify lag
 #' t <- 0:10

@@ -9,6 +9,7 @@
 #' @param acsvalue target auto-correlation structure (from lag 0)
 #' @param p0 probability zero
 #'
+#' @keywords internal
 #' @import stats ggplot2
 #' @export
 #'

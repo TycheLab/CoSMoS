@@ -74,7 +74,7 @@ pburrIII <- function(q, scale, shape1, shape2, lower.tail = TRUE, log.p = FALSE)
 #' @rdname BurrIII
 #' @export
 
-qburrIII <- function(p, scale, shape1, shape2, lower.tail = TRUE, log.p = FALSE) { ## cdf
+qburrIII <- function(p, scale, shape1, shape2, lower.tail = TRUE, log.p = FALSE) { ## quntile
 
   if((shape1 <= 0) | (shape2 <= 0)) {
 

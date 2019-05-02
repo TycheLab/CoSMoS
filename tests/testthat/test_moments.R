@@ -15,3 +15,15 @@ test_that('test moments function for normal and pareto type II distributions', {
                     coefficients = c(cv = 1.5811, cs = 16.4438, ck = -208.8)),
                tolerance = .01)
 })
+
+test_that('test sample.moments function for normal distributions', {
+
+  expect_equal(sample.moments(rnorm(10000,
+                                    mean = 2,
+                                    sd = 1)),
+               list(m = c(m1 = 2, m2 = 5, m3 = 14, m4 = 43),
+                    mu = c(mu1 = 2, mu2 = 1, mu3 = 0, mu4 =3),
+                    coefficients = c(cv = .5, cs = 0, ck = 3)),
+               tolerance = 1)
+
+})

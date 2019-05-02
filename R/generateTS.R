@@ -1,32 +1,57 @@
 #' Generate timeseries
 #'
-#' Generates timeseries with given properties, just provide (1) the target marginal distribution and its parameters, (2) the target autocorrelation structure or individual autocorrelation values up to a desired lag, and (3) the probablility zero if you wish to simulate an intermittent process.
+#' Generates timeseries with given properties, just provide (1) the target marginal
+#' distribution and its parameters, (2) the target autocorrelation structure or
+#' individual autocorrelation values up to a desired lag, and (3) the probablility
+#' zero if you wish to simulate an intermittent process.
 #'
 #' @details
 #'
 #' A step-by-step guide:
-#' * First define the target marginal (margdist), that is, the probability distribution of the generated data. For example set margdist = 'ggamma' if you wish to generate data following the Generalized Gamma distribution, or, margidst = 'burrXII' for Burr type XII distribution, etc. For a full list of the distributions we support see the help vignette: \code{vignette('vignette', package = 'CoSMoS')}. In general, the package supports all build-in distribution functions of R and of other packages.
+#' * First define the target marginal (margdist), that is, the probability distribution
+#' of the generated data. For example set margdist = 'ggamma' if you wish to generate
+#' data following the Generalized Gamma distribution, margidst = 'burrXII' for Burr
+#' type XII distribution etc. For a full list of the distributions we support see the
+#' help vignette: \code{vignette('vignette', package = 'CoSMoS')}. In general, the package
+#' supports all build-in distribution functions of R and of other packages.
 #'
-#' * Define the parameters’ values (margarg) of the distribution you selected. For example the Generalized Gamma has one scale and two shape parameters so set the desired value, e.g., margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8). Note distributions might have different number of parameters and different type of parameters (location, scale, shape). To see the parameters of each distribution we support see the help vignette: \code{vignette('vignette', package = 'CoSMoS')}.
+#' * Define the parameters’ values (margarg) of the distribution you selected. For example
+#' the Generalized Gamma has one scale and two shape parameters so set the desired value,
+#' e.g., margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8). Note distributions might
+#' have different number of parameters and different type of parameters (location, scale, shape).
+#' To see the parameters of each distribution we support, see the help vignette:
+#' \code{vignette('vignette', package = 'CoSMoS')}.
 #'
-#' * If you wish your time series to be intermittent (e.g., precipitation) then define the probability zero. Just set for example p0 = 0.9 if you wish your generated data to have 90% of zero values (dry days).
+#' * If you wish your time series to be intermittent (e.g., precipitation), then define the
+#' probability zero. For example, set p0 = 0.9, if you wish your generated data to have
+#' 90\% of zero values (dry days).
 #'
 #' * Define your linear autocorrelations.
-#'     + You can use a parametric autocorrelation structure (see section 3.2 in \href{https://doi.org/10.1016/j.advwatres.2018.02.013}{Papalexiou 2018}). We support the following autocorrelation structures (acs) weibull, paretoII, fgn and burrXII. seealso \link[CoSMoS]{acs} examples.
+#'     + You can supply specific lag autocorrelations starting from lag 0
+#'     and up to a desired lag, e.g., acs = c(1, 0.9, 0.8, 0.7); this will generate
+#'     a process with lag1, 2 and 3 autocorrelations equal with 0.9, 0.8 and 0.7.
 #'
-#'     + Otherwise, you can supply specific lag autocorrelations starting from lag 0 and up to a desired lag, e.g., acs = list (1, 0.9, 0.8, 0.7); this will generate a process with lag1, 2 and 3 autocorrelations equal with 0.9, 0.8 and 0.7.
+#'     + Alternatively, you can use a parametric autocorrelation structure (see section 3.2 in
+#'     \href{https://doi.org/10.1016/j.advwatres.2018.02.013}{Papalexiou 2018}).
+#'     We support the following autocorrelation structures (acs) weibull, paretoII,
+#'     fgn and burrXII. See also \link[CoSMoS]{acs} examples.
 #'
-#' * Define the order to the autoregressive model p. For example if you aim to preserve the first 10 lag autocorrelations then just set p = 10. Otherwise set it p = NULL and the model will decide the value of p in order to preserve the whole autocorrelation structure.
+#' * Define the order to the autoregressive model p. For example if you aim to preserve
+#' the first 10 lag autocorrelations then just set p = 10. Otherwise set it p = NULL and
+#' the model will decide the value of p in order to preserve the whole autocorrelation
+#' structure.
 #'
-#' * Lastly just define the time series length, e.g., n = 1000 and number of time series you wish to generate, e.g., TSn =10.
+#' * Lastly just define the time series length, e.g., n = 1000 and number of time series
+#' you wish to generate, e.g., TSn = 10.
 #'
-#' Play around with the following given examples which will make the whole process a piece of cake.
+#' Play around with the following given examples which will make the whole
+#' process a piece of cake.
 #'
 #' @inheritParams actpnts
 #' @inheritParams ARp
 #' @param TSn number of timeseries to be generated
 #'
-#' @import reshape2 ggplot2
+#' @import data.table ggplot2
 #' @export
 #'
 #' @examples
@@ -115,7 +140,7 @@
 #'
 #'}
 #'
-generateTS <- function(margdist, margarg, n, p = NULL, p0 = 0, TSn = 1, distbounds = c(-Inf, Inf), acsvalue = NULL) {
+generateTS <- function(n, margdist, margarg, p = NULL, p0 = 0, TSn = 1, distbounds = c(-Inf, Inf), acsvalue = NULL) {
 
   pnts <- actpnts(margdist = margdist, ## estimate act points
                   margarg = margarg,

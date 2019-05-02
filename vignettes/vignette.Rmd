@@ -87,23 +87,10 @@ ggplot() +
 
 ## Check the simulation
 ```{r, comment = '>'}
-checksimulation(target)
+chck <-  checkTS(target)
+
+chck
 ```
-
-## Or check the model in general
-```{r, out.width = '95%', fig.asp = .75, results = 'asis'}
-chck <- checkmodel(margdist = marginaldist,
-                   margarg = para,
-                   n = 100000,
-                   p = order,
-                   p0 = p0,
-                   acsvalue = targetcorr,
-                   TSn = 15,
-                   plot = T)
-
-knitr::kable(chck)
-```
-
 # Available distributions in CoSMoS package
 
 Package CoSMoS supports majority of continuous distributions available in R with defined quantile and probability density functions. We also provide four widely used distributions - Burr type III and XII, Generalized gamma and Pareto type II distribution.

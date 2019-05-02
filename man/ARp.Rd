@@ -70,3 +70,4 @@ ggplot() +
   theme_classic()
 
 }
+\keyword{internal}

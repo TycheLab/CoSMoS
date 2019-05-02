@@ -78,7 +78,10 @@ moments <- function(dist, distarg, p0 = 0, raw = T, central = T, coef = T, distb
                        mu3 = 2*m$m1^3 - 3*m$m2*m$m1 + m$m3,
                        mu4 = -3*m$m1^4 + 6*m$m2*m$m1^2 - 4*m$m3*m$m1 + m$m4)
 
-      out$mu <- unlist(mu)
+      if (central) {
+
+        out$mu <- unlist(mu)
+      }
     }
 
     if (coef) { ## coeffitiens calculation
@@ -96,5 +99,70 @@ moments <- function(dist, distarg, p0 = 0, raw = T, central = T, coef = T, distb
   #   message('Please input a correct distribution name with valid parameters \n(ditributions have to be defined in form dxxx, pxxx, qxxx, etc...)')
   # }
   # )
+}
+
+#' Estimation of sample moments
+#'
+#' @param x a numeric vector of values
+#' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds
+#' @inheritParams moments
+#'
+#' @import stats
+#' @export
+#'
+#' @keywords moments, moment
+#'
+#' @examples
+#'
+#' library(CoSMoS)
+#'
+#' x <- rnorm(1000)
+#' sample.moments(x)
+#'
+#' y <- rparetoII(1000, 10, .1)
+#' sample.moments(y)
+#'
+sample.moments <- function(x, na.rm = FALSE, raw = T, central = T, coef = T, order = 1:4) {
+
+  if((central | coef) & (max(order) < 4)) {
+
+    order <- 1:4
+  }
+
+  n <- ifelse(na.rm, length(which(!is.na(x))), length(x))
+
+  mean <- mean(x, na.rm = na.rm)
+
+  out <- list()
+
+  if (raw) {
+
+    m <- lapply(order, function(i) (1/n * sum((x)^i)))
+    names(m) <- paste0('m', order)
+
+    out$m <- unlist(m)
+  }
+
+  if (central | coef) { ## central moments calculation
+
+    mu <- lapply(order, function(i) 1/n * sum((x - mean)^i))
+    names(mu) <- paste0('mu', order)
+
+    if (central) {
+
+      out$mu <- unlist(mu)
+    }
+  }
+
+  if (coef) { ## coeffitiens calculation
+
+    coef <- data.frame(cv = sqrt(mu$mu2)/mu$mu1,
+                       cs = mu$mu3/sqrt(mu$mu2)^3,
+                       ck = mu$mu4/mu$mu2^2)
+
+    out$coefficients <- unlist(coef)
+  }
+
+  return(out)
 }
 

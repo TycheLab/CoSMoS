@@ -7,7 +7,7 @@
 #'
 #' @export
 #' @method plot cosmosts
-#' @import ggplot2 reshape2
+#' @import ggplot2 data.table
 #'
 #' @examples
 #'
@@ -41,7 +41,10 @@ plot.cosmosts <- function(x, ...) {
     labs(x = '',
          y = 'value') +
     facet_wrap(~variable, ncol = 1) +
-    theme_classic()
+    theme_gray() +
+    theme(legend.position = 'bottom',
+          strip.background = element_rect(fill = 'grey5'),
+          strip.text = element_text(colour = 'grey95'))
 
   return(p)
 }

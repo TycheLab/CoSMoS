@@ -30,7 +30,7 @@ p <- actpnts(margdist = dist, margarg = distarg, p0 = 0)
 fit <- fitactf(p)
 
 ## plot the results
-plot(fit, method = 'ggplot2')
-plot(fit, method = 'base', main = 'Pareto type II distribution \\nautocorrelation tranformation')
+plot(fit)
+plot(fit, main = 'Pareto type II distribution \\nautocorrelation tranformation')
 
 }

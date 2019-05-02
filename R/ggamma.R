@@ -37,7 +37,6 @@
 #'        y = 'Density') +
 #'   theme_classic()
 
-
 dggamma <- function(x, scale, shape1, shape2, log = FALSE) { ## density
 
   if((shape1 <= 0) | (shape2 <= 0)) {
