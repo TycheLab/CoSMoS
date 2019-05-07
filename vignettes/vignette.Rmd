@@ -7,7 +7,7 @@ output:
     toc: true
     number_sections: yes
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{vignette}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
   header-includes:
@@ -144,7 +144,7 @@ ggplot(m.dta,
   labs(x = bquote(lag ~ tau),
        y = 'Acf') +
   scale_x_continuous(breaks = t) +
-  theme_classic()
+  theme_grey()
 ```
 
 Back to our example, we can implement a 30-lag autocorrelation structure as:
@@ -180,7 +180,7 @@ acf(ggamma_sim[[1]])
 
 ## Intermittency
 
-If we wish to simulate an intermittent process (e.g., precipitation), then we have to define the probability zero. For example, if `p0 = 0.9`, then generated data shall have 90% of zero values (dry days).
+If we wish to simulate an intermittent process (e.g., precipitation), then we have to define the probability zero. For example, if `p0 = 0.9`, then generated data shall have 90% of zero values (dry days). We can simulate multiple processes at once by using argument `TSn = 5`.
 
 ```{r}
 prob_zero <- .9
@@ -188,8 +188,9 @@ ggamma_sim <- generateTS(n = no,
                          margdist = marginaldist,
                          margarg = param,
                          acsvalue = acf,
-                         p0 = prob_zero)
-plot.ts(ggamma_sim, main = "")
+                         p0 = prob_zero,
+                         TSn = 5)
+plot(ggamma_sim, main = "")
 ```
 
 ##Validating the results
@@ -214,7 +215,7 @@ plot(density(precip$value), main = "", xlim = c(0, 10)) #Does not plot extreme v
 acf(precip$value, main = "")
 ```
 
-To generate a synthetic time series with similar characteristics to the observed precipitation, we have to determine their marginal distribution, autocorrelation structure and probability zero for each individual month. This can be done by trying to fit different distributions and autocorrelation structures with `analyzeTS()` and then check the goodness-of-fit with `reportTS()`.
+To generate a synthetic time series with similar characteristics to the observed precipitation, we have to determine their marginal distribution, autocorrelation structure and probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with `analyzeTS()` and then check the goodness-of-fit with `reportTS()`.
 
 ```{r}
 precip_ggamma <- CoSMoS::analyzeTS(TS = precip, 
