@@ -3,20 +3,28 @@
 \docType{data}
 \name{precip}
 \alias{precip}
-\title{Precipitation data}
+\title{Hourly station precipitation data}
 \format{A data.table with 79633 rows and 2 variables:
 \describe{
 \item{date}{POSIXct format date/time}
 \item{value}{precipitation totals}
-...
 }}
 \source{
-some database
+The National Oceanic and Atmospheric Administration (NOAA)
 }
 \usage{
 precip
 }
 \description{
-Precipitation data
+Station details
+\itemize{
+\item Name: Philadelphia International Airport
+\item Network ID: COOP:366889
+\item Latitude/Longitude:	39.87327°, -75.22678°
+\item Elevation: 3m
+}
+}
+\details{
+more details can be found \href{https://www.ncdc.noaa.gov/cdo-web/datasets/PRECIP_HLY/stations/COOP:366889/detail}{here}.
 }
 \keyword{datasets}
