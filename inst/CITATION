@@ -1,0 +1,13 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "{CoSMoS}: Complete Stochastic Modelling Solution",
+  author   = c(person("Filip", "Strnad"),
+               person("Simon", "Papalexiou"),
+               person("Yanis", "Markonis")),
+  year     = year,
+  note     = note,
+  url      = "https://CRAN.R-project.org/package=CoSMoS "
+)
