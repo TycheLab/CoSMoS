@@ -41,6 +41,9 @@ simulateTS(aTS, from = NULL, to = NULL)
 \description{
 Provide a complete set of tools for time series simulation, from seasonal descriptive statistics incuding autocorrelation sturctures all the way to seasonal distribution fits and variable simulations.
 }
+\details{
+In practice, we usually want to simulate a natural process using some sampled time series. To generate a synthetic time series with similar characteristics to the observed values, we have to determine marginal distribution, autocorrelation structure and probability zero for each individual month. This can is done by fitting distributions and autocorrelation structures with analyzeTS(). Result can be checked with reportTS(). Syynthetic time series with the same statistical properties can be produced with simulateTS().
+}
 \examples{
 
 library(CoSMoS)

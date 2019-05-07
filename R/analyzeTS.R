@@ -2,6 +2,8 @@
 #'
 #' Provide a complete set of tools for time series simulation, from seasonal descriptive statistics incuding autocorrelation sturctures all the way to seasonal distribution fits and variable simulations.
 #'
+#' In practice, we usually want to simulate a natural process using some sampled time series. To generate a synthetic time series with similar characteristics to the observed values, we have to determine marginal distribution, autocorrelation structure and probability zero for each individual month. This can is done by fitting distributions and autocorrelation structures with analyzeTS(). Result can be checked with reportTS(). Syynthetic time series with the same statistical properties can be produced with simulateTS().
+#'
 #' @param TS time series in format - date, value
 #' @param season name of the season (e.g. month, week)
 #' @param acsID ID of the autocorrelation structure to be fitted
