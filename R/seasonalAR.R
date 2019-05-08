@@ -34,8 +34,6 @@ seasonalAR <- function(x, ACS, season = 'month') {
   out <- data.table(value = AR1(max(sapply(alpha, length)), alpha[[d[1, 's']]][1])) ## overal init values
   out[, id := 0]
 
-  # out <- c(AR1(max(sapply(alpha, length)), alpha[[d[1, 's']]][1])) ## overal init values
-
   esd <- c()
 
   for (i in seq_along(alpha)) { ## sd for gaussian noise
@@ -50,7 +48,6 @@ seasonalAR <- function(x, ACS, season = 'month') {
 
     p <- length(alpha[[s]]) ## model order
 
-    # val <- c(out[(length(out) + 1 - p):length(out)]) ## initial value
     val <- out[(dim(out)[1] + 1 - p):dim(out)[1], value] ## initial value
 
     aux <- length(val)
@@ -66,8 +63,6 @@ seasonalAR <- function(x, ACS, season = 'month') {
     for (i in (p + 1):(n + p)) { ## AR
       val[i] <- sum(val[(i - p):(i - 1)]*a.rev) + gn[i]
     }
-
-    # val <- val[-((length(val) + 1 - p):length(val))] ## remove init values
 
     out <- rbind(out,
                  data.table(value = val[-1:-aux],

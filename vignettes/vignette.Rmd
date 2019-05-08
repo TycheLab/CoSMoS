@@ -117,7 +117,6 @@ The `acs()` can produce values of the linear autocorrelation according to this f
 Thus, instead of setting each autocorrelation coefficient explicitly, we can fit a model with one to four arguments depending on the selected structure.
 
 ```{r}
-library(reshape2); library(ggplot2)
 ## specify lag
 lags <- 0:10
 
@@ -196,7 +195,7 @@ par(mfrow = c(1, 1))
 plot(ggamma_sim, main = "")
 ```
 
-##Validating the results
+## Validating the results
 
 The efficiency of the generated time series can be validated with `checkTS()`. The first three moments, probability zero and the first three autocorrelation coefficients are printed.
 
@@ -208,6 +207,7 @@ checkTS(ggamma_sim)
 
 # Stochastic Simulation of real-world processes {#section_2}
 
+## Hourly precipitation
 In practice, we usually want to simulate a natural process using some sampled time series. A typical hydroclimatic variable, also available in `CoSMoS` package is daily precipitation.
 
 ```{r}
@@ -221,10 +221,11 @@ acf(precip$value, main = "", lag.max = 20)
 To generate a synthetic time series with similar characteristics to the observed precipitation, we have to determine their marginal distribution, autocorrelation structure and probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with `analyzeTS()` and then check the goodness-of-fit with `reportTS()`.
 
 ```{r, fig.height = 9}
-precip_ggamma <- CoSMoS::analyzeTS(TS = precip, 
+precip_ggamma <- analyzeTS(TS = precip, 
                                    season = 'month',
                                    dist = 'ggamma',
-                                   acsID = "weibull")
+                                   acsID = "weibull",
+                                   lag.max = 12)
 reportTS(precip_ggamma, 'dist')
 reportTS(precip_ggamma, 'acs')
 reportTS(precip_ggamma, 'stat')
@@ -233,10 +234,11 @@ reportTS(precip_ggamma, 'stat')
 In this example, the Generalized Gamma distribution, with a Weibull auto-correlation structure, appears to fit well to the observered time series. Other combinations might not give so good results. For instance:
 
 ```{r, warning = FALSE, fig.height = 9}
-precip_pareto <- CoSMoS::analyzeTS(TS = precip, 
+precip_pareto <- analyzeTS(TS = precip, 
                                    season = 'month',
                                    dist = 'paretoII',
-                                   acsID = 'fgn')
+                                   acsID = 'fgn',
+                                   lag.max = 12)
 reportTS(precip_pareto, 'dist')
 reportTS(precip_pareto, 'acs')
 ```
@@ -256,8 +258,43 @@ dta <- rbind(dta, sim_precip)
 ggplot(dta) +
   geom_line(aes(x = date, y = value)) +
   facet_wrap(~id, ncol = 1) +
-  theme_bw()
+  theme_classic()
 ```
+
+## Daily streamflow
+
+We can also apply the same methods to a different dataset - daily streamflow! For this example we have used random dataset from the MOPEX database [(https://www.nws.noaa.gov/oh/mopex/mo_datasets.htm)](https://www.nws.noaa.gov/oh/mopex/mo_datasets.htm).
+```{r}
+id <- '02135000'
+dta_raw <- as.data.table(read.fwf(sprintf('ftp://hydrology.nws.noaa.gov/pub/gcip/mopex/US_Data/Us_438_Daily/%s.dly', 
+                                          id), 
+                                  widths = c(8,10,10,10,10,10),
+                                  col.names = c('date', 'P', 'E', 'value', 'Tmax', 'Tmin')))
+
+dta_raw[, date := as.POSIXct(gsub(' ','0', date), format = '%Y%m%d')]
+
+daily_streamflow <- dta_raw[value >= 0, .(date, value)]
+
+str_burr <- analyzeTS(daily_streamflow,
+                      dist = 'ggamma',
+                      norm = 'N4',
+                      acsID = 'paretoII',
+                      lag.max = 50)
+
+sim_str <- simulateTS(str_burr)
+
+dta <- daily_streamflow
+dta[, id := 'observed']
+sim_str[, id := 'simulated']
+
+dta <- rbind(dta, sim_str)
+
+ggplot(dta) +
+  geom_line(aes(x = date, y = value)) +
+  facet_wrap(~id, ncol = 1) +
+  theme_classic()
+```
+
 
 # Available distributions in CoSMoS package {#section_3}
 
