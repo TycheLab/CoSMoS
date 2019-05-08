@@ -74,7 +74,7 @@
 #'}
 #' \dontshow{
 #' ## test for one month to make it fast
-#' precip <- precip[between(date, as.POSIXct('1990-1-01', format('%Y-%m-%d'), tz = 'America/Regina'), as.POSIXct('1990-1-31', format('%Y-%m-%d'), tz = 'America/Regina'))]
+#' precip <- precip[between(date, as.POSIXct('1990-1-01', format('%Y-%m-%d'), tz = 'America/Regina'), as.POSIXct('1990-1-10', format('%Y-%m-%d'), tz = 'America/Regina'))]
 #' a <- analyzeTS(precip)
 #'}
 #'
