@@ -16,8 +16,13 @@ editor_options:
   chunk_output_type: console
 ---
 
+***
+**Vignette with figures can be found [here](http://rpubs.com/Strnda/CoSMoS).**    
+
+***
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 7)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 7, eval = FALSE)
 ```
 
 _Hydroclimatic processes come in all "shapes and sizes". They are characterized by different spatiotemporal correlation structures and probability distributions that can be continuous, mixed-type, discrete or even binary. Simulating such processes by reproducing precisely their marginal distribution and linear correlation structure, including features like intermittency, can greatly improve hydrological analysis and design. Traditionally, modelling schemes are case specific and typically attempt to preserve few statistical moments providing inadequate and potentially risky distribution approximations._ 
@@ -266,8 +271,8 @@ ggplot(dta) +
 We can also apply the same methods to a different dataset - daily streamflow! For this example we have used random dataset from the MOPEX database [(https://www.nws.noaa.gov/oh/mopex/mo_datasets.htm)](https://www.nws.noaa.gov/oh/mopex/mo_datasets.htm).
 ```{r}
 id <- '02135000'
-dta_raw <- as.data.table(read.fwf(sprintf('ftp://hydrology.nws.noaa.gov/pub/gcip/mopex/US_Data/Us_438_Daily/%s.dly', 
-                                          id), 
+dta_raw <- as.data.table(read.fwf(sprintf(
+  'ftp://hydrology.nws.noaa.gov/pub/gcip/mopex/US_Data/Us_438_Daily/%s.dly', id), 
                                   widths = c(8,10,10,10,10,10),
                                   col.names = c('date', 'P', 'E', 'value', 'Tmax', 'Tmin')))
 
