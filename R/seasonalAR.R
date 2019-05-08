@@ -31,14 +31,16 @@ seasonalAR <- function(x, ACS, season = 'month') {
 
   alpha <- lapply(ACS, YW) ## pars for the seasonal models
 
-  out <- data.table(value = AR1(max(sapply(alpha, length)), alpha[[d[1, 's']]][1])) ## overal init values
+  out <- data.table(value = AR1(max(sapply(alpha, length)),
+                                ACS[[which(gsub(paste(season, ''), '', names(ACS)) == d[1, 's'])]][2])) ## overal init values
+
   out[, id := 0]
 
   esd <- c()
 
   for (i in seq_along(alpha)) { ## sd for gaussian noise
 
-    esd[i] <- sqrt(1 - sum(ACS[[i]][2:length(ACS[[i]])]*alpha[[i]]))
+    esd[i] <- sqrt(1 - sum(alpha[[i]]*ACS[[i]][2:length(ACS[[i]])]))
   }
 
 
@@ -46,7 +48,9 @@ seasonalAR <- function(x, ACS, season = 'month') {
 
     s <- d[j, 's'] ## season selection
 
-    p <- length(alpha[[s]]) ## model order
+    ss <- which(gsub(paste(season, ''), '', names(alpha)) == s) ## season possition
+
+    p <- length(alpha[[ss]]) ## model order
 
     val <- out[(dim(out)[1] + 1 - p):dim(out)[1], value] ## initial value
 
@@ -58,7 +62,7 @@ seasonalAR <- function(x, ACS, season = 'month') {
                 mean = 0,
                 sd = esd[s])
 
-    a.rev <- rev(alpha[[s]]) ## alpha in the correct order
+    a.rev <- rev(alpha[[ss]]) ## alpha in the correct order
 
     for (i in (p + 1):(n + p)) { ## AR
       val[i] <- sum(val[(i - p):(i - 1)]*a.rev) + gn[i]
@@ -76,7 +80,6 @@ seasonalAR <- function(x, ACS, season = 'month') {
                     gauss = out[, value],
                     season = out[, id]))
 }
-
 #' Yule-Walker solver
 #'
 #' @param ACS vector of ACS values

@@ -300,6 +300,13 @@ ggplot(dta) +
   theme_classic()
 ```
 
+**Recomended distributions for variables:**     
+
+* _precipitation_: ggamma (Generalized Gamma), burr### (Burr type)     
+* _streamflow_: ggamma (Generalized Gamma), burr### (Burr type)     
+* _relative humidity_: beta     
+* _temperature_: norm (Normal distribution)     
+
 
 # Available distributions in CoSMoS package {#section_3}
 

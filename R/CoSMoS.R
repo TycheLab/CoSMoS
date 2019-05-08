@@ -5,8 +5,8 @@
 #' The generated time series preserve any probability distribution and any linear autocorrelation structure. Users can generate as many and as long time series from processes such as precipitation, wind, temperature, relative humidity etc. It is based on a framework that unified, extended, and improved a modelling strategy that generates time series by transforming “parent” Gaussian time series having specific characteristics (Papalexiou, 2018).
 #'
 #' @author \strong{Coded and maintained by:} Filip Strnad \email{strnadf@fzp.czu.cz}
-#' @author \strong{Conceptual design by:} Simon Michael Papalexiou \email{sm.papalexiou@usask.ca}, and Filip Strnad
-#' @author \strong{Beta tested by:} Filip Strnad, Yannis Markonis \email{markonis@fzp.czu.cz}, and Simon Michael Papalexiou
+#' @author \strong{Conceptual design by:} Simon Michael Papalexiou \email{sm.papalexiou@usask.ca}
+#' @author \strong{Tested and documented by:} Yannis Markonis \email{markonis@fzp.czu.cz}
 #'
 #' @section Funding:
 #'

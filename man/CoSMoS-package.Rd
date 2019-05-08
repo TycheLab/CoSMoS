@@ -22,7 +22,7 @@ Papalexiou, S.M., 2018. Unified theory for stochastic modelling of hydroclimatic
 \author{
 \strong{Coded and maintained by:} Filip Strnad \email{strnadf@fzp.czu.cz}
 
-\strong{Conceptual design by:} Simon Michael Papalexiou \email{sm.papalexiou@usask.ca}, and Filip Strnad
+\strong{Conceptual design by:} Simon Michael Papalexiou \email{sm.papalexiou@usask.ca}
 
-\strong{Beta tested by:} Filip Strnad, Yannis Markonis \email{markonis@fzp.czu.cz}, and Simon Michael Papalexiou
+\strong{Tested and documented by:} Yannis Markonis \email{markonis@fzp.czu.cz}
 }

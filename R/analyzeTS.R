@@ -4,6 +4,12 @@
 #'
 #' In practice, we usually want to simulate a natural process using some sampled time series. To generate a synthetic time series with similar characteristics to the observed values, we have to determine marginal distribution, autocorrelation structure and probability zero for each individual month. This can is done by fitting distributions and autocorrelation structures with analyzeTS(). Result can be checked with reportTS(). Syynthetic time series with the same statistical properties can be produced with simulateTS().
 #'
+#' Recomended distributions for variables:
+#'  * _precipitation_: ggamma (Generalized Gamma), burr### (Burr type)
+#'  * _streamflow_: ggamma (Generalized Gamma), burr### (Burr type)
+#'  * _relative humidity_: beta
+#'  * _temperature_: norm (Normal distribution)
+#'
 #' @param TS time series in format - date, value
 #' @param season name of the season (e.g. month, week)
 #' @param acsID ID of the autocorrelation structure to be fitted
@@ -69,10 +75,7 @@
 #' \dontshow{
 #' ## test for one month to make it fast
 #' precip <- precip[between(date, as.POSIXct('1990-1-01', format('%Y-%m-%d'), tz = 'America/Regina'), as.POSIXct('1990-1-31', format('%Y-%m-%d'), tz = 'America/Regina'))]
-#'
 #' a <- analyzeTS(precip)
-#' reportTS(a)
-#' simulateTS(a)
 #'}
 #'
 analyzeTS <- function(TS, season = 'month', dist = 'ggamma', acsID = 'weibull', norm = 'N2', n.points = 30, lag.max = 30, constrain = FALSE){
@@ -367,6 +370,8 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
     as <- do.call(acs, c(list(id = id, t = lag), a[[i]])) ## get ACS
     ACS[[i]] <- actf(as, fp$actfcoef[1], fp$actfcoef[2]) ## transform ACS
   }
+
+  names(ACS) <- names(a)
 
   p0 <- uval <- gauss <- value <- . <- NULL ## global variable check
 

@@ -43,6 +43,14 @@ Provide a complete set of tools for time series simulation, from seasonal descri
 }
 \details{
 In practice, we usually want to simulate a natural process using some sampled time series. To generate a synthetic time series with similar characteristics to the observed values, we have to determine marginal distribution, autocorrelation structure and probability zero for each individual month. This can is done by fitting distributions and autocorrelation structures with analyzeTS(). Result can be checked with reportTS(). Syynthetic time series with the same statistical properties can be produced with simulateTS().
+
+Recomended distributions for variables:
+\itemize{
+\item \emph{precipitation}: ggamma (Generalized Gamma), burr### (Burr type)
+\item \emph{streamflow}: ggamma (Generalized Gamma), burr### (Burr type)
+\item \emph{relative humidity}: beta
+\item \emph{temperature}: norm (Normal distribution)
+}
 }
 \examples{
 
@@ -94,10 +102,7 @@ ggplot(dta) +
 \dontshow{
 ## test for one month to make it fast
 precip <- precip[between(date, as.POSIXct('1990-1-01', format('\%Y-\%m-\%d'), tz = 'America/Regina'), as.POSIXct('1990-1-31', format('\%Y-\%m-\%d'), tz = 'America/Regina'))]
-
 a <- analyzeTS(precip)
-reportTS(a)
-simulateTS(a)
 }
 
 }
