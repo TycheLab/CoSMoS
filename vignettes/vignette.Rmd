@@ -17,7 +17,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 7)
 ```
 
 _Hydroclimatic processes come in all "shapes and sizes". They are characterized by different spatiotemporal correlation structures and probability distributions that can be continuous, mixed-type, discrete or even binary. Simulating such processes by reproducing precisely their marginal distribution and linear correlation structure, including features like intermittency, can greatly improve hydrological analysis and design. Traditionally, modelling schemes are case specific and typically attempt to preserve few statistical moments providing inadequate and potentially risky distribution approximations._ 
@@ -34,10 +34,9 @@ From [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013).
 
 The implementation of the stochastic simulation framework follows a few simple steps. Our aim is to generate a time series from a given [marginal distribution](https://en.wikipedia.org/wiki/Marginal_distribution), [autocorrelation function](https://en.wikipedia.org/wiki/Autocorrelation) and probability zero. The latter is the probability that a sample value is zero and is commonly used in modelling variables with a substantial number of zero values, such as daily precipitation (intermittent processes).
 
-```{r, message = FALSE, eval = TRUE}
+```{r, message = FALSE}
 library(CoSMoS)
 ```
-
 
 ## Define marginal distribution
 
@@ -87,6 +86,7 @@ ggamma_sim <- generateTS(n = no,
                          margarg = param,
                          acsvalue = acf)
 plot(ggamma_sim, main = "")
+par(mfrow = c(1, 2))
 plot(density(ggamma_sim[[1]]), main = "")
 acf(ggamma_sim[[1]], main = "")
 ```
@@ -100,6 +100,7 @@ ggamma_sim <- generateTS(n = no,
                          margarg = param,
                          acsvalue = acf)
 plot(ggamma_sim, main = "")
+par(mfrow = c(1, 2))
 plot(density(ggamma_sim[[1]]), main = "")
 acf(ggamma_sim[[1]], main = "")
 ```
@@ -175,14 +176,15 @@ ggamma_sim <- generateTS(n = no,
                          acsvalue = my_acf)
 par(mfrow = c(1, 1))
 plot(ggamma_sim, main = "")
+par(mfrow = c(1, 2))
 acf(ggamma_sim[[1]])
 ```
 
 ## Intermittency
 
-If we wish to simulate an intermittent process (e.g., precipitation), then we have to define the probability zero. For example, if `p0 = 0.9`, then generated data shall have 90% of zero values (dry days). We can simulate multiple processes at once by using argument `TSn = 5`.
+If we wish to simulate an intermittent process (e.g., precipitation), then we have to define the probability zero. For example, if `p0 = 0.9`, then generated data shall have 90% of zero values (dry days). In addition, we can simulate multiple processes at once by using argument `TSn = 5`.
 
-```{r}
+```{r, fig.height = 7}
 prob_zero <- .9
 ggamma_sim <- generateTS(n = no, 
                          margdist = marginaldist,
@@ -190,6 +192,7 @@ ggamma_sim <- generateTS(n = no,
                          acsvalue = acf,
                          p0 = prob_zero,
                          TSn = 5)
+par(mfrow = c(1, 1))
 plot(ggamma_sim, main = "")
 ```
 
@@ -212,12 +215,12 @@ data('precip')
 plot(precip, type = 'l')
 par(mfrow = c(1, 2))
 plot(density(precip$value), main = "", xlim = c(0, 10)) #Does not plot extreme values
-acf(precip$value, main = "")
+acf(precip$value, main = "", lag.max = 20)
 ```
 
 To generate a synthetic time series with similar characteristics to the observed precipitation, we have to determine their marginal distribution, autocorrelation structure and probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with `analyzeTS()` and then check the goodness-of-fit with `reportTS()`.
 
-```{r}
+```{r, fig.height = 9}
 precip_ggamma <- CoSMoS::analyzeTS(TS = precip, 
                                    season = 'month',
                                    dist = 'ggamma',
@@ -227,9 +230,9 @@ reportTS(precip_ggamma, 'acs')
 reportTS(precip_ggamma, 'stat')
 ```
 
-In this example the Generalized Gamma distribution with Weibull auto-correlation structure apperas to be a good combination for the stochastic simulation. Other combinations might not be so well-fitted:
+In this example, the Generalized Gamma distribution, with a Weibull auto-correlation structure, appears to fit well to the observered time series. Other combinations might not give so good results. For instance:
 
-```{r}
+```{r, warning = FALSE, fig.height = 9}
 precip_pareto <- CoSMoS::analyzeTS(TS = precip, 
                                    season = 'month',
                                    dist = 'paretoII',
@@ -238,7 +241,7 @@ reportTS(precip_pareto, 'dist')
 reportTS(precip_pareto, 'acs')
 ```
 
-Then we can produce a synthetic time series with the same statistical properties with `simulateTS()` for a given period:
+When the marginal distribution and the autocorrelation structure with the best fit are determined, we can produce a synthetic time series with the same statistical properties with `simulateTS()` for a given period.
 
 ```{r}
 sim_precip <- simulateTS(aTS = precip_ggamma, 
