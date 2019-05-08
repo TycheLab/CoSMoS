@@ -1,4 +1,4 @@
-CoSMoS v1.0.1 (Release date: 2019-05-13)
+CoSMoS v1.0.1 (Release date: 2019-05-8)
 ================
 
 Major upgrade to package functionality:    

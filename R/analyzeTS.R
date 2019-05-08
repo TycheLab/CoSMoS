@@ -1,6 +1,6 @@
-#' Analyze, Report and Simulate time series functions
+#' The Functions analyzeTS, reportTS, and simulateTS
 #'
-#' Provide a complete set of tools for time series simulation, from seasonal descriptive statistics incuding autocorrelation sturctures all the way to seasonal distribution fits and variable simulations.
+#' Provide a complete set of tools to make time series analysis a piece of cake - analyzeTS() automatically performs seasonal analysis, fits distributions and correlation structures, reportTS provides visualizations of the fitted distributions and correlation structures, and a table with the values of the fitted parameters and basic descriptive statistics, simulateTS automatically takes the results of the analyseTS and generates syntetic ones.
 #'
 #' In practice, we usually want to simulate a natural process using some sampled time series. To generate a synthetic time series with similar characteristics to the observed values, we have to determine marginal distribution, autocorrelation structure and probability zero for each individual month. This can is done by fitting distributions and autocorrelation structures with analyzeTS(). Result can be checked with reportTS(). Syynthetic time series with the same statistical properties can be produced with simulateTS().
 #'
