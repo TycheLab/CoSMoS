@@ -1,6 +1,6 @@
 [![Travis build status](https://travis-ci.org/strnda/CoSMoS.svg?branch=master)](https://travis-ci.org/strnda/CoSMoS)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/strnda/CoSMoS?branch=master&svg=true)](https://ci.appveyor.com/project/strnda/CoSMoS)
-[![CRAN_Release_Badge](http://www.r-pkg.org/badges/version-ago/CoSMoS)](https://CRAN.R-project.org/package=CoSMoS)
+[![CRAN status](https://www.r-pkg.org/badges/version/CoSMoS)](https://cran.r-project.org/package=CoSMoS)
 [![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/CoSMoS)](https://CRAN.R-project.org/package=CoSMoS)
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)
 
