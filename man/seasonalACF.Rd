@@ -18,10 +18,13 @@ Calculate seasonal ACF
 }
 \examples{
 
-x <- data.frame(date = seq(Sys.Date(), by = 'day', length.out = 1000),
-                value = rnorm(1000))
+data('precip')
 
-sacf <- seasonalACF(x, 'month')
+\dontshow{
+ precip <- precip[between(date, as.POSIXct('1990-1-01', format('\%Y-\%m-\%d'), tz = 'America/Regina'),
+ as.POSIXct('1990-1-10', format('\%Y-\%m-\%d'), tz = 'America/Regina'))]
+}
+seasonalACF(precip, 'month')
 
 }
 \keyword{internal}
