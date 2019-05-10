@@ -11,7 +11,7 @@ Authors@R: c(person("Filip", "Strnad",
                       role = "ctb"))
 Description: A single framework, unifying, extending, and improving a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific 'parent' Gaussian process Papalexiou (2018) <doi:10.1016/j.advwatres.2018.02.013>.
 License: GPL-3
-Depends: R (>= 3.6.0), ggplot2, pracma, nloptr, data.table, methods, stats
+Depends: R (>= 3.5.0), ggplot2, pracma, nloptr, data.table, methods, stats
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
