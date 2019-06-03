@@ -82,7 +82,7 @@ acfburrXII <- function(t, scale, shape1, shape2) {
     return(NaN)
   } else {
 
-    return((1 + shape2*(t/scale)^shape1)^-(1/shape1*shape2))
+    return((1 + shape2 * (t / scale) ^ shape1) ^ -(1 / shape1 * shape2))
   }
 }
 
@@ -92,12 +92,12 @@ acfburrXII <- function(t, scale, shape1, shape2) {
 
 acfparetoII <- function(t, scale, shape) {
 
-  if((scale <= 0) | (shape <= 0)) {
+  if ((scale <= 0) | (shape <= 0)) {
 
     return(NaN)
   } else {
 
-    return((1 + (shape*t)/scale)^(-shape^(-1)))
+    return((1 + (shape * t) / scale) ^ (-shape ^ (-1)))
   }
 }
 
@@ -108,7 +108,7 @@ acfparetoII <- function(t, scale, shape) {
 
 acffgn <- function(t, H) {
 
-  (abs(-1 + t)^(2*H) - 2*abs(t)^(2*H) + abs(1 + t)^(2*H))/2
+  (abs(-1 + t) ^ (2 * H) - 2 * abs(t) ^ (2 * H) + abs(1 + t) ^ (2 * H)) / 2
 }
 
 #' @keywords internal
@@ -116,5 +116,5 @@ acffgn <- function(t, H) {
 #' @export
 
 acfweibull <- function(t, scale, shape) {
-  exp(-(t/scale)^shape)
+  exp(-(t / scale) ^ shape)
 }

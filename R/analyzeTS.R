@@ -75,10 +75,16 @@
 #' \dontshow{
 #' ## test for one month to make it fast
 #' precip <- precip[between(date, as.POSIXct('1990-1-01', format('%Y-%m-%d'), tz = 'America/Regina'), as.POSIXct('1990-1-5', format('%Y-%m-%d'), tz = 'America/Regina'))]
-#' a <- analyzeTS(precip)
+#' a <- analyzeTS(precip, opts = list('algorithm' = 'NLOPT_LN_NELDERMEAD',
+#'                                    'maxeval' = 10))
 #'}
 #'
-analyzeTS <- function(TS, season = 'month', dist = 'ggamma', acsID = 'weibull', norm = 'N2', n.points = 30, lag.max = 30, constrain = FALSE){
+analyzeTS <- function(TS, season = 'month', dist = 'ggamma', acsID = 'weibull', norm = 'N1', n.points = 30, lag.max = 30, constrain = FALSE, opts = NULL){
+
+  if (is.null(opts)) {
+
+    opts <- formals(fitDist)$opts
+  }
 
   ea <- seasonalACF(TS, ## calculate seasonal empirical ACS
                     season = season,
@@ -93,7 +99,8 @@ analyzeTS <- function(TS, season = 'month', dist = 'ggamma', acsID = 'weibull', 
                                           dist,
                                           norm = norm,
                                           n.points = n.points,
-                                          constrain = constrain))
+                                          constrain = constrain,
+                                          opts = opts))
 
   structure(.Data = list(data = x, ## send the result out
                          dfits = f,
@@ -148,7 +155,7 @@ reportTS <- function(aTS, method = 'dist') {
                               coef = T)$coefficients[2])
     }), 2))
 
-    err <- round(sapply(aTS$dfits, function(x) attr(x, 'err')), 4)
+    err <- round(sapply(aTS$dfits, function(x) attr(x, 'nfo')$objective), 4)
 
     p0 <- 1 - round(sapply(nz, dim)[1,]/sapply(aTS$data[[1]], dim)[1,], 2)
 

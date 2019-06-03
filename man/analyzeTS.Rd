@@ -7,7 +7,8 @@
 \title{The Functions analyzeTS, reportTS, and simulateTS}
 \usage{
 analyzeTS(TS, season = "month", dist = "ggamma", acsID = "weibull",
-  norm = "N2", n.points = 30, lag.max = 30, constrain = FALSE)
+  norm = "N1", n.points = 30, lag.max = 30, constrain = FALSE,
+  opts = NULL)
 
 reportTS(aTS, method = "dist")
 
@@ -29,6 +30,8 @@ simulateTS(aTS, from = NULL, to = NULL)
 \item{lag.max}{max lag for the empirical autocorrelation structure}
 
 \item{constrain}{logical - constrain shape2 parametes for finite tails}
+
+\item{opts}{minimization options}
 
 \item{aTS}{analyzed timeseries}
 
@@ -102,7 +105,8 @@ ggplot(dta) +
 \dontshow{
 ## test for one month to make it fast
 precip <- precip[between(date, as.POSIXct('1990-1-01', format('\%Y-\%m-\%d'), tz = 'America/Regina'), as.POSIXct('1990-1-5', format('\%Y-\%m-\%d'), tz = 'America/Regina'))]
-a <- analyzeTS(precip)
+a <- analyzeTS(precip, opts = list('algorithm' = 'NLOPT_LN_NELDERMEAD',
+                                   'maxeval' = 10))
 }
 
 }

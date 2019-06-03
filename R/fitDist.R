@@ -3,6 +3,7 @@
 #' Uses Nelder-Mead simplex algorithm to minimize fitting norms.
 #'
 #' @inheritParams N
+#' @param opts minimization options
 #' @param data value to be fitted
 #' @param constrain logical - constrain shape2 parametes for finite tails
 #'
@@ -14,7 +15,14 @@
 #' x <- fitDist(rnorm(1000), 'norm', 30, 'N1', FALSE)
 #' x
 #'
-fitDist <- function(data, dist, n.points, norm, constrain) {
+fitDist <- function(data,
+                    dist,
+                    n.points,
+                    norm,
+                    constrain,
+                    opts = list('algorithm' = 'NLOPT_LN_NELDERMEAD',
+                                'xtol_rel' = 1.0e-8,
+                                'maxeval' = 1.0e4)) {
 
   a <- getDistArg(dist)
 
@@ -48,22 +56,33 @@ fitDist <- function(data, dist, n.points, norm, constrain) {
     }
   }
 
-  fit <-  neldermead(x0 = start, ## parameter starting position
-                     fn = N, ## function to minimize
-                     val = data, ## input data
-                     dist = dist, ## distribution to be fitted
-                     n.points = n.points, ## number of points for fitting
-                     norm = norm, ## norm used to fit
-                     lower = lwr, ## lower bound
-                     upper = upr) ## upper bound
+  # fit <-  neldermead(x0 = start, ## parameter starting position
+  #                    fn = N, ## function to minimize
+  #                    val = data, ## input data
+  #                    dist = dist, ## distribution to be fitted
+  #                    n.points = n.points, ## number of points for fitting
+  #                    norm = norm, ## norm used to fit
+  #                    lower = lwr, ## lower bound
+  #                    upper = upr) ## upper bound
 
-  out <- as.list(setNames(fit$par, ## return list of dist arguments
+  fit <- nloptr(x0 = start,
+                eval_f = N,
+                lb = lwr,
+                ub = upr,
+                val = data, ## input data
+                dist = dist, ## distribution to be fitted
+                n.points = n.points,
+                norm = norm,
+                opts = opts)
+
+
+  out <- as.list(setNames(fit$solution, ## return list of dist arguments
                           a))
 
   structure(.Data = out,
             dist = dist,
             edf = ECDF(data),
-            err = fit$value,
+            nfo = fit,
             class = 'fitDist')
 }
 
@@ -87,7 +106,7 @@ plot.fitDist <- function(x, ...) {
 
   edf <- attr(x, 'edf') ## get ecdf
   dist <- attr(x, 'dist') ## get dist name
-  err <- attr(x, 'err')
+  nfo <- attr(x, 'nfo')
 
   mm <- do.call(paste0('p', dist), ## find the min / max prob for the plot
                 c(list(q = range(edf$value)),
@@ -113,7 +132,7 @@ plot.fitDist <- function(x, ...) {
                alpha = .5) +
     labs(x = 'Nonzero values',
          y = 'Exceedence probability',
-         title = paste('Fitting norm (error) value =', round(err, 5))) +
+         title = paste('Fitting norm (error) value =', round(nfo$objective, 5))) +
     scale_y_continuous(breaks = seq(-10, ## auxiliary axis ticks
                                     0,
                                     length.out = 5),

@@ -79,9 +79,11 @@ seasonalAR <- function(x, ACS, season = 'month') {
 
   out <- out[id != 0, ]
 
-  return(data.table(date = x,
-                    gauss = out[, value],
-                    season = out[, id]))
+  dt <- data.table(date = x,
+                   gauss = out[, value],
+                   season = out[, id])
+
+  return(dt)
 }
 #' Yule-Walker solver
 #'
@@ -107,5 +109,7 @@ YW <- function(ACS) {
 
   rho <- matrix(ACS[2:(p + 1)], p, 1)
 
-  return(solve(P, rho)) ## Yule-Walker
+  m <- solve(P, rho) ## Yule-Walker
+
+  return(m)
 }

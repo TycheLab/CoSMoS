@@ -16,7 +16,7 @@
 #'
 actf <- function(rhox, b, c) {
 
-  rhoz <- ((1 + b*rhox)^(1 - c) - 1)/((1 + b)^(1 - c) - 1)
+  rhoz <- ((1 + b * rhox) ^ (1 - c) - 1)/((1 + b) ^ (1 - c) - 1)
 
   return(rhoz)
 }
@@ -37,7 +37,7 @@ actf <- function(rhox, b, c) {
 #'
 actfdiscrete <- function(rhox, b, c) {
 
-  rhoz <- 1 - (1 - rhox^b)^c
+  rhoz <- 1 - (1 - rhox ^ b) ^ c
 
   return(rhoz)
 }

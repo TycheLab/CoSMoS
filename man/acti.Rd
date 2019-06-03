@@ -20,7 +20,7 @@ acti(x, y, dist, distarg, rhoz, p0)
 \item{p0}{probability od zero values}
 }
 \description{
-Expretion supplied to double integral
+Expression supplied to double integral
 }
 \examples{
 

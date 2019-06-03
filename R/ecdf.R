@@ -13,11 +13,20 @@
 #'
 ECDF <- function(x) {
 
-  st <- sort(x) ## sort the values: x1 < x2 < x3 < ... < xN
-  p <- rank(st)/(length(st) + 1) ## weibull plotting position
+  ## sort the values: x1 < x2 < x3 < ... < xN
+  st <- sort(x)
 
-  out <- unique(data.table(p = p,
-                           value = st))
+  ## weibull plotting position
+  aux <- data.table(p = rank(
+    x = st,
+    ties.method = 'first') / (length(st) + 1),
+                    value = st,
+                    key = 'value')
+
+  J <- value <- NULL
+
+  out <- aux[J(unique(value)),
+             mult = 'last']
 
   structure(.Data = out)
 }

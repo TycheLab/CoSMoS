@@ -37,11 +37,12 @@ N <- function(par, val, dist, norm, n.points) {
                           a))
   if((norm == 'N1') | (norm == 'N2')) {
 
-    FN <- edf$p ## empirical probs
-    F <- do.call(paste0('p', ## theoretical probs
+    FN <- edf$value ## empirical values
+    F <- do.call(paste0('q', ## theoretical values
                         dist),
-                 args = c(list(edf$value),
+                 args = c(list(edf$p),
                           arg))
+
 
     if(norm == 'N1') { ## N1
 
@@ -56,10 +57,10 @@ N <- function(par, val, dist, norm, n.points) {
 
   if((norm == 'N3') | (norm == 'N4')) {
 
-    Xi <- edf$value ## empirical values
-    Xu <- do.call(paste0('q', ## theoretical values
+    Xi <- edf$p ## empirical probs
+    Xu <- do.call(paste0('p', ## theoretical probs
                          dist),
-                  args = c(list(edf$p),
+                  args = c(list(edf$value),
                            arg))
 
     if(norm == 'N3') { ## N3

@@ -25,6 +25,9 @@ fitACS <- function(acf, ID, start = NULL, lag = NULL) {
 
       eACS <- acf[1:which(acf <= .01)[1]]
     }
+  } else {
+
+    eACS <- acf[1:(lag + 1)]
   }
 
 

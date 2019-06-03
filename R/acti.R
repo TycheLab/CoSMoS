@@ -1,6 +1,6 @@
 #' ACTI - autocorrelation transformation integral function
 #'
-#' Expretion supplied to double integral
+#' Expression supplied to double integral
 #'
 #' @param x x-plain value
 #' @param y y-plain value
@@ -10,7 +10,7 @@
 #' @param p0 probability od zero values
 #'
 #' @export
-#' @import pracma stats
+#' @import stats
 #' @keywords internal
 #'
 #' @examples
@@ -19,9 +19,14 @@
 #'
 acti <- function(x, y, dist, distarg, rhoz, p0) {
 
-  do.call(paste0('q', dist), args = c(list(p = (erfc(-x/sqrt(2))/2 - p0)/(1 - p0)), distarg))*
-    do.call(paste0('q', dist), args = c(list(p = (erfc(-y/sqrt(2))/2 - p0)/(1 - p0)), distarg))*
-    exp((x^2 + y^2 - 2*x*y*rhoz)/(2*(-1 + rhoz^2)))/(2*pi*sqrt(1 - rhoz^2))
+  do.call(what = paste0('q', dist),
+          args = c(list(p = (erfc(-x / sqrt(2)) / 2 - p0) / (1 - p0)),
+                   distarg)) *
+    do.call(what = paste0('q', dist),
+            args = c(list(p = (erfc(-y / sqrt(2)) / 2 - p0) / (1 - p0)),
+                     distarg)) *
+    exp((x ^ 2 + y ^ 2 - 2 * x * y * rhoz) /
+          (2 * (-1 + rhoz ^ 2))) / (2 * pi * sqrt(1 - rhoz ^ 2))
 }
 
 #' AutoCorrelation Transformed Points
@@ -34,7 +39,7 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 #' @inheritParams moments
 #'
 #' @export
-#' @import pracma stats ggplot2
+#' @import stats ggplot2
 #'
 #' @examples
 #'
@@ -63,32 +68,65 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 #'
 actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 
-  rho <- data.frame(rhoz = c(seq(0.1, .9, .1), .95), rhox = 0) ## create data frame of marginal ACS values
+  rho <- data.frame(rhoz = c(seq(from = 0.1,
+                                 to = .9,
+                                 by = .1),
+                             .95),
+                    rhox = 0) ## create data frame of marginal ACS values
 
-  .min <- ifelse(p0 == 0, -8, -sqrt(2)*erfcinv(2*p0)) ## double integral lower bound
+  .min <- ifelse(test = p0 == 0,
+                 yes = -8,
+                 no = -sqrt(2) * inv.erfc(2 * p0)) ## double integral lower bound
   .max <- 8 ## double integral upper bound
 
   m <- moments(dist = margdist, ## moment calculation
                distarg = margarg,
-               raw = F, central = T, coef = F,
+               raw = F,
+               central = T,
+               coef = F,
                distbounds = distbounds,
                p0 = p0,
                order = 1:2)
 
   for (i in 1:dim(rho)[1]) {
 
-    temp <- integral2(acti, ## ACTI calculation
-                      ymin = .min, ymax = .max, xmin = .min, xmax = .max,
-                      rhoz = rho[i, 'rhoz'], p0 = p0,
-                      dist = margdist,
-                      distarg = margarg)$Q
+    # temp <- integral2(acti, ## ACTI calculation using pracma
+    #                   ymin = .min,
+    #                   ymax = .max,
+    #                   xmin = .min,
+    #                   xmax = .max,
+    #                   rhoz = rho[i, 'rhoz'],
+    #                   p0 = p0,
+    #                   dist = margdist,
+    #                   distarg = margarg)$Q
 
-    rho[i, 'rhox'] <- (temp - m[[1]]['mu1']^2)/(m[[1]]['mu2'])
+    temp <- integrate( ## ACTI using base
+      f = function(y) {
+        sapply(y, function(y) {
+          integrate(
+            f = function(x) {
+              acti(x = x,
+                   y = y,
+                   rhoz = rho[i, 'rhoz'],
+                   p0 = p0,
+                   dist = margdist,
+                   distarg = margarg)
+            },
+            lower = .min,
+            upper = .max,
+            subdivisions = 2e3)$value
+        })
+      },
+      lower = .min,
+      upper = .max,
+      subdivisions = 2e3
+    )$value
+
+    rho[i, 'rhox'] <- (temp - m[[1]]['mu1'] ^ 2) / (m[[1]]['mu2'])
   }
 
   structure(.Data = rho)
 }
-
 
 #' Fit the AutoCorrelation Transformation Function
 #'
@@ -118,9 +156,9 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 #'
 fitactf <- function(actpnts, discrete = FALSE) {
 
-  suppressWarnings(fit <- nls(rhoz ~ do.call(ifelse(discrete, ## actf fit using nls
-                                                    'actfdiscrete',
-                                                    'actf'),
+  suppressWarnings(fit <- nls(rhoz ~ do.call(what = ifelse(test = discrete, ## actf fit using nls
+                                                           yes = 'actfdiscrete',
+                                                           no = 'actf'),
                                              args = list(rhox, b, c)),
                               data = list(rhoz = actpnts$rhoz,
                                           rhox = actpnts$rhox),
