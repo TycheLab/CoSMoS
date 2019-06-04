@@ -10,10 +10,10 @@ test_that('test auto-correlation transformation integral and fit', {
                   margarg = distarg,
                   p0 = 0)
 
-  expect_equal(unlist(pnts[c(1, dim(pnts)[1]),]),             c(rhoz = c(0.10, 0.95), rhox = c(0.0549, 0.9151)),
+  expect_equal(unlist(pnts[c(1, dim(pnts)[1]),]),             c(rhoz = c(0.10, 0.95), rhox = c(0.0549, 0.9134)),
                tolerance = 0.05)
 
-  expect_equal(fitactf(pnts)$`actfcoef`,                      c(b = 1.6418, c = 1.2677),
+  expect_equal(fitactf(pnts)$`actfcoef`,                      c(b = 1.6154, c = 1.2813),
                tolerance = 0.05)
 
   expect_error(pnts <- actpnts(margdist = 'gammma', ## misspelled dist
