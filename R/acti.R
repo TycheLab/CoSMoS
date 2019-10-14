@@ -115,15 +115,16 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
             lower = .min,
             upper = .max,
             subdivisions = 1.0e3,
-            rel.tol = .Machine$double.eps ^ 0.5,
-            stop.on.error = FALSE)$value
+            rel.tol = 1.0e-5#,
+            # stop.on.error = FALSE
+          )$value
         })
       },
       lower = .min,
       upper = .max,
       subdivisions = 1.0e3,
-      rel.tol = .Machine$double.eps ^ 0.5,
-      stop.on.error = FALSE
+      rel.tol = 1.0e-5#,
+      # stop.on.error = FALSE
     )$value
 
     rho[i, 'rhox'] <- (temp - m[[1]]['mu1'] ^ 2) / (m[[1]]['mu2'])

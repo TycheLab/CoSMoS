@@ -39,17 +39,21 @@
 #'
 AR1 <- function(n, alpha, mean = 0, sd = 1) {
 
-  emean <- (1 - alpha)*mean ## Gaussian noise mean
-  esd <- sqrt(1- alpha^2)*sd ## Gaussian noise sd
+  emean <- (1 - alpha) * mean ## Gaussian noise mean
+  esd <- sqrt(1 - alpha ^ 2) * sd ## Gaussian noise sd
 
-  val <- c(rnorm(1, mean = mean, sd = sd)) ## values vector
+  val <- c(rnorm(n = 1,
+                 mean = mean,
+                 sd = sd)) ## values vector
 
   if(n != 1) {
 
-    gn <- rnorm(n, mean = emean, sd = esd) ## Gaussain noise vector
+    gn <- rnorm(n = n,
+                mean = emean,
+                sd = esd) ## Gaussain noise vector
 
     for (i in 2:n) { ## AR
-      val[i] <- val[(i - 1)]*alpha + gn[i]
+      val[i] <- val[(i - 1)] * alpha + gn[i]
     }
   }
 

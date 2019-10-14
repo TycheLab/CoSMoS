@@ -392,8 +392,11 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
     to <- date[.N, date]
   }
 
-  by <- (strsplit(format(difftime(date[2, date], ## time seq step
-                                  date[1, date])), ' ')[[1]][2])
+  # by <- (strsplit(format(difftime(date[2, date], ## time seq step
+  #                                 date[1, date])), ' ')[[1]][2])
+  #
+  by <- difftime(date[2, date], ## time seq step
+                 date[1, date])
 
   gausian <- seasonalAR(x = seq(from = from, ## generate seasonal gaussian process
                                 to = to,
