@@ -380,7 +380,7 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
 
   names(ACS) <- names(a)
 
-  p0 <- uval <- gauss <- value <- . <- NULL ## global variable check
+  p0 <- uval <- gauss <- value <- . <- season_id <- rn <- NULL ## global variable check
 
   if (is.null(from)) {
 
@@ -418,11 +418,25 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
 
   d <- getDistArg(dist)
 
-  l <- lapply(seq_along(d), function(i) as.data.frame(aux)[, d[i]]) ## get dist para
-  names(l) <- d
+  l <- as.data.table(x = r[, d],
+                     keep.rownames = TRUE) ## get dist parameters for each season
 
-  suppressWarnings(x <- do.call(paste0('q', dist), args = c(list(p = aux[, uval]), l))) ## transform gaussian process
-  aux[, value := x]
+  l[, 'season_id' := as.numeric(
+    x = sapply(X = strsplit(x = rn,
+                            split = '_'),
+               FUN = '[[', 2)
+  )] ## make season_id variable
+
+
+  for(i in l[, season_id]) {
+
+    trans.para <- l[season_id == i,
+                    !c('rn', 'season_id')] ## select correct pars
+
+    aux[season == i, value :=  do.call(what = paste0('q', dist),
+                                       args = c(list(p = uval),
+                                                as.list(trans.para)))] ## transform correct season gausian process
+  }
 
   out <- aux[, .(date, value)] ## select date amd value
 
