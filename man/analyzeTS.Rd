@@ -6,9 +6,17 @@
 \alias{simulateTS}
 \title{The Functions analyzeTS, reportTS, and simulateTS}
 \usage{
-analyzeTS(TS, season = "month", dist = "ggamma", acsID = "weibull",
-  norm = "N1", n.points = 30, lag.max = 30, constrain = FALSE,
-  opts = NULL)
+analyzeTS(
+  TS,
+  season = "month",
+  dist = "ggamma",
+  acsID = "weibull",
+  norm = "N1",
+  n.points = 30,
+  lag.max = 30,
+  constrain = FALSE,
+  opts = NULL
+)
 
 reportTS(aTS, method = "dist")
 

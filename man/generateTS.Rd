@@ -4,8 +4,16 @@
 \alias{generateTS}
 \title{Generate timeseries}
 \usage{
-generateTS(n, margdist, margarg, p = NULL, p0 = 0, TSn = 1,
-  distbounds = c(-Inf, Inf), acsvalue = NULL)
+generateTS(
+  n,
+  margdist,
+  margarg,
+  p = NULL,
+  p0 = 0,
+  TSn = 1,
+  distbounds = c(-Inf, Inf),
+  acsvalue = NULL
+)
 }
 \arguments{
 \item{n}{number of values}
@@ -47,7 +55,7 @@ To see the parameters of each distribution we support, see the help vignette:
 \code{vignette('vignette', package = 'CoSMoS')}.
 \item If you wish your time series to be intermittent (e.g., precipitation), then define the
 probability zero. For example, set p0 = 0.9, if you wish your generated data to have
-90\% of zero values (dry days).
+90\\% of zero values (dry days).
 \item Define your linear autocorrelations.
 \itemize{
 \item You can supply specific lag autocorrelations starting from lag 0

@@ -4,8 +4,14 @@
 \alias{fitDist}
 \title{Distribution fitting}
 \usage{
-fitDist(data, dist, n.points, norm, constrain, opts = list(algorithm =
-  "NLOPT_LN_NELDERMEAD", xtol_rel = 1e-08, maxeval = 10000))
+fitDist(
+  data,
+  dist,
+  n.points,
+  norm,
+  constrain,
+  opts = list(algorithm = "NLOPT_LN_NELDERMEAD", xtol_rel = 1e-08, maxeval = 10000)
+)
 }
 \arguments{
 \item{data}{value to be fitted}

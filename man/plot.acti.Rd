@@ -31,6 +31,6 @@ fit <- fitactf(p)
 
 ## plot the results
 plot(fit)
-plot(fit, main = 'Pareto type II distribution \\nautocorrelation tranformation')
+plot(fit, main = 'Pareto type II distribution \nautocorrelation tranformation')
 
 }

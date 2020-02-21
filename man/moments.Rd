@@ -4,8 +4,16 @@
 \alias{moments}
 \title{Numerical estimation of moments}
 \usage{
-moments(dist, distarg, p0 = 0, raw = T, central = T, coef = T,
-  distbounds = c(-Inf, Inf), order = 1:4)
+moments(
+  dist,
+  distarg,
+  p0 = 0,
+  raw = T,
+  central = T,
+  coef = T,
+  distbounds = c(-Inf, Inf),
+  order = 1:4
+)
 }
 \arguments{
 \item{dist}{distribution}

@@ -11,8 +11,7 @@
 \alias{popkurt}
 \title{Population statistics}
 \usage{
-populationstat(stat = "mean", dist, distarg, p0 = 0,
-  distbounds = c(-Inf, Inf))
+populationstat(stat = "mean", dist, distarg, p0 = 0, distbounds = c(-Inf, Inf))
 
 popmean(dist, distarg, p0 = 0, distbounds = c(-Inf, Inf))
 

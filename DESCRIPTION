@@ -1,7 +1,7 @@
 Package: CoSMoS
 Type: Package
 Title: Complete Stochastic Modelling Solution
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: c(person("Filip", "Strnad",
                      role = c("aut", "cre"),
                      email = "strnadf@fzp.czu.cz"),
@@ -14,11 +14,10 @@ License: GPL-3
 Depends: R (>= 3.5.0), ggplot2, nloptr, data.table, methods, stats
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-

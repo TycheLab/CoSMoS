@@ -4,8 +4,7 @@
 \alias{sample.moments}
 \title{Estimation of sample moments}
 \usage{
-sample.moments(x, na.rm = FALSE, raw = T, central = T, coef = T,
-  order = 1:4)
+sample.moments(x, na.rm = FALSE, raw = T, central = T, coef = T, order = 1:4)
 }
 \arguments{
 \item{x}{a numeric vector of values}

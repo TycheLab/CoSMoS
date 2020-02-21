@@ -403,9 +403,15 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
                                 by = by),
                         ACS = ACS)
 
-  setkey(gausian, season)
+  setkey(x = gausian,
+         season)
 
-  para <- as.data.table(t(sapply(f, function(x) as.matrix(do.call(cbind, x))))) ## get distribution pars
+  para <- as.data.table(
+
+    x = t(sapply(f, function(x) {
+      as.matrix(x = do.call(what = cbind, x))
+    }))
+  ) ## get distribution pars
   names(para) <- names(f[[1]])
   para[, season := as.numeric(gsub('data_nz_', '', rownames(para)))]
   para[, p0 := r[, 'p0']]
@@ -413,7 +419,7 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
 
   aux <- merge(gausian, para, all.x = T) ## merge gaussian process with parameters
   aux <- aux[order(date)]
-  aux[, uval := (pnorm(gauss) - p0)/(1 - p0)] ## calculate intermitent process
+  aux[, uval := (pnorm(q = gauss) - p0)/(1 - p0)] ## calculate intermitent process
   aux[uval < 0, uval := 0]
 
   d <- getDistArg(dist)
