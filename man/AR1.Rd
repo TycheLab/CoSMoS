@@ -20,7 +20,7 @@ Generates time series from an AR1 model
 }
 \examples{
 
-library(CoSMoS); library(ggplot2)
+library(CoSMoS)
 
 ## generate 500 values from an AR1 having lag-1 autocorrelation 0.8,
 ## mean value equal to 0, and standard deviation equal to 1.

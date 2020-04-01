@@ -14,7 +14,7 @@
 #' @import stats
 #' @export
 #'
-#' @keywords moments, moment
+#' @keywords moments
 #'
 #' @examples
 #'
@@ -110,7 +110,7 @@ moments <- function(dist, distarg, p0 = 0, raw = T, central = T, coef = T, distb
 #' @import stats
 #' @export
 #'
-#' @keywords moments, moment
+#' @keywords moments
 #'
 #' @examples
 #'

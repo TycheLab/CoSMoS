@@ -29,6 +29,6 @@ p <- actpnts(margdist = dist, margarg = distarg, p0 = 0)
 fit <- fitactf(p)
 
 ## plot the result
-plot(fit, method = 'base')
+plot(fit)
 
 }

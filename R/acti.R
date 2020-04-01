@@ -43,7 +43,7 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 #'
 #' @examples
 #'
-#' library(CoSMoS); library(ggplot2)
+#' library(CoSMoS)
 #'
 #' ## here we target to a process that has the Pareto type II marginal distribution
 #' ## with scale parameter 1 and shape parameter 0.3
@@ -157,7 +157,7 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 #' fit <- fitactf(p)
 #'
 #' ## plot the result
-#' plot(fit, method = 'base')
+#' plot(fit)
 #'
 fitactf <- function(actpnts, discrete = FALSE) {
 

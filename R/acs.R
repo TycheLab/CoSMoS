@@ -12,7 +12,7 @@
 #'
 #' @examples
 #'
-#' library(CoSMoS); library(ggplot2)
+#' library(CoSMoS)
 #'
 #' ## specify lag
 #' t <- 0:10
@@ -24,7 +24,7 @@
 #' p <- acs('paretoII', t = t, scale = 3, shape = 0.3)
 #'
 #' ## visualize the ACS
-#' dta <- data.frame(t, f, b, w, p)
+#' dta <- data.table(t, f, b, w, p)
 #'
 #' m.dta <- melt(dta, id.vars = 't')
 #'

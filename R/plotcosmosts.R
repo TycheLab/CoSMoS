@@ -31,12 +31,17 @@
 
 plot.cosmosts <- function(x, ...) {
 
-  dta <- data.frame(n = seq_along(x[[1]]), do.call(cbind, x))
+  dta <- data.table(n = seq_along(x[[1]]),
+                    do.call(cbind, x))
+
   names(dta)[2:(length(x) + 1)] <- paste('timeseries', 1:length(x), sep = '_')
 
-  m.dta <- melt(dta, id.vars = 'n')
+  m.dta <- melt(data = as.data.table(x = dta),
+                id.vars = 'n')
 
-  p <- ggplot(m.dta, aes(x = m.dta$n, y = m.dta$value)) +
+  p <- ggplot(data = m.dta,
+              mapping = aes(x = m.dta$n,
+                            y = m.dta$value)) +
     geom_col() +
     labs(x = '',
          y = 'value') +

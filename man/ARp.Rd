@@ -26,7 +26,7 @@ Generates time series from an Autoregressive model of order \emph{p}
 }
 \examples{
 
-library(CoSMoS); library(ggplot2)
+library(CoSMoS)
 
 ## choose the marginal distribution as Pareto type II with corresponding parameters
 dist <- 'paretoII'

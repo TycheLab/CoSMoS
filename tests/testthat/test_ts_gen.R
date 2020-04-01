@@ -51,11 +51,14 @@ test_that('test wrapper for acti and ARp functions', {
                                  shape = .75),
                   n = 1000, p = 30, p0 = .5, TSn = 3)
 
-  expect_equal({val <- x[[1]];
-    attributes(val) <- NULL;
-    val[190:200]},
-  c(0, 0, 0, 0, 0, 0, 0.1546, 0, 0, 0, 0),
-  tolerance = .01)
+  expect_equal({
+      val <- x[[1]];
+      attributes(val) <- NULL;
+      val[190:200]
+    },
+    c(0, 0, 0, 0, 0, 0, 0.1546, 0, 0, 0, 0),
+    tolerance = .01
+  )
 
   expect_equal({set.seed(666);
     val <- regenerateTS(x);

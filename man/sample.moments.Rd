@@ -33,5 +33,4 @@ y <- rparetoII(1000, 10, .1)
 sample.moments(y)
 
 }
-\keyword{moment}
-\keyword{moments,}
+\keyword{moments}

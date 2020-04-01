@@ -16,7 +16,7 @@ Provides a parametric function that describes the values of the linear autocorre
 }
 \examples{
 
-library(CoSMoS); library(ggplot2)
+library(CoSMoS)
 
 ## specify lag
 t <- 0:10
@@ -28,7 +28,7 @@ w <- acs('weibull', t = t, scale = 2, shape = 0.8)
 p <- acs('paretoII', t = t, scale = 3, shape = 0.3)
 
 ## visualize the ACS
-dta <- data.frame(t, f, b, w, p)
+dta <- data.table(t, f, b, w, p)
 
 m.dta <- melt(dta, id.vars = 't')
 

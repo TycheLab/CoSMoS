@@ -20,7 +20,7 @@ Transforms a gaussian process in order to match a target marginal lowers its aut
 }
 \examples{
 
-library(CoSMoS); library(ggplot2)
+library(CoSMoS)
 
 ## here we target to a process that has the Pareto type II marginal distribution
 ## with scale parameter 1 and shape parameter 0.3

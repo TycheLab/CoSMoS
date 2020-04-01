@@ -51,5 +51,4 @@ moments(dist = 'paretoII',
                        scale = scale))
 
 }
-\keyword{moment}
-\keyword{moments,}
+\keyword{moments}

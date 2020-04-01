@@ -114,22 +114,24 @@ plot.checkTS <- function(x, ...) {
   margarg <- att$margarg
   p0 <- att$p0
 
-  dta <- melt(x)
-  dta.e <- dta[which(dta$Var1 == 'expected'),]
-  dta.s <- dta[which(dta$Var1 != 'expected'),]
+  dta <- melt(as.data.table(x = x,
+                            keep.rownames = TRUE),
+              id.vars = 'rn')
+  dta.e <- dta[which(dta$rn == 'expected'),]
+  dta.s <- dta[which(dta$rn != 'expected'),]
 
   p <- ggplot() +
     geom_boxplot(data = dta.s,
-                 aes_string(x = 'Var2',
+                 aes_string(x = 'variable',
                             y = 'value',
-                            group = 'Var2')) +
+                            group = 'variable')) +
     geom_point(data = dta.e,
-               aes_string(x = 'Var2',
+               aes_string(x = 'variable',
                           y = 'value',
-                          group = 'Var2'),
+                          group = 'variable'),
                size = 2,
                colour = 'red1') +
-    facet_wrap('Var2',
+    facet_wrap('variable',
                scales = 'free',
                nrow = 1) +
     labs(x = '',

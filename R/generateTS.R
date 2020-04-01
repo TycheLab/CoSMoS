@@ -151,13 +151,17 @@ generateTS <- function(n, margdist, margarg, p = NULL, p0 = 0, TSn = 1, distboun
 
   out <- lapply(1:TSn, function(i) { ## get timeseries using ARp
 
-    ARp(margdist = margdist,
-        margarg = margarg,
-        n = n,
-        p = p,
-        p0 = p0,
-        actfpara = par,
-        acsvalue = acsvalue)
+    return(
+      value = ARp(margdist = margdist,
+                  margarg = margarg,
+                  n = n,
+                  p = p,
+                  p0 = p0,
+                  actfpara = par,
+                  acsvalue = acsvalue)
+    )
+
+
   })
 
   structure(.Data = out,
