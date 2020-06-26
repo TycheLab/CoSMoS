@@ -22,7 +22,7 @@ mburrXII(r, scale, shape1, shape2)
 \arguments{
 \item{x, q}{vector of quantiles.}
 
-\item{scale, shape1, shape2}{scale and shape parameters; the shape arguments cannot be a vectors (must have length one).}
+\item{scale, shape1, shape2}{scale and shape parameters; the shape arguments cannot be a vector (must have length one).}
 
 \item{log, log.p}{logical; if TRUE, probabilities p are given as log(p).}
 

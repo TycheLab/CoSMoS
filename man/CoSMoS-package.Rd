@@ -20,7 +20,7 @@ The package was partly funded by the Global institute for Water Security (GIWS; 
 Papalexiou, S.M., 2018. Unified theory for stochastic modelling of hydroclimatic processes: Preserving marginal distributions, correlation structures, and intermittency. Advances in Water Resources 115, 234-252. \href{https://doi.org/10.1016/j.advwatres.2018.02.013}{(link)}
 }
 \author{
-\strong{Coded and maintained by:} Filip Strnad \email{strnadf@fzp.czu.cz}
+\strong{Coded and maintained by:} Filip Strnad \email{strnadf@fzp.czu.cz} and Francesco Serinaldi
 
 \strong{Conceptual design by:} Simon Michael Papalexiou \email{sm.papalexiou@usask.ca}
 

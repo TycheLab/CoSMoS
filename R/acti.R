@@ -31,7 +31,7 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 
 #' AutoCorrelation Transformed Points
 #'
-#' Transforms a gaussian process in order to match a target marginal lowers its autocorrelation values. The actpnts evaluates the corresponding autocorrelations for the given target marginal for a set of gaussian correlations, i.e., it returns  (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x and \rho_z} represent, respectively, the autocorrelations of the target and gaussian process.
+#' Transforms a gaussian process in order to match a target marginal lowers its autocorrelation values. The actpnts evaluates the corresponding autocorrelations for the given target marginal for a set of gaussian correlations, i.e., it returns  (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x} and \eqn{\rho_z} represent, respectively, the autocorrelations of the target and gaussian process.
 #'
 #' @param margdist target marginal distribution
 #' @param margarg list of marginal distribution arguments
@@ -114,7 +114,7 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
             },
             lower = .min,
             upper = .max,
-            subdivisions = 1.0e3,
+            subdivisions = 1.0e4,
             rel.tol = 1.0e-5#,
             # stop.on.error = FALSE
           )$value
@@ -122,7 +122,7 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
       },
       lower = .min,
       upper = .max,
-      subdivisions = 1.0e3,
+      subdivisions = 1.0e4,
       rel.tol = 1.0e-5#,
       # stop.on.error = FALSE
     )$value

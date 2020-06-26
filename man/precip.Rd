@@ -4,11 +4,13 @@
 \name{precip}
 \alias{precip}
 \title{Hourly station precipitation data}
-\format{A data.table with 79633 rows and 2 variables:
+\format{
+A data.table with 79633 rows and 2 variables:
 \describe{
 \item{date}{POSIXct format date/time}
 \item{value}{precipitation totals}
-}}
+}
+}
 \source{
 The National Oceanic and Atmospheric Administration (NOAA)
 }

@@ -6,7 +6,8 @@ bibentry(
   title    = "{CoSMoS}: Complete Stochastic Modelling Solution",
   author   = c(person("Filip", "Strnad"),
                person("Simon", "Papalexiou"),
-               person("Yanis", "Markonis")),
+               person("Yanis", "Markonis"),
+               person("Francesco", "Serinaldi")),
   year     = year,
   note     = note,
   url      = "https://CRAN.R-project.org/package=CoSMoS "

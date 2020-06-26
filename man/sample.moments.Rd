@@ -15,7 +15,7 @@ sample.moments(x, na.rm = FALSE, raw = T, central = T, coef = T, order = 1:4)
 
 \item{central}{logical - calculate central moments?}
 
-\item{coef}{logical - calculate coeffitients (coeffitient of variation, skweness and kurtosis)?}
+\item{coef}{logical - calculate coefficients (coefficient of variation, skewness and kurtosis)?}
 
 \item{order}{vector of integers - raw moment orders}
 }

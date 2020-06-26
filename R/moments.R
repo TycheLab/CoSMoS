@@ -8,7 +8,7 @@
 #' @param p0 probability zero
 #' @param raw logical - calculate raw moments?
 #' @param central logical - calculate central moments?
-#' @param coef logical - calculate coeffitients (coeffitient of variation, skweness and kurtosis)?
+#' @param coef logical - calculate coefficients (coefficient of variation, skewness and kurtosis)?
 #' @param order vector of integers - raw moment orders
 #'
 #' @import stats

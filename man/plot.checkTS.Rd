@@ -27,7 +27,7 @@ x <- generateTS(margdist = 'burrXII',
                                t = 0:30,
                                scale = 10,
                                shape = .75),
-                n = 10000, p = 30, p0 = .25, TSn = 100)
+                n = 1000, p = 30, p0 = .25, TSn = 100)
 
 chck <- checkTS(x)
 

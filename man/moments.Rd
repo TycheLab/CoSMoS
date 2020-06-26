@@ -26,7 +26,7 @@ moments(
 
 \item{central}{logical - calculate central moments?}
 
-\item{coef}{logical - calculate coeffitients (coeffitient of variation, skweness and kurtosis)?}
+\item{coef}{logical - calculate coefficients (coefficient of variation, skewness and kurtosis)?}
 
 \item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
 
