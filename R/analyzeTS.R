@@ -424,20 +424,20 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
 
   d <- getDistArg(dist)
 
-  l <- as.data.table(x = r[, d],
-                     keep.rownames = TRUE) ## get dist parameters for each season
+  # l <- as.data.table(x = r[, d],
+  #                    keep.rownames = TRUE) ## get dist parameters for each season
+  #
+  # l[, 'season_id' := as.numeric(
+  #   x = sapply(X = strsplit(x = rn,
+  #                           split = '_'),
+  #              FUN = '[[', 2)
+  # )] ## make season_id variable
 
-  l[, 'season_id' := as.numeric(
-    x = sapply(X = strsplit(x = rn,
-                            split = '_'),
-               FUN = '[[', 2)
-  )] ## make season_id variable
 
+  for(i in para[, season]) {
 
-  for(i in l[, season_id]) {
-
-    trans.para <- l[season_id == i,
-                    !c('rn', 'season_id')] ## select correct pars
+    trans.para <- para[season == i,
+                       !c('p0', 'season')] ## select correct pars
 
     aux[season == i, value :=  do.call(what = paste0('q', dist),
                                        args = c(list(p = uval),

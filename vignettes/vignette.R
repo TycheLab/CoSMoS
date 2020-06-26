@@ -10,140 +10,65 @@ knitr::opts_chunk$set(eval = FALSE, ###
 
 ## -----------------------------------------------------------------------------
 #  marginaldist <- "ggamma"
-#  param <- list(scale = 1,
-#                shape1 = .8,
-#                shape2 = .8)
+#  param <- list(scale = 1, shape1 = .8, shape2 = .8)
 
 ## -----------------------------------------------------------------------------
+#  ## (i) specifying the sample size
 #  no <- 1000
-#  ggamma_sim <- rggamma(n = no,
-#                        scale = 1,
-#                        shape1 = 1,
-#                        shape2 = .5)
-#  plot.ts(x = ggamma_sim,
-#          main = "")
-#  
-#  par(mfrow = c(1, 2))
-#  
-#  plot(x = density(x = ggamma_sim),
-#       main = "")
-#  acf(x = ggamma_sim,
-#      main = "")
-
-## -----------------------------------------------------------------------------
-#  acf <- c(1, 0.8)
-#  ggamma_sim <- generateTS(n = no,
-#                           margdist = marginaldist,
-#                           margarg = param,
-#                           acsvalue = acf)
-#  plot(x = ggamma_sim,
-#       main = "")
-#  
-#  par(mfrow = c(1, 2))
-#  
-#  plot(x = density(ggamma_sim[[1]]),
-#       main = "")
-#  acf(x = ggamma_sim[[1]],
-#      main = "")
+#  ## (ii) defining the type of marginal distribution and its parameters
+#  marginaldist <- "ggamma"
+#  param <- list(scale = 1, shape1 = .8, shape2 = .8)
+#  ## (iii) defining the desired autocorrelation
+#  acf.my <- c(1, 0.8)
+#  ## (iv) simulating
+#  ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf.my)
+#  ## and (v) visually checking the generated time series
+#  quickTSPlot(ggamma_sim[[1]])
 
 ## -----------------------------------------------------------------------------
 #  acf <- c(1, 0.5, 0.5, 0.4, 0.4) #up to lag-4
-#  ggamma_sim <- generateTS(n = no,
-#                           margdist = marginaldist,
-#                           margarg = param,
-#                           acsvalue = acf)
-#  plot(x = ggamma_sim,
-#       main = "")
-#  
-#  par(mfrow = c(1, 2))
-#  
-#  plot(density(x = ggamma_sim[[1]]),
-#       main = "")
-#  acf(x = ggamma_sim[[1]],
-#      main = "")
+#  ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
+#  quickTSPlot(ggamma_sim[[1]])
 
 ## -----------------------------------------------------------------------------
 #  ## specify lag
 #  lags <- 0:10
 #  
 #  ## get the ACS
-#  f <- acs(id = "fgn",
-#           t = lags,
-#           H = .75)
-#  b <- acs(id = "burrXII",
-#           t = lags,
-#           scale = 1,
-#           shape1 = .6,
-#           shape2 = .4)
-#  w <- acs(id = "weibull",
-#           t = lags,
-#           scale = 2,
-#           shape = 0.8)
-#  p <- acs(id = "paretoII",
-#           t = lags,
-#           scale = 3,
-#           shape = 0.3)
+#  f <- acs(id = "fgn", t = lags, H = .75)
+#  b <- acs(id = "burrXII", t = lags, scale = 1, shape1 = .6, shape2 = .4)
+#  w <- acs(id = "weibull", t = lags, scale = 2, shape = 0.8)
+#  p <- acs(id = "paretoII", t = lags, scale = 3, shape = 0.3)
 #  
 #  ## visualize the ACS
 #  dta <- data.table(lags, f, b, w, p)
+#  m.dta <- melt(data = dta, id.vars = "lags")
 #  
-#  m.dta <- melt(data = dta,
-#                id.vars = "lags")
-#  
-#  ggplot(data = m.dta,
-#         mapping = aes(x = lags,
-#                       y = value,
-#                       group = variable,
-#                       colour = variable)) +
-#    geom_point(size = 2.5) +
-#    geom_line(lwd = 1) +
+#  ggplot(data = m.dta, mapping = aes(x = lags, y = value, group = variable, colour = variable)) +
+#    geom_point(size = 2.5) + geom_line(lwd = 1) +
 #    scale_color_manual(values = c("steelblue4", "red4", "green4", "darkorange"),
-#                       labels = c("FGN", "Burr XII", "Weibull", "Pareto II"),
-#                       name = "") +
-#    labs(x = bquote(lag ~ tau),
-#         y = "Acf") +
-#    scale_x_continuous(breaks = lags) +
-#    theme_grey()
+#    labels = c("FGN", "Burr XII", "Weibull", "Pareto II"), name = "") +
+#    labs(x = bquote(lag ~ tau), y = "Acf") + scale_x_continuous(breaks = lags) + theme_grey()
 
-## -----------------------------------------------------------------------------
-#  acf = acs(id = "paretoII",
-#            t = 0:30,
-#            scale = 1,
-#            shape = .75)
+## ---- fig.height=2.5----------------------------------------------------------
+#  acf = acs(id = "paretoII", t = 0:30, scale = 1, shape = .75)
+#  ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
+#  dta <- data.frame(time = 1:no, value = ggamma_sim[[1]])
 #  
-#  ggamma_sim <- generateTS(n = no,
-#                           margdist = marginaldist,
-#                           margarg = param,
-#                           acsvalue = acf)
-#  
-#  plot(x = ggamma_sim,
-#       main = "")
+#  ggplot(dta, aes(x=time, y=value)) + geom_line() + theme(aspect.ratio=0.25)
 
 ## -----------------------------------------------------------------------------
 #  my_acf <- exp(seq(0, -2, -0.1))
-#  ggamma_sim <- generateTS(n = no,
-#                           margdist = marginaldist,
-#                           margarg = param,
-#                           acsvalue = my_acf)
+#  ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = my_acf)
+#  quickTSPlot(ggamma_sim[[1]])
 #  
-#  plot(x = ggamma_sim,
-#       main = "")
-#  
-#  acf(x = ggamma_sim[[1]])
 
 ## ---- fig.height = 7----------------------------------------------------------
 #  prob_zero <- .9
-#  ggamma_sim <- generateTS(n = no,
-#                           margdist = marginaldist,
-#                           margarg = param,
-#                           acsvalue = acf,
-#                           p0 = prob_zero,
-#                           TSn = 5)
-#  
-#  par(mfrow = c(1, 1))
-#  
-#  plot(x = ggamma_sim,
-#       main = "")
+#  ## the argument `TSn = 5` enables the simulation of multiple timeseries.
+#  ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf,
+#                           p0 = prob_zero, TSn = 5)
+#  plot(x = ggamma_sim, main = "")
 
 ## -----------------------------------------------------------------------------
 #  checkTS(ggamma_sim)
@@ -152,216 +77,130 @@ knitr::opts_chunk$set(eval = FALSE, ###
 #  library(plotly)
 #  
 #  ## specify grid of spatial and temporal lags
-#  d <- 31
-#  st <- expand.grid(0:(d - 1),
-#                    0:(d - 1))
+#  d <- 51
+#  st <- expand.grid(0:(d - 1), 0:(d - 1))
 #  
 #  ## get the STCS
-#  wc <- stcfclayton(t = st[, 1],
-#                    s = st[, 2],
-#                    scfid = "weibull",
-#                    tcfid = "weibull",
-#                    copulaarg = 2,
-#                    scfarg = list(scale = 20,
-#                                  shape = 0.7),
-#                    tcfarg = list(scale = 1.1,
-#                                  shape = 0.8))
+#  wc <- stcfclayton(t = st[, 1], s = st[, 2], scfid = "weibull", tcfid = "weibull", copulaarg = 2,
+#                    scfarg = list(scale = 20, shape = 0.7), tcfarg = list(scale = 5.1,shape = 0.8))
 #  
 #  ## visualize the STCS
-#  wc.m <- matrix(data = wc,
-#                 nrow = d)
+#  wc.m <- matrix(data = wc, nrow = d)
+#  j <- tail(which(wc.m[1, ] > 0.15), 1)
+#  i <- tail(which(wc.m[, 1] > 0.15), 1)
+#  wc.m <- wc.m[1:i, 1:j]
 #  
-#  plot_ly(z = ~wc.m) %>%
-#    add_surface() %>%
-#    layout(
-#        scene = list(
-#            xaxis = list(title = "Time lag"),
-#            yaxis = list(title = "Distance"),
-#            zaxis = list(title = "STCF")
-#        )
-#    ) %>%
-#    hide_colorbar()
+#  plot_ly(z = ~wc.m) %>% add_surface() %>%
+#    layout(scene = list(xaxis = list(title = "Time lag"), yaxis = list(title = "Distance"),
+#                        zaxis = list(title = "STCF") ) ) %>% hide_colorbar()
 
-## ---- fig.height = 7----------------------------------------------------------
+## ---- fig.height = 5----------------------------------------------------------
 #  ## set a sequence of hypothetical coordinates
-#  coord <- cbind(runif(8)*30,
-#                 runif(8)*30)
+#  d <- 5
+#  coord <- cbind(runif(d)*30, runif(d)*30)
 #  
 #  ## compute VAR model parameters
-#  fit <- fitVARMULTI(
-#    coord = coord,
-#    p = 5,
-#    margdist ="burrXII",
-#    margarg = list(scale = 3,
-#                   shape1 = .9,
-#                   shape2 = .2),
-#    p0 = 0.8,
-#    stcsid = "clayton",
-#    stcsarg = list(scfid = "weibull",
-#                   tcfid = "weibull",
-#                   copulaarg = 2,
-#                   scfarg = list(scale = 25,
-#                                 shape = 0.7),
-#                   tcfarg = list(scale = 3.1,
-#                                 shape = 0.8))
-#  )
+#  fit <- fitVAR(spacepoints = coord, p = 5, margdist ="burrXII",
+#                     margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton",
+#                     stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
+#                     scfarg = list(scale = 25, shape = 0.7), tcfarg = list(scale = 3.1,shape = 0.8) ) )
 #  
-#  ## generate correlated random vectors
-#  sim <- generateMULTI(n = 500,
-#                       STmodel = fit)
+#  ## generate correlated timeseries
+#  sim <- generateMTS(n = 500, STmodel = fit)
 #  
 #  ## visualize simulated timeseries
-#  dta <- melt(data = data.table(time = 1:nrow(sim),
-#                                sim[,1:8]),
-#              id.vars = "time")
+#  dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 #  
-#  ggplot(data = dta,
-#         mapping = aes(x = time,
-#                       y = value)) +
-#         geom_line() +
-#         facet_grid(facets = variable ~ .,
-#                    scales = "free_y")
+#  ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
+#         facet_grid(facets = variable ~ ., scales = "free_y")
+
+## ---- fig.height = 5----------------------------------------------------------
+#  ## set a sequence of hypothetical coordinates
+#  d <- 5
+#  coord <- cbind(runif(d)*30, runif(d)*30)
+#  
+#  ## fit and generate correlated timeseries
+#  sim <- generateMTSFast(n = 500, spacepoints = 3, p0 = 0.7, margdist ='paretoII',
+#                         margarg = list(scale = 1, shape = .3),
+#                         stcsarg = list(scfid = "weibull", tcfid = "weibull",
+#                         scfarg = list(scale = 20, shape = 0.7),
+#                         tcfarg = list(scale = 1.1, shape = 0.8)) )
+#  
+#  ## visualize simulated timeseries
+#  dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
+#  
+#  ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
+#         facet_grid(facets = variable ~ ., scales = "free_y")
 
 ## -----------------------------------------------------------------------------
 #  ## compute VAR model parameters
-#  fit <- fitVARSTRF(
-#    m = 20,
-#    p = 10,
-#    margdist ="burrXII",
-#    margarg = list(scale = 3,
-#                   shape1 = .9,
-#                   shape2 = .2),
-#    p0 = 0.8,
-#    stcsid = "clayton",
-#    stcsarg = list(scfid = "weibull",
-#                   tcfid = "weibull",
-#                   copulaarg = 2,
-#                   scfarg = list(scale = 20,
-#                                 shape = 0.7),
-#                   tcfarg = list(scale = 1.1,
-#                                 shape = 0.8))
-#  )
+#  ## CPU time: ~15s
+#  fit <- fitVAR(spacepoints = 20, p = 3, margdist ="burrXII",
+#                    margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton",
+#                    stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
+#                    scfarg = list(scale = 20, shape = 0.7), tcfarg = list(scale = 1.1, shape = 0.8) ) )
+#  
 #  ## generate random fields with nonseparable correlation structure
-#  sim1 <- generateSTRF(n = 1000,
-#                       STmodel = fit)
+#  sim1 <- generateRF(n = 1000, STmodel = fit)
 #  
 #  ## fast simulation of random fields with separable correlation structure
-#  sim2 <- generateSTRFsepfast(
-#      n = 1000,
-#      m = 20,
-#      p0 = 0.7,
-#      margdist ="paretoII",
-#      margarg = list(scale = 1,
-#                     shape = .3),
-#      stcsarg = list(scfid = "weibull",
-#                     tcfid = "weibull",
-#                     scfarg = list(scale = 20,
-#                                   shape = 0.7),
-#                     tcfarg = list(scale = 1.1,
-#                                   shape = 0.8))
-#  )
-#  
-#  checkSTRF(STRF = sim2)
+#  sim2 <- generateRFFast(n = 1000, spacepoints = 20, p0 = 0.7, margdist ="paretoII",
+#                         margarg = list(scale = 1, shape = .3),
+#                         stcsarg = list(scfid = "weibull", tcfid = "weibull",
+#                         scfarg = list(scale = 20, shape = 0.7),
+#                         tcfarg = list(scale = 1.1, shape = 0.8) ) )
 
-## -----------------------------------------------------------------------------
+## ---- fig.height = 6----------------------------------------------------------
 #  ## check random fields
-#  checkSTRF(sim1)
-#  checkSTRF(sim2)
+#  ## CPU time: ~20s
+#  checkRF(RF = sim1, nfields = 9*9)
+#  checkRF(RF = sim2, nfields = 9*9)
 
 ## -----------------------------------------------------------------------------
 #  data("precip")
-#  plot(x = precip,
-#       type = "l")
-#  
-#  par(mfrow = c(1, 2))
-#  
-#  plot(x = density(x = precip$value),
-#       main = "",
-#       xlim = c(0, 10)) #Does not plot extreme values
-#  acf(x = precip$value,
-#      main = "", lag.max = 20)
+#  quickTSPlot(precip$value, xlimdf = c(0, 10))
 
 ## ---- fig.height = 9----------------------------------------------------------
-#  precip_ggamma <- analyzeTS(TS = precip,
-#                                  season = "month",
-#                                  dist = "ggamma",
-#                                  acsID = "weibull",
-#                                  lag.max = 12)
+#  ## CPU time: ~75s
+#  precip_ggamma <- analyzeTS(TS = precip, season = "month", dist = "ggamma",
+#                             acsID = "weibull", lag.max = 12)
 #  
-#  reportTS(aTS = precip_ggamma,
-#           method = "dist")
-#  reportTS(aTS = precip_ggamma,
-#           method = "acs")
-#  reportTS(aTS = precip_ggamma,
-#           method = "stat")
+#  reportTS(aTS = precip_ggamma, method = "dist")
+#  reportTS(aTS = precip_ggamma, method = "acs")
+#  reportTS(aTS = precip_ggamma, method = "stat")
 
 ## ---- warning = FALSE, fig.height = 9-----------------------------------------
-#  precip_pareto <- analyzeTS(TS = precip,
-#                             season = "month",
-#                             dist = "paretoII",
-#                             acsID = "fgn",
-#                             lag.max = 12)
+#  precip_pareto <- analyzeTS(TS = precip, season = "month", dist = "paretoII", acsID = "fgn", lag.max = 12)
 #  
-#  reportTS(aTS = precip_pareto,
-#           method = "dist")
-#  reportTS(aTS = precip_pareto,
-#           method = "acs")
+#  reportTS(aTS = precip_pareto, method = "dist")
+#  reportTS(aTS = precip_pareto, method = "acs")
 
 ## -----------------------------------------------------------------------------
-#  sim_precip <- simulateTS(aTS = precip_ggamma,
-#                           from = as.POSIXct(x = "1978-12-01 00:00:00"),
+#  sim_precip <- simulateTS(aTS = precip_ggamma, from = as.POSIXct(x = "1978-12-01 00:00:00"),
 #                           to = as.POSIXct(x = "2008-12-01 00:00:00"))
 #  dta <- precip
 #  dta[, id := "observed"]
 #  sim_precip[, id := "simulated"]
-#  
 #  dta <- rbind(dta, sim_precip)
 #  
-#  ggplot(data = dta) +
-#    geom_line(mapping = aes(x = date,
-#                            y = value)) +
-#    facet_wrap(facets = ~id,
-#               ncol = 1) +
-#    theme_classic()
+#  ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1)
 
-## -----------------------------------------------------------------------------
-#  # id <- "06606600"
-#  # dta_raw <- as.data.table(read.fwf(file = sprintf(
-#  #   "https://hydrology.nws.noaa.gov/pub/gcip/mopex/US_Data/Us_438_Daily/%s.dly", id),
-#  #                                   widths = c(8,10,10,10,10,10),
-#  #                                   col.names = c("date", "P", "E", "value", "Tmax", "Tmin")
-#  #   )
-#  # )
-#  #
-#  # dta_raw[, date := as.POSIXct(gsub(pattern = " ",
-#  #                                   replacement = "0",
-#  #                                   x = date),
-#  #                              format = "%Y%m%d")]
-#  #
-#  # daily_streamflow <- dta_raw[value >= 0, .(date, value)]
-#  # daily_streamflow <- daily_streamflow[1:1000,]
-#  #
-#  # str <- analyzeTS(TS = daily_streamflow,
-#  #                  dist = "paretoII",
-#  #                  norm = "N2",
-#  #                  acsID = "paretoII",
-#  #                  lag.max = 20,
-#  #                  constrain = TRUE)
-#  #
-#  # reportTS(aTS = str)
-#  #
-#  # sim_str <- simulateTS(aTS = str)
-#  #
-#  # dta <- daily_streamflow
-#  # dta[, id := "observed"]
-#  # sim_str[, id := "simulated"]
-#  #
-#  # dta <- rbind(dta, sim_str)
-#  #
-#  # ggplot(data = dta) +
-#  #   geom_line(mapping = aes(x = date,
-#  #                           y = value)) +
-#  #   facet_wrap(facets = ~id,
-#  #              ncol = 1) +
-#  #   theme_classic()
+## ---- fig.height = 9----------------------------------------------------------
+#  ## CPU time: ~240s
+#  data("disch")
+#  
+#  str <- analyzeTS(TS = disch, dist = "ggamma", norm = "N4", acsID = "paretoII",
+#                   lag.max = 20, constrain = TRUE)
+#  
+#  reportTS(aTS = str)
+
+## ---- fig.height = 3.5--------------------------------------------------------
+#  sim_str <- simulateTS(aTS = str)
+#  
+#  dta <- disch
+#  dta[, id := "observed"]
+#  sim_str[, id := "simulated"]
+#  dta <- rbind(dta, sim_str)
+#  
+#  ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1)
 

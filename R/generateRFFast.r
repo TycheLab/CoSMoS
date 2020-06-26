@@ -1,10 +1,9 @@
-#' Faster simulation of approximately separable spatiotemporal random fields
+#' Faster simulation of random fields with approximately separable spatiotemporal correlation structure
 #'
 #' For more details see section 6 in \href{https://doi.org/10.1029/2018WR023055}{Serinaldi and Kilsby (2018)}, and section 2.4 in \href{https://doi.org/10.1029/2019WR026331}{Papalexiou and Serinaldi (2020)}
 #'
 #' @param n number of fields (time steps) to simulate
-#' @param m side length of the square field (m x m)
-#' @param p order of VAR(p) model
+#' @param spacepoints side length m of the square field (m x m)
 #' @param margdist target marginal distribution of the field
 #' @param margarg list of marginal distribution arguments
 #' @param p0 probability zero
@@ -14,7 +13,7 @@
 #' @param scalefactor factor specifying the distance between the centers of two pixels (default set to 1)
 #' @param anisotropyarg list of arguments establishing spatial anisotropy. phi1 and phi2 control the stretch in two orthogonal directions (e.g., longitude and latitude) while the angle theta controls a counterclockwise rotation (default set to list(phi1 = 1, phi2 = 1 , theta = 0) for isotropic fields)
 #'
-#' @name generateSTRFsepfast
+#' @name generateRFFast
 #'
 #' @import mvtnorm
 #'
@@ -23,11 +22,27 @@
 #'
 #' @export
 #'
+#' @details
+#' \code{\link{generateRFFast}} provides a faster approach to RF simulation
+#' compared to \code{\link{generateRF}} by exploiting circulant embedding
+#' fast Fourier transformation.
+#' However, this approach is feasible only for approximately
+#' separable target spatiotemporal correlation functions (see section 6 in
+#' \href{https://doi.org/10.1029/2018WR023055}{Serinaldi and Kilsby (2018)}).
+#' \code{\link{generateRFFast}} comprises fitting and simulation in a single function.
+#' Here, we give indicative CPU times for some settings, referring to a
+#' Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz,
+#' 4-core, 8 logical processors, and 32GB RAM. \cr
+#' CPU time:\cr
+#' m = 50, n = 1000: ~58s \cr
+#' m = 50, n = 10000: ~160s \cr
+#' m = 100, n = 1000: ~2955s (~50min) \cr
+#'
 #' @examples
 #'
-#' sim <- generateSTRFsepfast(
+#' sim <- generateRFFast(
 #'     n = 50,
-#'     m = 3,
+#'     spacepoints = 3,
 #'     p0 = 0.7,
 #'     margdist ='paretoII',
 #'     margarg = list(scale = 1,
@@ -40,9 +55,11 @@
 #'                                  shape = 0.8))
 #' )
 #'
-#' checkSTRF(sim)
+#' checkRF(sim,
+#'           lags = 10,
+#'           nfields = 49)
 #'
-generateSTRFsepfast <- function(n, m, p, margdist, margarg, p0, distbounds = c(-Inf, Inf), stcsid, stcsarg, scalefactor = 1, anisotropyarg = list(phi1 = 1, phi2 = 1 , theta = 0)) {
+generateRFFast <- function(n, spacepoints, margdist, margarg, p0, distbounds = c(-Inf, Inf), stcsid, stcsarg, scalefactor = 1, anisotropyarg = list(phi1 = 1, phi2 = 1 , theta = 0)) {
 
     DHMgenSj <- function(acvf) {
         MM <- length(acvf) - 1
@@ -63,13 +80,18 @@ generateSTRFsepfast <- function(n, m, p, margdist, margarg, p0, distbounds = c(-
         Yj[N + 1] <- sqrt(Sj[N + 1]) * rn[M]
         js <- 2:N
         Yj[js] <- sqrt(0.5 * Sj[js]) * complex(real = rn[2 *
-            (1:(N - 1))], imaginary = rn[2 * (1:(N - 1)) + 1])
+                                                             (1:(N - 1))], imaginary = rn[2 * (1:(N - 1)) + 1])
         Re(fft(c(Yj, Conj(rev(Yj[js])))))[1:N]/sqrt(M)
     }
 
-    mm <- m^2
-    d <- seq(0, m-1, length = m) * scalefactor
-    dd <- expand.grid(d, d)
+    if(class(spacepoints)[1] == "numeric"){
+        mm <- spacepoints^2
+        d <- seq(0, spacepoints - 1,length = spacepoints) * scalefactor
+        dd <- expand.grid(d, d)
+    } else {
+        stop("spacepoints should be an integer")
+    }
+
     phi1 <- anisotropyarg$phi1
     phi2 <- anisotropyarg$phi2
     theta <- anisotropyarg$theta
@@ -81,13 +103,13 @@ generateSTRFsepfast <- function(n, m, p, margdist, margarg, p0, distbounds = c(-
     pnts <- actpnts(margdist = margdist, margarg = margarg, p0 = p0,distbounds = distbounds)
     actfpara <- fitactf(pnts)
     scf <- actf( acs(id=stcsarg$scfid, t = dis, scale = stcsarg$scfarg$scale,
-                                                      shape = stcsarg$scfarg$shape),
-                                            b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
+                     shape = stcsarg$scfarg$shape),
+                 b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
     if (!is.positive.definite(round(as.matrix(scf),6)))  scf = as.matrix(nearPD(scf, corr = T,conv.tol = 1e-04)$mat)
 
     tcf <- actf( acs(id=stcsarg$tcfid, t = 0:n, scale = stcsarg$tcfarg$scale,
-                                                      shape = stcsarg$tcfarg$shape),
-                                            b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
+                     shape = stcsarg$tcfarg$shape),
+                 b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
 
     Sj <- DHMgenSj(tcf)
     rn <- rmvnorm(2 * length(Sj) - 2, sigma = scf)
@@ -101,18 +123,20 @@ generateSTRFsepfast <- function(n, m, p, margdist, margarg, p0, distbounds = c(-
     x[x < p0] <- 0
     x[x > p0] <- do.call(paste0("q", margdist), args = c(list(p = (x[x > p0] - p0)/(1-p0)), margarg))
 
-    d <- seq(0, max(dis), length = m)
+    d <- seq(0, max(dis), length = 200)
     u <- 0:n
     scf0 <- actf( acs(id=stcsarg$scfid, t = d, scale = stcsarg$scfarg$scale,
-                                                      shape = stcsarg$scfarg$shape),
-                                            b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
+                      shape = stcsarg$scfarg$shape),
+                  b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
     tcf0 <- actf( acs(id=stcsarg$tcfid, t = u, scale = stcsarg$tcfarg$scale,
-                                                      shape = stcsarg$tcfarg$shape),
-                                            b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
+                      shape = stcsarg$tcfarg$shape),
+                  b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
 
-    fout <- actf.inv(tcf0%*%t(scf0),b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
+    fout <- actfInv(tcf0%*%t(scf0),b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
 
     structure(.Data = t(x), class = c("matrix", "cosmosts"), STmodel=list(margdist = margdist, margarg = margarg,
-        p0 = p0, stcs = fout, s.lags = d, t.lags=u, grid.lags = dis))
+                                                                          p0 = p0, stcs = fout, s.lags = d, t.lags=u, grid.lags = dis))
 }
+
+
 
