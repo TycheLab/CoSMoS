@@ -31,10 +31,11 @@
 #' sim <- generateSTRF(n = 10,
 #'                     STmodel = fit)
 #' checkSTRF(STRF = sim,
-#'           lags = 10)
+#'           lags = 10,
+#'           nfields = 10)
 #'
 #'
-checkSTRF <- function(STRF, lags = 30) {
+checkSTRF <- function(STRF, lags = 30, nfields = 50) {
 
     att <- attributes(STRF)$STmodel
     margdist <- att$margdist
@@ -54,13 +55,12 @@ checkSTRF <- function(STRF, lags = 30) {
     stcs.sim <- acf(as.matrix(STRF)[ , 1:npoints], lags, plot=F)[[1]][ , , 1]
 
     # dev.new(w = 15, h = 11)
-
     op <- par(no.readonly = TRUE) # the whole list of settable par's.
 
     par(mar = c(4, 4, .5, 2), mgp = c(2.5, 1, 0), las = 1)
 
-    layout(mat = matrix(data = 1:12,
-                        nrow = 4,
+    layout(mat = matrix(data = 1:3,
+                        nrow = 3,
                         byrow = TRUE))
 
     plot(grid.lags[1:npoints], stcs.sim[1, ], type = "n", xlab=expression(paste('Distance ', delta)),
@@ -91,57 +91,24 @@ checkSTRF <- function(STRF, lags = 30) {
            col = c(1:2), lwd = 2, pch = c(rep(NA,2)), lty = c(1,2), bg = "darkgrey", box.col = "darkgrey", text.col = "white")
     box()
 
-    par(mar = c(.0, .9, .0, .1), mgp = c(1, 1, 0))
-
-    d <- u <- seq(0, m - 1, length = m)
-    ud <- expand.grid(u, d)
-    my.colors <- colorRampPalette( c('#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#ffffbf', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695') )
-    for(i in 1:9){
-        z <- mba.surf(data.frame(x = ud[ ,1], y = ud[ ,2], z = STRF[i, ]), 100, 100)$xyz.est$z
-        grid <- seq(0, m-1, length = 100)
-        nrz <- nrow(z)
-        ncz <- ncol(z)
-        nbcol <- 100
-        color <- my.colors(nbcol)
-        if(diff(range(z)) == 0){
-            zlim <- c(0,1)
-            facetcol <- 1
-        }
-        else{
-            zlim <- range(z)
-            zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
-            facetcol <- cut(zfacet, nbcol)
-        }
-        persp(x = grid, y = grid, z = z, expand = 0.1, col = color[facetcol],
-              theta = 25, phi = 25, zlim = zlim, box = T, border = F,
-              xlab = "", ylab = "", zlab = "X", axes = T)
-    }
 
     # dev.new(w = 11 * 1.2, h = 13 * 1.2)
     par(mar = c(0, 0, 0, 0),
         oma = c(0.5, 0.5, 0.5, 0.5))
 
-    layout(mat = matrix(data = 1:80,
-                        nrow = 10,
+    layout(mat = matrix(data = 1:nfields,
+                        nrow = n2mfrow(nfields)[1],
                         byrow = TRUE))
 
-    if (nrow(STRF) < 80) {
+    if(p0 > 0 & sample.moments(STRF[1:nfields, ], raw = F, central = F, coef = T)$coefficients[2] > 1) {
 
-        n.aux <- nrow(STRF)
-    } else {
-
-        n.aux <- 80
-    }
-
-    if(p0 > 0 & sample.moments(STRF[1:n.aux, ], raw = F, central = F, coef = T)$coefficients[2] > 1) {
-
-        aux  <-  sqrt(STRF[1:n.aux, ])
+        aux  <-  sqrt(STRF[1:nfields, ])
     }  else {
 
-        aux <- STRF[1:n.aux, ]
+        aux <- STRF[1:nfields, ]
     }
-    for(i in 1:n.aux){
-        image(matrix(aux[i, ], m, m), axes=F, col = my.colors(20), zlim = range(sqrt(STRF[1:n.aux,])))
+    for(i in 1:nfields){
+        image(matrix(aux[i, ], m, m), axes=F, col = my.colors(20), zlim = range(sqrt(STRF[1:nfields,])))
         legend("topleft", legend = i, adj = c(1.3, 0.1), cex = 1.2,
                pch = NA, lty = 0, bty = 'n', text.col = "darkgrey", text.font = 2)
         box(col = "darkgrey")
