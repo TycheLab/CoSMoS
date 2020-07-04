@@ -1,5 +1,5 @@
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(eval = FALSE, ###
+knitr::opts_chunk$set(eval = FALSE,
                       echo = TRUE,
                       fig.width = 7, 
                       warning = FALSE,
@@ -120,7 +120,7 @@ knitr::opts_chunk$set(eval = FALSE, ###
 #  coord <- cbind(runif(d)*30, runif(d)*30)
 #  
 #  ## fit and generate correlated timeseries
-#  sim <- generateMTSFast(n = 500, spacepoints = 3, p0 = 0.7, margdist ='paretoII',
+#  sim <- generateMTSFast(n = 500, spacepoints = coord, p0 = 0.7, margdist ='paretoII',
 #                         margarg = list(scale = 1, shape = .3),
 #                         stcsarg = list(scfid = "weibull", tcfid = "weibull",
 #                         scfarg = list(scale = 20, shape = 0.7),
@@ -143,18 +143,29 @@ knitr::opts_chunk$set(eval = FALSE, ###
 #  ## generate random fields with nonseparable correlation structure
 #  sim1 <- generateRF(n = 1000, STmodel = fit)
 #  
-#  ## fast simulation of random fields with separable correlation structure
+#  ## fast simulation of anisotropic random fields with separable correlation structure
 #  sim2 <- generateRFFast(n = 1000, spacepoints = 20, p0 = 0.7, margdist ="paretoII",
 #                         margarg = list(scale = 1, shape = .3),
 #                         stcsarg = list(scfid = "weibull", tcfid = "weibull",
 #                         scfarg = list(scale = 20, shape = 0.7),
-#                         tcfarg = list(scale = 1.1, shape = 0.8) ) )
+#                         tcfarg = list(scale = 1.1, shape = 0.8)),
+#                         anisotropyarg = list(phi1 = 0.5, phi2 = 2, theta = -pi/3))
 
-## ---- fig.height = 6----------------------------------------------------------
+## ---- fig.height = 6.5--------------------------------------------------------
 #  ## check random fields
 #  ## CPU time: ~20s
-#  checkRF(RF = sim1, nfields = 9*9)
-#  checkRF(RF = sim2, nfields = 9*9)
+#  checkRF(RF = sim1, nfields = 9*9, method = "stat")
+#  checkRF(RF = sim1, nfields = 9*9, method = "statplot")
+#  checkRF(RF = sim1, nfields = 9*9, method = "field")
+
+## ---- fig.height = 6.5--------------------------------------------------------
+#  ## check random fields
+#  checkRF(RF = sim2, nfields = 9*9, method = "field")
+#  
+#  ## Uncomment to save fields as a GIF file named 'movieRF.gif' in the working directory
+#  ## checkRF(RF = sim2, nfields = 9*9, method = "movie")
+#  
+#  
 
 ## -----------------------------------------------------------------------------
 #  data("precip")
@@ -189,10 +200,13 @@ knitr::opts_chunk$set(eval = FALSE, ###
 #  ## CPU time: ~240s
 #  data("disch")
 #  
+#  disch <- head(disch,365*4)
+#  
 #  str <- analyzeTS(TS = disch, dist = "ggamma", norm = "N4", acsID = "paretoII",
 #                   lag.max = 20, constrain = TRUE)
 #  
 #  reportTS(aTS = str)
+#  reportTS(aTS = str, method = "stat")
 
 ## ---- fig.height = 3.5--------------------------------------------------------
 #  sim_str <- simulateTS(aTS = str)

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Simon Papalexiou, Filip Strnad, Francesco Serinaldi, Yannis Markonis, Kevin Shook" />
 
-<meta name="date" content="2020-07-01" />
+<meta name="date" content="2020-07-04" />
 
 <title>CoSMoS-R | Complete Stochatic Modelling Solution</title>
 
@@ -303,7 +303,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">CoSMoS-R | Complete Stochatic Modelling Solution</h1>
 <h4 class="author">Simon Papalexiou, Filip Strnad, Francesco Serinaldi, Yannis Markonis, Kevin Shook</h4>
-<h4 class="date">2020-07-01</h4>
+<h4 class="date">2020-07-04</h4>
 
 
 <div id="TOC">
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><em>“Hydroclimatic processes come in all “shapes and sizes”. They are characterized by different spatiotemporal correlation structures and probability distributions that can be continuous, mixed-type, discrete or even binary. Simulating such processes by reproducing precisely their marginal distribution and linear correlation structure, including features like intermittency, can greatly improve hydrological analysis and design. … Here, a single framework is proposed that unifies, extends, and improves a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific “parent”&quot; Gaussian process.&quot;</em></p>
 <p>~<em>Unified Theory of Stochastic Modelling</em> | <a href="https://doi.org/10.1016/j.advwatres.2018.02.013">Papalexiou (2018)</a></p>
 <p><em>“Hydroclimatic variables such as precipitation and temperature are often measured or simulated by climate models at coarser spatiotemporal scales than those needed for operational purposes. … Here we introduce a novel disaggregation method, named Disaggregation Preserving Marginals and Correlations (DiPMaC), that is able to disaggregate a coarse-scale time series to any finer scale, while reproducing the probability distribution and the linear correlation structure of the fine-scale process. DiPMaC is also generalized for arbitrary nonstationary scenarios to reproduce time varying marginals.”</em></p>
-<p>~<em>Precise Temporal Disaggregation</em> | <a href="https://doi.org/10.1029/2018WR022726">Papalexiou et al. (2018) (2018)</a></p>
+<p>~<em>Precise Temporal Disaggregation</em> | <a href="https://doi.org/10.1029/2018WR022726">Papalexiou et al. (2018)</a></p>
 <p><em>“Nature manifests itself in space and time. The spatiotemporal complexity of processes such as precipitation, temperature, and wind, does not allow purely deterministic modeling. Spatiotemporal random fields have a long history in modeling such processes, and yet a single unified framework offering the flexibility to simulate processes that may differ profoundly does not exist. Here we introduce a blueprint to efficiently simulate spatiotemporal random fields that preserve any marginal distribution, any valid spatiotemporal correlation structure, and intermittency.”</em></p>
 <p>~<em>Random Fields Simplified</em> | <a href="https://doi.org/10.1029/2019WR026331">Papalexiou and Serinaldi (2020)</a></p>
 <hr />
@@ -491,7 +491,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb12-3"><a href="#cb12-3"></a>coord &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(d)<span class="op">*</span><span class="dv">30</span>, <span class="kw">runif</span>(d)<span class="op">*</span><span class="dv">30</span>)</span>
 <span id="cb12-4"><a href="#cb12-4"></a></span>
 <span id="cb12-5"><a href="#cb12-5"></a><span class="co">## fit and generate correlated timeseries</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a>sim &lt;-<span class="st"> </span><span class="kw">generateMTSFast</span>(<span class="dt">n =</span> <span class="dv">500</span>, <span class="dt">spacepoints =</span> <span class="dv">3</span>, <span class="dt">p0 =</span> <span class="fl">0.7</span>, <span class="dt">margdist =</span><span class="st">&#39;paretoII&#39;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6"></a>sim &lt;-<span class="st"> </span><span class="kw">generateMTSFast</span>(<span class="dt">n =</span> <span class="dv">500</span>, <span class="dt">spacepoints =</span> coord, <span class="dt">p0 =</span> <span class="fl">0.7</span>, <span class="dt">margdist =</span><span class="st">&#39;paretoII&#39;</span>,</span>
 <span id="cb12-7"><a href="#cb12-7"></a>                       <span class="dt">margarg =</span> <span class="kw">list</span>(<span class="dt">scale =</span> <span class="dv">1</span>, <span class="dt">shape =</span> <span class="fl">.3</span>),  </span>
 <span id="cb12-8"><a href="#cb12-8"></a>                       <span class="dt">stcsarg =</span> <span class="kw">list</span>(<span class="dt">scfid =</span> <span class="st">&quot;weibull&quot;</span>, <span class="dt">tcfid =</span> <span class="st">&quot;weibull&quot;</span>, </span>
 <span id="cb12-9"><a href="#cb12-9"></a>                       <span class="dt">scfarg =</span> <span class="kw">list</span>(<span class="dt">scale =</span> <span class="dv">20</span>, <span class="dt">shape =</span> <span class="fl">0.7</span>),</span>
@@ -505,7 +505,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="random-field-simulation" class="section level2">
 <h2><span class="header-section-number">2.3</span> Random Field Simulation</h2>
-<p><code>CoSMoS</code> implements the simulation of spatially and temporally correlated random fields in two main functions called <code>generateRF()</code> and <code>generateRFFast()</code>, which are the analogous of <code>generateMTS()</code> and <code>generateMTSFast()</code>, with the same syntax. The only difference is the specification of the spatial points, which reduces to an integer denoting the side lenght  of a square grid . As mentioned in the previuo section, the algorithm in <code>generateRFFast()</code> is computationally less expensive than that of <code>generateRF()</code>, thus enabling the simulation of random fields over a larger number of grid points (see, <a href="https://doi.org/10.1016/j.advwatres.2018.02.013">Papalexiou (2018)</a>, <a href="https://doi.org/10.1029/2019WR026331">Papalexiou and Serinaldi (2020)</a>, and <a href="https://doi.org/10.1029/2018WR023055">Serinaldi and Kilsby (2018)</a> fo more details).</p>
+<p><code>CoSMoS</code> implements the simulation of spatially and temporally correlated random fields in two main functions called <code>generateRF()</code> and <code>generateRFFast()</code>, which are the analogous of <code>generateMTS()</code> and <code>generateMTSFast()</code>, with the same syntax. The only difference is the specification of the spatial points, which reduces to an integer denoting the side lenght  of a square grid . As mentioned in the previous section, the algorithm in <code>generateRFFast()</code> is computationally less expensive than that of <code>generateRF()</code>, thus enabling the simulation of random fields over a larger number of grid points (see, <a href="https://doi.org/10.1016/j.advwatres.2018.02.013">Papalexiou (2018)</a>, <a href="https://doi.org/10.1029/2019WR026331">Papalexiou and Serinaldi (2020)</a>, and <a href="https://doi.org/10.1029/2018WR023055">Serinaldi and Kilsby (2018)</a> fo more details).</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">## compute VAR model parameters</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="co">## CPU time: ~15s </span></span>
 <span id="cb13-3"><a href="#cb13-3"></a>fit &lt;-<span class="st"> </span><span class="kw">fitVAR</span>(<span class="dt">spacepoints =</span> <span class="dv">20</span>, <span class="dt">p =</span> <span class="dv">3</span>, <span class="dt">margdist =</span><span class="st">&quot;burrXII&quot;</span>,</span>
@@ -516,20 +516,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb13-8"><a href="#cb13-8"></a><span class="co">## generate random fields with nonseparable correlation structure </span></span>
 <span id="cb13-9"><a href="#cb13-9"></a>sim1 &lt;-<span class="st"> </span><span class="kw">generateRF</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">STmodel =</span> fit)</span>
 <span id="cb13-10"><a href="#cb13-10"></a></span>
-<span id="cb13-11"><a href="#cb13-11"></a><span class="co">## fast simulation of random fields with separable correlation structure</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">## fast simulation of anisotropic random fields with separable correlation structure</span></span>
 <span id="cb13-12"><a href="#cb13-12"></a>sim2 &lt;-<span class="st"> </span><span class="kw">generateRFFast</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">spacepoints =</span> <span class="dv">20</span>, <span class="dt">p0 =</span> <span class="fl">0.7</span>, <span class="dt">margdist =</span><span class="st">&quot;paretoII&quot;</span>,</span>
 <span id="cb13-13"><a href="#cb13-13"></a>                       <span class="dt">margarg =</span> <span class="kw">list</span>(<span class="dt">scale =</span> <span class="dv">1</span>, <span class="dt">shape =</span> <span class="fl">.3</span>),</span>
 <span id="cb13-14"><a href="#cb13-14"></a>                       <span class="dt">stcsarg =</span> <span class="kw">list</span>(<span class="dt">scfid =</span> <span class="st">&quot;weibull&quot;</span>, <span class="dt">tcfid =</span> <span class="st">&quot;weibull&quot;</span>,</span>
 <span id="cb13-15"><a href="#cb13-15"></a>                       <span class="dt">scfarg =</span> <span class="kw">list</span>(<span class="dt">scale =</span> <span class="dv">20</span>, <span class="dt">shape =</span> <span class="fl">0.7</span>), </span>
-<span id="cb13-16"><a href="#cb13-16"></a>                       <span class="dt">tcfarg =</span> <span class="kw">list</span>(<span class="dt">scale =</span> <span class="fl">1.1</span>, <span class="dt">shape =</span> <span class="fl">0.8</span>) ) )</span></code></pre></div>
+<span id="cb13-16"><a href="#cb13-16"></a>                       <span class="dt">tcfarg =</span> <span class="kw">list</span>(<span class="dt">scale =</span> <span class="fl">1.1</span>, <span class="dt">shape =</span> <span class="fl">0.8</span>)),</span>
+<span id="cb13-17"><a href="#cb13-17"></a>                       <span class="dt">anisotropyarg =</span> <span class="kw">list</span>(<span class="dt">phi1 =</span> <span class="fl">0.5</span>, <span class="dt">phi2 =</span> <span class="dv">2</span>, <span class="dt">theta =</span> <span class="op">-</span>pi<span class="op">/</span><span class="dv">3</span>))</span></code></pre></div>
 </div>
 <div id="validate-the-simulated-random-fields" class="section level2">
 <h2><span class="header-section-number">2.4</span> Validate the Simulated Random Fields</h2>
-<p>The properties of the generated time series can be checked with <code>checkSTRF()</code>. The first three moments, and the probability zero at several grid points are printed. <code>checkSTRF()</code> also returns a multi-panel plot comparing theoretical and empirical spatial correlation functions at 0, 1, and 2 time lags, and the empirical and target CDFs. The graphical output also yields the contour plot of the target STCF, and level plots of 80 consecutive simulated RFs to visualize the temporal persistence of spatial patterns.</p>
+<p>The properties of the generated time series can be checked with <code>checkRF()</code>. The first three moments, and the probability zero at several grid points are printed. <code>checkRF()</code> also returns a multi-panel plot comparing theoretical and empirical spatial correlation functions at 0, 1, and 2 time lags, and the empirical and target CDFs. The graphical output also yields the contour plot of the target STCF, and level plots of 80 consecutive simulated RFs to visualize the temporal persistence of spatial patterns.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">## check random fields</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="co">## CPU time: ~20s </span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">checkRF</span>(<span class="dt">RF =</span> sim1, <span class="dt">nfields =</span> <span class="dv">9</span><span class="op">*</span><span class="dv">9</span>)</span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="kw">checkRF</span>(<span class="dt">RF =</span> sim2, <span class="dt">nfields =</span> <span class="dv">9</span><span class="op">*</span><span class="dv">9</span>)</span></code></pre></div>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">checkRF</span>(<span class="dt">RF =</span> sim1, <span class="dt">nfields =</span> <span class="dv">9</span><span class="op">*</span><span class="dv">9</span>, <span class="dt">method =</span> <span class="st">&quot;stat&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="kw">checkRF</span>(<span class="dt">RF =</span> sim1, <span class="dt">nfields =</span> <span class="dv">9</span><span class="op">*</span><span class="dv">9</span>, <span class="dt">method =</span> <span class="st">&quot;statplot&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="kw">checkRF</span>(<span class="dt">RF =</span> sim1, <span class="dt">nfields =</span> <span class="dv">9</span><span class="op">*</span><span class="dv">9</span>, <span class="dt">method =</span> <span class="st">&quot;field&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">## check random fields</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">checkRF</span>(<span class="dt">RF =</span> sim2, <span class="dt">nfields =</span> <span class="dv">9</span><span class="op">*</span><span class="dv">9</span>, <span class="dt">method =</span> <span class="st">&quot;field&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">## Uncomment to save fields as a GIF file named &#39;movieRF.gif&#39; in the working directory</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">## checkRF(RF = sim2, nfields = 9*9, method = &quot;movie&quot;)</span></span></code></pre></div>
 <hr />
 </div>
 </div>
@@ -538,49 +545,52 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="hourly-precipitation" class="section level2">
 <h2><span class="header-section-number">3.1</span> Hourly Precipitation</h2>
 <p>In practice, we simulate a natural process based on observed time series. A hydroclimatic variable that can be easily simulated in <code>CoSMoS</code> is precipitation. Here is a simulation example of hourly precipitation.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">data</span>(<span class="st">&quot;precip&quot;</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">quickTSPlot</span>(precip<span class="op">$</span>value, <span class="dt">xlimdf =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">data</span>(<span class="st">&quot;precip&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">quickTSPlot</span>(precip<span class="op">$</span>value, <span class="dt">xlimdf =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>))</span></code></pre></div>
 <p>To generate a synthetic time series with similar characteristics to the observed precipitation, you have to determine (1) the marginal distribution, (2) autocorrelation structure, and (3) probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with <code>analyzeTS()</code> and then check the goodness-of-fit with <code>reportTS()</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">## CPU time: ~75s </span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>precip_ggamma &lt;-<span class="st"> </span><span class="kw">analyzeTS</span>(<span class="dt">TS =</span> precip, <span class="dt">season =</span> <span class="st">&quot;month&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;ggamma&quot;</span>,</span>
-<span id="cb16-3"><a href="#cb16-3"></a>                           <span class="dt">acsID =</span> <span class="st">&quot;weibull&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
-<span id="cb16-4"><a href="#cb16-4"></a></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">method =</span> <span class="st">&quot;dist&quot;</span>)</span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">method =</span> <span class="st">&quot;acs&quot;</span>)</span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">method =</span> <span class="st">&quot;stat&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">## CPU time: ~75s </span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>precip_ggamma &lt;-<span class="st"> </span><span class="kw">analyzeTS</span>(<span class="dt">TS =</span> precip, <span class="dt">season =</span> <span class="st">&quot;month&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;ggamma&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3"></a>                           <span class="dt">acsID =</span> <span class="st">&quot;weibull&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">method =</span> <span class="st">&quot;dist&quot;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">method =</span> <span class="st">&quot;acs&quot;</span>)</span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">method =</span> <span class="st">&quot;stat&quot;</span>)</span></code></pre></div>
 <p>In this example, the Generalized Gamma distribution and the Weibull autocorrelation structure describe well the observed time series. Other combinations might not give so good results. For instance:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>precip_pareto &lt;-<span class="st"> </span><span class="kw">analyzeTS</span>(<span class="dt">TS =</span> precip, <span class="dt">season =</span> <span class="st">&quot;month&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;paretoII&quot;</span>, <span class="dt">acsID =</span> <span class="st">&quot;fgn&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_pareto, <span class="dt">method =</span> <span class="st">&quot;dist&quot;</span>)</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_pareto, <span class="dt">method =</span> <span class="st">&quot;acs&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>precip_pareto &lt;-<span class="st"> </span><span class="kw">analyzeTS</span>(<span class="dt">TS =</span> precip, <span class="dt">season =</span> <span class="st">&quot;month&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;paretoII&quot;</span>, <span class="dt">acsID =</span> <span class="st">&quot;fgn&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_pareto, <span class="dt">method =</span> <span class="st">&quot;dist&quot;</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> precip_pareto, <span class="dt">method =</span> <span class="st">&quot;acs&quot;</span>)</span></code></pre></div>
 <p>Once you choose the marginal distribution and the autocorrelation structure you can produce as many and as long synthetic series you wish. The generated series will reproduce both the distribution, correlation structure and probability zero (intermittency). Just use the <code>simulateTS()</code> function.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>sim_precip &lt;-<span class="st"> </span><span class="kw">simulateTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">from =</span> <span class="kw">as.POSIXct</span>(<span class="dt">x =</span> <span class="st">&quot;1978-12-01 00:00:00&quot;</span>),</span>
-<span id="cb18-2"><a href="#cb18-2"></a>                         <span class="dt">to =</span> <span class="kw">as.POSIXct</span>(<span class="dt">x =</span> <span class="st">&quot;2008-12-01 00:00:00&quot;</span>))</span>
-<span id="cb18-3"><a href="#cb18-3"></a>dta &lt;-<span class="st"> </span>precip</span>
-<span id="cb18-4"><a href="#cb18-4"></a>dta[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;observed&quot;</span>]</span>
-<span id="cb18-5"><a href="#cb18-5"></a>sim_precip[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;simulated&quot;</span>]</span>
-<span id="cb18-6"><a href="#cb18-6"></a>dta &lt;-<span class="st"> </span><span class="kw">rbind</span>(dta, sim_precip)</span>
-<span id="cb18-7"><a href="#cb18-7"></a></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dta) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="dt">facets =</span> <span class="op">~</span>id, <span class="dt">ncol =</span> <span class="dv">1</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>sim_precip &lt;-<span class="st"> </span><span class="kw">simulateTS</span>(<span class="dt">aTS =</span> precip_ggamma, <span class="dt">from =</span> <span class="kw">as.POSIXct</span>(<span class="dt">x =</span> <span class="st">&quot;1978-12-01 00:00:00&quot;</span>),</span>
+<span id="cb19-2"><a href="#cb19-2"></a>                         <span class="dt">to =</span> <span class="kw">as.POSIXct</span>(<span class="dt">x =</span> <span class="st">&quot;2008-12-01 00:00:00&quot;</span>))</span>
+<span id="cb19-3"><a href="#cb19-3"></a>dta &lt;-<span class="st"> </span>precip</span>
+<span id="cb19-4"><a href="#cb19-4"></a>dta[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;observed&quot;</span>]</span>
+<span id="cb19-5"><a href="#cb19-5"></a>sim_precip[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;simulated&quot;</span>]</span>
+<span id="cb19-6"><a href="#cb19-6"></a>dta &lt;-<span class="st"> </span><span class="kw">rbind</span>(dta, sim_precip)</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dta) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="dt">facets =</span> <span class="op">~</span>id, <span class="dt">ncol =</span> <span class="dv">1</span>) </span></code></pre></div>
 </div>
 <div id="daily-streamflow" class="section level2">
 <h2><span class="header-section-number">3.2</span> Daily streamflow</h2>
-<p>We can also apply the same methods to a different dataset - daily streamflow! For this example we have used the streamflow records of the Colorado River below Hoover Dam (Arizona/Nevada; USGS Id 09421500) from the US Geological Survey (USGS) repository <a href="http://waterdata.usgs.gov/nwis">(http://waterdata.usgs.gov/nwis)</a>.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">## CPU time: ~240s</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">data</span>(<span class="st">&quot;disch&quot;</span>)</span>
-<span id="cb19-3"><a href="#cb19-3"></a></span>
-<span id="cb19-4"><a href="#cb19-4"></a>str &lt;-<span class="st"> </span><span class="kw">analyzeTS</span>(<span class="dt">TS =</span> disch, <span class="dt">dist =</span> <span class="st">&quot;ggamma&quot;</span>, <span class="dt">norm =</span> <span class="st">&quot;N4&quot;</span>, <span class="dt">acsID =</span> <span class="st">&quot;paretoII&quot;</span>, </span>
-<span id="cb19-5"><a href="#cb19-5"></a>                 <span class="dt">lag.max =</span> <span class="dv">20</span>, <span class="dt">constrain =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb19-6"><a href="#cb19-6"></a></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> str)</span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>sim_str &lt;-<span class="st"> </span><span class="kw">simulateTS</span>(<span class="dt">aTS =</span> str)</span>
-<span id="cb20-2"><a href="#cb20-2"></a></span>
-<span id="cb20-3"><a href="#cb20-3"></a>dta &lt;-<span class="st"> </span>disch</span>
-<span id="cb20-4"><a href="#cb20-4"></a>dta[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;observed&quot;</span>]</span>
-<span id="cb20-5"><a href="#cb20-5"></a>sim_str[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;simulated&quot;</span>]</span>
-<span id="cb20-6"><a href="#cb20-6"></a>dta &lt;-<span class="st"> </span><span class="kw">rbind</span>(dta, sim_str)</span>
-<span id="cb20-7"><a href="#cb20-7"></a></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dta) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="dt">facets =</span> <span class="op">~</span>id, <span class="dt">ncol =</span> <span class="dv">1</span>) </span></code></pre></div>
+<p>We can also apply the same methods to a different dataset - daily streamflow! For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository <a href="http://waterdata.usgs.gov/nwis">(http://waterdata.usgs.gov/nwis)</a>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co">## CPU time: ~240s</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="kw">data</span>(<span class="st">&quot;disch&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a>disch &lt;-<span class="st"> </span><span class="kw">head</span>(disch,<span class="dv">365</span><span class="op">*</span><span class="dv">4</span>)</span>
+<span id="cb20-5"><a href="#cb20-5"></a></span>
+<span id="cb20-6"><a href="#cb20-6"></a>str &lt;-<span class="st"> </span><span class="kw">analyzeTS</span>(<span class="dt">TS =</span> disch, <span class="dt">dist =</span> <span class="st">&quot;ggamma&quot;</span>, <span class="dt">norm =</span> <span class="st">&quot;N4&quot;</span>, <span class="dt">acsID =</span> <span class="st">&quot;paretoII&quot;</span>, </span>
+<span id="cb20-7"><a href="#cb20-7"></a>                 <span class="dt">lag.max =</span> <span class="dv">20</span>, <span class="dt">constrain =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-8"><a href="#cb20-8"></a></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> str)</span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="kw">reportTS</span>(<span class="dt">aTS =</span> str, <span class="dt">method =</span> <span class="st">&quot;stat&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>sim_str &lt;-<span class="st"> </span><span class="kw">simulateTS</span>(<span class="dt">aTS =</span> str)</span>
+<span id="cb21-2"><a href="#cb21-2"></a></span>
+<span id="cb21-3"><a href="#cb21-3"></a>dta &lt;-<span class="st"> </span>disch</span>
+<span id="cb21-4"><a href="#cb21-4"></a>dta[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;observed&quot;</span>]</span>
+<span id="cb21-5"><a href="#cb21-5"></a>sim_str[, id <span class="op">:</span><span class="er">=</span><span class="st"> &quot;simulated&quot;</span>]</span>
+<span id="cb21-6"><a href="#cb21-6"></a>dta &lt;-<span class="st"> </span><span class="kw">rbind</span>(dta, sim_str)</span>
+<span id="cb21-7"><a href="#cb21-7"></a></span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dta) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="dt">facets =</span> <span class="op">~</span>id, <span class="dt">ncol =</span> <span class="dv">1</span>) </span></code></pre></div>
 </div>
 </div>
 <div id="section_4" class="section level1">

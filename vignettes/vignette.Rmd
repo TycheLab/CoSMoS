@@ -284,7 +284,7 @@ sim2 <- generateRFFast(n = 1000, spacepoints = 20, p0 = 0.7, margdist ="paretoII
 
 ## Validate the Simulated Random Fields
 
-The properties of the generated time series can be checked with `checkSTRF()`. The first three moments, and the probability zero at several grid points are printed. `checkSTRF()` also returns a multi-panel plot comparing theoretical and empirical spatial correlation functions at 0, 1, and  2 time lags, and the empirical and target CDFs. The  graphical output  also yields the contour plot of the target STCF, and level plots of 80 consecutive simulated RFs to visualize the temporal persistence of spatial patterns.
+The properties of the generated time series can be checked with `checkRF()`. The first three moments, and the probability zero at several grid points are printed. `checkRF()` also returns a multi-panel plot comparing theoretical and empirical spatial correlation functions at 0, 1, and  2 time lags, and the empirical and target CDFs. The  graphical output  also yields the contour plot of the target STCF, and level plots of 80 consecutive simulated RFs to visualize the temporal persistence of spatial patterns.
 
 ```{r, fig.height = 6.5}
 ## check random fields
