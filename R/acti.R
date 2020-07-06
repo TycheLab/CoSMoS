@@ -39,7 +39,7 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 #' @inheritParams moments
 #'
 #' @export
-#' @import stats ggplot2
+#' @import stats ggplot2 pracma
 #'
 #' @examples
 #'
@@ -75,9 +75,9 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
                     rhox = 0) ## create data frame of marginal ACS values
 
   .min <- ifelse(test = p0 == 0,
-                 yes = -8,
+                 yes = -7.5,
                  no = -sqrt(2) * inv.erfc(2 * p0)) ## double integral lower bound
-  .max <- 8 ## double integral upper bound
+  .max <- 7.5 ## double integral upper bound
 
   m <- moments(dist = margdist, ## moment calculation
                distarg = margarg,
@@ -90,42 +90,42 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 
   for (i in 1:dim(rho)[1]) {
 
-    # temp <- integral2(acti, ## ACTI calculation using pracma
-    #                   ymin = .min,
-    #                   ymax = .max,
-    #                   xmin = .min,
-    #                   xmax = .max,
-    #                   rhoz = rho[i, 'rhoz'],
-    #                   p0 = p0,
-    #                   dist = margdist,
-    #                   distarg = margarg)$Q
+    temp <- integral2(acti, ## ACTI calculation using pracma
+                      ymin = .min,
+                      ymax = .max,
+                      xmin = .min,
+                      xmax = .max,
+                      rhoz = rho[i, 'rhoz'],
+                      p0 = p0,
+                      dist = margdist,
+                      distarg = margarg)$Q
 
-    temp <- integrate( ## ACTI using base
-      f = function(y) {
-        sapply(y, function(y) {
-          integrate(
-            f = function(x) {
-              acti(x = x,
-                   y = y,
-                   rhoz = rho[i, 'rhoz'],
-                   p0 = p0,
-                   dist = margdist,
-                   distarg = margarg)
-            },
-            lower = .min,
-            upper = .max,
-            subdivisions = 1.0e4,
-            rel.tol = 1.0e-5#,
-            # stop.on.error = FALSE
-          )$value
-        })
-      },
-      lower = .min,
-      upper = .max,
-      subdivisions = 1.0e4,
-      rel.tol = 1.0e-5#,
-      # stop.on.error = FALSE
-    )$value
+    # temp <- integrate( ## ACTI using base
+    #   f = function(y) {
+    #     sapply(y, function(y) {
+    #       integrate(
+    #         f = function(x) {
+    #           acti(x = x,
+    #                y = y,
+    #                rhoz = rho[i, 'rhoz'],
+    #                p0 = p0,
+    #                dist = margdist,
+    #                distarg = margarg)
+    #         },
+    #         lower = .min,
+    #         upper = .max,
+    #         subdivisions = 1.0e4,
+    #         rel.tol = 1.0e-5#,
+    #         # stop.on.error = FALSE
+    #       )$value
+    #     })
+    #   },
+    #   lower = .min,
+    #   upper = .max,
+    #   subdivisions = 1.0e4,
+    #   rel.tol = 1.0e-5#,
+    #   # stop.on.error = FALSE
+    # )$value
 
     rho[i, 'rhox'] <- (temp - m[[1]]['mu1'] ^ 2) / (m[[1]]['mu2'])
   }

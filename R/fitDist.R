@@ -35,7 +35,7 @@ fitDist <- function(data,
       start <- c(rep(1, length(a) - 1),
                  .1)
       upr <- c(rep(Inf, length(a) - 1),
-               .499)
+               .48)
     } else {
 
       start <- rep(1, length(a))

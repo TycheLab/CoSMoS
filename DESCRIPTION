@@ -31,7 +31,8 @@ Imports:
     plotly,
     cowplot,
     directlabels,
-    animation
+    animation,
+    pracma
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0

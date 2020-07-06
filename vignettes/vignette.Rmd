@@ -357,10 +357,8 @@ We can also apply the same methods to a different dataset - daily streamflow! Fo
 ## CPU time: ~240s
 data("disch")
 
-disch <- head(disch,365*4)
-
-str <- analyzeTS(TS = disch, dist = "ggamma", norm = "N4", acsID = "paretoII", 
-                 lag.max = 20, constrain = TRUE)
+str <- analyzeTS(TS = disch, dist = "lonorm", norm = "N2", acsID = "paretoII", 
+                 lag.max = 20, constrain = TRUE, season = "month")
 
 reportTS(aTS = str)
 reportTS(aTS = str, method = "stat")
