@@ -17,11 +17,6 @@ editor_options:
 ---
 
 ***
-**For a more intuitive vignette with figures check out [here](http://rpubs.com/Strnda/CoSMoS).** 
-
-***
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval = TRUE,
@@ -419,7 +414,7 @@ As general guideline we suggest the following distributions for different variab
 
 *	Precipitation: Generalized Gamma (`ggamma`), Burr type XII (`burrXII`)
 *	Streamflow: Burr type III and XII (`burrIII`, `burrXII`), Generalized Gamma (`ggamma`), Lognormal (`lnorm`)
-*	Relative humidity: Beta (beta), Kumaraswamy (`kumar` in [ `extraDistr`](https://cran.r-project.org/web/packages/extraDistr/index.html)  package)
+*	Relative humidity: Beta (beta), Kumaraswamy (`kumar` in [ `extraDistr`](https://cran.R-project.org/package=extraDistr)  package)
 *	Wind speed: Weibull (`weibull`), Generalized Gamma (`ggamma`)
 *	Temperature: Normal (`norm`)
 *	Maxima of any variable: GEV (`gev`)

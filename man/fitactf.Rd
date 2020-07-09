@@ -18,7 +18,8 @@ Fits the ACTF (Autocorrelation Transformation Function) to the estimated points 
 
 library(CoSMoS)
 
-## choose the marginal distribution as Pareto type II with corresponding parameters
+## choose the marginal distribution as Pareto type II
+## with corresponding parameters
 dist <- 'paretoII'
 distarg <- list(scale = 1, shape = .3)
 

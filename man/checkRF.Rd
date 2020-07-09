@@ -27,14 +27,15 @@ expected values (similar to checkTS). It also returns graphical output for
 visual check
 }
 \examples{
-## The example below refers to the fitting and simulation of 10 random fields of size 10x10
-## with AR(1) temporal correlation. As the fitting algorithm has O((mxm)^3)
-## complexity for a mxm field, this setting allows for quick fitting and
-## simulation (short CPU time). However, for a more effective visualization
+## The example below refers to the fitting and simulation of 10 random fields
+## of size 10x10 with AR(1) temporal correlation. As the fitting algorithm has
+## O((mxm)^3) complexity for a mxm field, this setting allows for quick fitting
+## and simulation (short CPU time). However, for a more effective visualization
 ## and reliable performance assessment, we suggest to generate a larger number
-## of fields (e.g. 100 or more) of size about 30X30. This setting needs more CPU time
-## but enables more effective comparison of theoretical and empirical statistics.
-## Sizes larger than about 50x50 can be unpractical on standard machines.
+## of fields (e.g. 100 or more) of size about 30X30. This setting needs more
+## CPU time but enables more effective comparison of theoretical and
+## empirical statistics. Sizes larger than about 50x50 can be unpractical
+##  on standard machines.
 
 fit <- fitVAR(
   spacepoints = 10,

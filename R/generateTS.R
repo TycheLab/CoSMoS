@@ -184,7 +184,8 @@ generateTS <- function(n, margdist, margarg, p = NULL, p0 = 0, TSn = 1, distboun
 #'
 #' library(CoSMoS)
 #'
-#' ## define marginal distribution and arguments with target autocorrelation structure
+#' ## define marginal distribution and arguments with target
+#' ## autocorrelation structure
 #' x <- generateTS(margdist = 'burrXII',
 #'                 margarg = list(scale = 1,
 #'                                shape1 = .75,

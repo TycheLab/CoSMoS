@@ -64,7 +64,7 @@
 #' fit$margdist
 #'
 #' ## for random fields simulation
-#' fit <- fitVARSTRF(
+#' fit <- fitVAR(
 #'   spacepoints = 10,
 #'   p = 1,
 #'   margdist ='burrXII',

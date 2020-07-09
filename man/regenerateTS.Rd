@@ -21,7 +21,8 @@ You have used the generateTS function and you wish to generate more time series.
 
 library(CoSMoS)
 
-## define marginal distribution and arguments with target autocorrelation structure
+## define marginal distribution and arguments with target
+## autocorrelation structure
 x <- generateTS(margdist = 'burrXII',
                 margarg = list(scale = 1,
                                shape1 = .75,

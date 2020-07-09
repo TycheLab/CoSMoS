@@ -24,7 +24,7 @@ fitVAR(
 
 \item{margdist}{target marginal distribution of the field}
 
-\item{margarg}{list of marginal distribution arguments}
+\item{margarg}{list of marginal distribution arguments. Please consult the documentation of the selected marginal distribution indicated in the argument “margdist” for the list of required parameters}
 
 \item{p0}{probability zero}
 
@@ -32,14 +32,7 @@ fitVAR(
 
 \item{stcsid}{spatiotemporal correlation structure ID}
 
-\item{stcsarg}{list of spatiotemporal correlation structure arguments. The list contains the following members:
-\tabular{ll}{
-\code{scfid}\tab ID of the spatial correlation function\cr
-\code{tcfid}\tab ID of the temporal correlation function\cr
-\code{copulaarg}\tab Argument to be passed to the copula function\cr
-\code{scfarg}\tab Arguments passed to the spatial correlation function\cr
-\code{tcfarg}\tab Arguments passed to the temporal correlation function\cr
-}}
+\item{stcsarg}{list of spatiotemporal correlation structure arguments. Please consult the documentation of the selected spatiotemporal correlation structure indicated in the argument “stcsid” for the list of required parameters}
 
 \item{scalefactor}{factor specifying the distance between the centers of two pixels (default set to 1)}
 
@@ -93,7 +86,7 @@ fit$margarg
 fit$margdist
 
 ## for random fields simulation
-fit <- fitVARSTRF(
+fit <- fitVAR(
   spacepoints = 10,
   p = 1,
   margdist ='burrXII',

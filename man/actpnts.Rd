@@ -22,8 +22,8 @@ Transforms a gaussian process in order to match a target marginal lowers its aut
 
 library(CoSMoS)
 
-## here we target to a process that has the Pareto type II marginal distribution
-## with scale parameter 1 and shape parameter 0.3
+## here we target to a process that has the Pareto type II
+## marginal distribution with scale parameter 1 and shape parameter 0.3
 ## (note that all parameters have to be named)
 dist <- 'paretoII'
 distarg <- list(scale = 1, shape = .3)

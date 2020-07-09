@@ -27,10 +27,11 @@
 #' where m denotes the side length of a square field (mxm)
 #'
 #' @examples
-#' ## The example below refers to the simulation of few random fields of size 10x10
-#' ## with AR(1) temporal correlation for the sake of illustration.
+#' ## The example below refers to the simulation of few random fields of
+#' ## size 10x10 with AR(1) temporal correlation for the sake of illustration.
 #' ## For a more effective visualization and reliable performance assessment,
-#' ## we suggest to generate a larger number of fields (e.g. 100 or more) of size about 30X30.
+#' ## we suggest to generate a larger number of fields (e.g. 100 or more)
+#' ## of size about 30X30.
 #' ## See section 'Details' for additional information on running times
 #' ## with different settings.
 #'
