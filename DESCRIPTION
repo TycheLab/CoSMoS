@@ -3,8 +3,7 @@ Type: Package
 Title: Complete Stochastic Modelling Solution
 Version: 2.0.0
 Authors@R: c(person("Filip", "Strnad",
-                     role = c("aut", "cre"),
-                     email = "strnadf@fzp.czu.cz"),
+                     role = "aut"),
              person("Simon Michael", "Papalexiou", 
                       role = c("aut")),
              person("Francesco", "Serinaldi", 
@@ -12,7 +11,8 @@ Authors@R: c(person("Filip", "Strnad",
              person("Yannis", "Markonis", 
                       role = "aut"),
              person("Kevin", "Shook", 
-                      role = "aut")
+                      role = c("ctb", "cre"),
+                      email = "kevin.shook@usask.ca")
               )
 Description: A single framework, unifying, extending, and improving a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific 'parent' Gaussian process Papalexiou (2018) <doi:10.1016/j.advwatres.2018.02.013>.
 License: GPL-3
