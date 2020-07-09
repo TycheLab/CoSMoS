@@ -126,10 +126,10 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
                                       ),
                            option = 'D') +
       labs(x = expression(paste('Distance ', delta)),
-           y = 'Scs',
+           y = 'SCS',
            title = 'Lagged spatial correlation structure',
            color = "Time lag") +
-      theme_gray() +
+      theme_light() +
       theme(legend.position=c(0.99,0.99),
             legend.justification=c(1,1),
             strip.background = element_rect(fill = 'grey5'),
@@ -149,7 +149,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
       labs(x = expression(paste('Distance ', delta)),
            y = expression(paste('Time lag ', tau)),
            title = 'Target STCS') +
-      theme_gray() +
+      theme_light() +
       theme(legend.position= 'none',
             legend.justification=c(1,1),
             strip.background = element_rect(fill = 'grey5'),
@@ -189,7 +189,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
            title = 'Probability distribution fit') +
       guides(color = guide_legend(title=NULL),
              linetype = guide_legend(title=NULL)) +
-      theme_gray() +
+      theme_light() +
       theme(legend.position=c(0.99,0.01),
             legend.justification=c(1,0),
             strip.background = element_rect(fill = 'grey5'),

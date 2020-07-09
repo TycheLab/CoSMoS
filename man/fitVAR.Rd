@@ -32,7 +32,14 @@ fitVAR(
 
 \item{stcsid}{spatiotemporal correlation structure ID}
 
-\item{stcsarg}{list of spatiotemporal correlation structure arguments}
+\item{stcsarg}{list of spatiotemporal correlation structure arguments. The list contains the following members:
+\tabular{ll}{
+\code{scfid}\tab ID of the spatial correlation function\cr
+\code{tcfid}\tab ID of the temporal correlation function\cr
+\code{copulaarg}\tab Argument to be passed to the copula function\cr
+\code{scfarg}\tab Arguments passed to the spatial correlation function\cr
+\code{tcfarg}\tab Arguments passed to the temporal correlation function\cr
+}}
 
 \item{scalefactor}{factor specifying the distance between the centers of two pixels (default set to 1)}
 
@@ -45,7 +52,8 @@ Compute VAR model parameters to simulate parent Gaussian random vectors with spe
 The fitting algorithm has \eqn{O(mxm)^3} complexity for a \eqn{(mxm)} field
 or equivalently \eqn{O(d^3)} complexity for a \eqn{d}-dimensional vector.
 Very large values of \eqn{(mxm)} (or \eqn{d}) and high order AR correlation
-structures can be unpractical on standard machines. #'
+structures can be unpractical on standard machines.
+
 Here, we give indicative CPU times for some settings, referring to a
 Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz,
 4-core, 8 logical processors, and 32GB RAM. \cr:

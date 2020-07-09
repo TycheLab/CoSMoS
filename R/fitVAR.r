@@ -5,11 +5,11 @@
 #' @param spacepoints it can be a numeric integer, which is interpreted as the side length m of the square field (m x m), or a matrix (d x 2) of coordinates (e.g. longitude and latitude) of d spatial locations (e.g. d gauge stations)
 #' @param p order of VAR(p) model
 #' @param margdist target marginal distribution of the field
-#' @param margarg list of marginal distribution arguments
+#' @param margarg  list of marginal distribution arguments. Please consult the documentation of the selected marginal distribution indicated in the argument “margdist” for the list of required parameters
 #' @param p0 probability zero
 #' @param distbounds distribution bounds (default set to c(-Inf, Inf))
 #' @param stcsid spatiotemporal correlation structure ID
-#' @param stcsarg list of spatiotemporal correlation structure arguments
+#' @param stcsarg  list of spatiotemporal correlation structure arguments. Please consult the documentation of the selected spatiotemporal correlation structure indicated in the argument “stcsid” for the list of required parameters
 #' @param scalefactor factor specifying the distance between the centers of two pixels (default set to 1)
 #' @param anisotropyarg list of arguments establishing spatial anisotropy. phi1 and phi2 control the stretch in two orthogonal directions (e.g., longitude and latitude) while the angle theta controls a counterclockwise rotation (default set to list(phi1 = 1, phi2 = 1 , theta = 0) for isotropic fields)
 #'
@@ -23,7 +23,8 @@
 #' The fitting algorithm has \eqn{O(mxm)^3} complexity for a \eqn{(mxm)} field
 #' or equivalently \eqn{O(d^3)} complexity for a \eqn{d}-dimensional vector.
 #' Very large values of \eqn{(mxm)} (or \eqn{d}) and high order AR correlation
-#' structures can be unpractical on standard machines. #'
+#' structures can be unpractical on standard machines.
+#'
 #' Here, we give indicative CPU times for some settings, referring to a
 #' Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz,
 #' 4-core, 8 logical processors, and 32GB RAM. \cr:

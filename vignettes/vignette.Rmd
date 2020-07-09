@@ -19,18 +19,19 @@ editor_options:
 ***
 **For a more intuitive vignette with figures check out [here](http://rpubs.com/Strnda/CoSMoS).** 
 
-NOTE: For R code chunks running in more than ~10s, we report indicative CPU time for a Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz, 4-core, 8 logical processors, and 32GB RAM.
-
 ***
 
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE,
+knitr::opts_chunk$set(eval = TRUE,
                       echo = TRUE,
                       fig.width = 7, 
                       warning = FALSE,
                       message = FALSE)
+library(CoSMoS)
 ```
-_What is `CoSMoS`? Released officially on CRAN in April 2019, `CoSMoS` is the leading R software on stochastic simulation and time series generation. Designed with the end-user in mind,  `CoSMoS` makes **univariate**, **multivariate**, or **random fields** simulations easy. You can reliably generate time series or fields of rainfall, streamflow, wind, relative humidity, or of any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest!_
+CoSMoS was conceived back in 2009 (see note in section 4) and officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind,  `CoSMoS` makes **univariate**, **multivariate**, or **random field** simulations easy. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
 
 
 _"Hydroclimatic processes come in all “shapes and sizes”. They are characterized by different spatiotemporal correlation structures and probability distributions that can be continuous, mixed-type, discrete or even binary. Simulating such processes by reproducing precisely their marginal distribution and linear correlation structure, including features like intermittency, can greatly improve hydrological analysis and design. ... Here, a single framework is proposed that unifies, extends, and improves a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific “parent”" Gaussian process."_
@@ -39,46 +40,44 @@ _"Hydroclimatic processes come in all “shapes and sizes”. They are character
 
 _"Hydroclimatic variables such as precipitation and temperature are often measured or simulated by climate models at coarser spatiotemporal scales than those needed for operational purposes. … Here we introduce a novel disaggregation method, named Disaggregation Preserving Marginals and Correlations (DiPMaC), that is able to disaggregate a coarse-scale time series to any finer scale, while reproducing the probability distribution and the linear correlation structure of the fine-scale process. DiPMaC is also generalized for arbitrary nonstationary scenarios to reproduce time varying marginals."_
 
-~_Precise Temporal Disaggregation_ | [Papalexiou et al. (2018)]( https://doi.org/10.1029/2018WR022726)
+~_Precise Temporal Disaggregation_ | [Papalexiou et al. (2018)](https://doi.org/10.1029/2018WR022726)
 
 _"Nature manifests itself in space and time. The spatiotemporal complexity of processes such as precipitation, temperature, and wind, does not allow purely deterministic modeling. Spatiotemporal random fields have a long history in modeling such processes, and yet a single unified framework offering the flexibility to simulate processes that may differ profoundly does not exist. Here we introduce a blueprint to efficiently simulate spatiotemporal random fields that preserve any marginal distribution, any valid spatiotemporal correlation structure, and intermittency."_
 
-~_Random Fields Simplified_ | [Papalexiou and Serinaldi (2020)]( https://doi.org/10.1029/2019WR026331)
+~_Random Fields Simplified_ | [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331)
 
 ***
-
 # Step by step guide to timeseries simulation {#section_1}
 
-In most cases we can simulate accurately a process by reproducing its marginal distribution and its autocorrelation structure. The first is represented typically by a parametric probability distribution; the second either by a parametric correlation structure, or by specific correlation coefficient values.  `CoSMoS` is the first software that enabled the generation of time series preserving any marginal distribution, correlation structure, and intermittency. Intermittency can be expressed by probability zero and is essential in the simulation of precipitation at fine scales (e.g., daily, hourly) but also for any other intermittent process, e.g., streamflow of ephemeral streams, wind speed, etc.
+NOTE: For R code chunks running longer than ~10s, we report the CPU time for a Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz, 4-core, 32GB RAM.
 
-In general, accurate time series generation requires knowledge of the statistical properties of the process under study. Different processes such as precipitation, streamflow, temperature, wind, evaporation etc. can have very different properties, that is, can be described by different probability distribution, correlation structures, and be or not be intermittent. 
+In most cases we can  accurately simulate a process by reproducing its marginal distribution and its autocorrelation structure. The first is typically represented by a parametric probability distribution; the second either by a parametric correlation structure, or by specific correlation coefficient values. `CoSMoS` is the first software that enables the generation of time series while preserving any marginal distribution, correlation structure, and intermittency. Intermittency can be defined by the probability of zero values, and is essential in the simulation of precipitation at fine scales (e.g., daily, hourly) but also for any other intermittent process, such as flows of ephemeral streams, wind speed, etc.
 
-```{r, message = FALSE}
-library(CoSMoS)
-```
+Accurate generation of time series requires knowledge of the statistical properties of the process under study. Processes such as precipitation, streamflow, temperature, wind, or evaporation may have very different properties; that is, they can be described by different probability distributions, correlation structures, and may or may not be intermittent. 
 
-## Choose a Probability Distribution
+There are four main steps required to generate a time series:
+ 1. Choosing a probability distribution
+ 2. Choosing a correlation structure, 
+ 3. Adding intermittency, and
+ 4. Validating the results.
 
-The choice of a probability distribution to describe the variable you wish to simulate is crucial. The probability distribution expresses how frequently specific magnitudes of your variable occur. For example, **temperature** is typically described by bell-shaped distributions like the [Normal](https://en.wikipedia.org/wiki/Normal_distribution); **relative humidity** needs distributions defined in (0,1) such as the [Beta](https://en.wikipedia.org/wiki/Beta_distribution) or the [Kumaraswamy](https://en.wikipedia.org/wiki/Kumaraswamy_distribution); **streamflow** typically has heavy tails and power-type distribution might be needed to reproduce the behavior of the extremes; **wind** typically can be modelled by positively skewed distributions such as the [Weibull](https://en.wikipedia.org/wiki/Weibull_distribution); **precipitation** at fines scales has to be modelled by mixed-type (or else zero inflated) distributions, that is, having a probability value to describe the occurrence of zeros, and a continuous distribution, such the [Generalized Gamma](https://en.wikipedia.org/wiki/Generalized_gamma_distribution) or the [Burr type XII](https://en.wikipedia.org/wiki/Burr_distribution), to describe the nonzero values. 
+The four steps are explained below.
 
-Distributions might have different number and type of parameters (e.g., location, scale, and shape parameters). For example, the Generalized Gamma distribution has one scale and two shape parameters and the parameter input can be given as: `margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8)`.
+## Choosing a Probability Distribution
 
-In general, `CoSMoS` supports all build-in distribution functions of `R` and of other packages (that is, tenths of distributions) but also comes with some build-in distributions such as Generalized Gamma, the [Pareto type II](https://en.wikipedia.org/wiki/Pareto_distribution), and the Burr type III and XII distributions. More details on the `CoSMoS` distributions and their parameters can be found in [Section 4](#section_4). 
+The choice of a probability distribution to describe the variable you wish to simulate is crucial. The probability distribution expresses how frequently specific magnitudes of the variable occur in the data set. Air **temperature** is typically described by bell-shaped distributions like the [Normal](https://en.wikipedia.org/wiki/Normal_distribution). **Relative humidity** needs distributions defined in the interval (0,1) such as the [Beta](https://en.wikipedia.org/wiki/Beta_distribution) or the [Kumaraswamy](https://en.wikipedia.org/wiki/Kumaraswamy_distribution). **Streamflow** typically has heavy tails and power-type distributions might be needed to reproduce the behavior of the extremes. **Wind speed** typically can be modelled by positively skewed distributions such as the [Weibull](https://en.wikipedia.org/wiki/Weibull_distribution). **Precipitation** at fine scales has to be modelled by mixed-type (or else zero inflated) distributions, that is, having a probability value to describe the occurrence of zeros, and a continuous distribution, such the [Generalized Gamma](https://en.wikipedia.org/wiki/Generalized_gamma_distribution) or the [Burr type XII](https://en.wikipedia.org/wiki/Burr_distribution), to describe the frequency of nonzero values. 
 
-Summarizing, the first step of stochastic simulation with  `CoSMoS` is to choose a parametric distribution to describe your variable and provide its parameters. For example, next the Generalized Gamma distribution is selected with specific values of the scale and shape parameters:
+`CoSMoS` supports **all the standard distribution** functions of `R` and from other packages (tens of distributions) but also comes with some built-in distributions such as Generalized Gamma, the [Pareto type II](https://en.wikipedia.org/wiki/Pareto_distribution), and the Burr type III and XII distributions. More details on the `CoSMoS` distributions and their parameters can be found in [Section 3.3](#section_4). 
 
-```{r}
-marginaldist <- "ggamma"
-param <- list(scale = 1, shape1 = .8, shape2 = .8)
-```
+Distributions may have differing numbers and types of parameters (e.g. location, scale, and shape parameters). For example, the Generalized Gamma distribution has one scale and two shape parameters.
 
-`CoSMoS` has built-in functions to fit distributions to data and assess their goodness-of-fit based on graphs; yet you can use any other package for distribution fitting. 
+`CoSMoS` has built-in functions to fit distributions to data and assess their goodness-of-fit based on graphs; but you can also use any other package for distribution fitting. 
 
-## Choose a Correlation Structure
+## Choosing a Correlation Structure
 
-The correlation structure expresses how much the random variables depend with each other; for example, processes at fine temporal scales are typically more correlated than those at coarse scales. CoSMoS offers two options to introduce correlations: (1) by defining specific lag autocorrelations as a list starting from lag 0 up to a desired lag, or (2) by using a pre-defined parametric autocorrelation structure.
+The correlation structure expresses how much the random variables depend upon each other. Processes at fine temporal scales are typically more correlated than those at coarse scales. CoSMoS offers two options to introduce correlations: (1) by defining specific lag autocorrelations as a list starting from lag 0 up to a desired limit, or (2) by using a pre-defined parametric autocorrelation structure.
 
-For instance, you can generate a time series with lag-1 autocorrelation $\rho_1 = 0.8$ and Generalized Gamma marginal distribution by:
+For example, you can generate a time series with lag-1 autocorrelation $\rho_1 = 0.8$ and Generalized Gamma marginal distribution by:
 
 ```{r}
 ## (i) specifying the sample size
@@ -91,27 +90,28 @@ acf.my <- c(1, 0.8)
 ## (iv) simulating
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf.my)
 ## and (v) visually checking the generated time series
-quickTSPlot(ggamma_sim[[1]])
+quickTSPlot(ggamma_sim[[1]]) 
+
 ```
 
-You can define also as many specific correlation values you wish, for example, next correlation  values are given up to lag 4:
+You can specify also as many autocorrelation values as you wish. In this example, autocorrelation values are specified up to lag 4:
 
 ```{r}
-acf <- c(1, 0.5, 0.5, 0.4, 0.4) #up to lag-4
+acf <- c(1, 0.6, 0.5, 0.4, 0.3) #up to lag-4
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
 quickTSPlot(ggamma_sim[[1]])
 ```
-A better approach is to use an autocorrelation structure expressed by a parametric function. `CoSMoS` has built in autocorrelation structures than can be used by the `acs()` function. Particularly, you can use the following ACS’s:
+A better approach is to use an autocorrelation structure expressed by a parametric function. `CoSMoS` has built in autocorrelation structures than can be used by the `acs()` function. You can use the following ACS structures:
 
-*	Fractional Gaussian Noise; this is the celebrated one-parameter fGn ACS.
+*	Fractional Gaussian Noise; this is the well-known one-parameter fGn ACS.
 *	Weibull; a flexible two parameter of exponential form.
 *	Pareto II: a two parameter power-type ACS.
 *	Burr XII: a three parameter power-type ACS. 
 
-For more practical application a two-parameter ACS is sufficient, thus for most cases we suggest either the Weibull or the Pareto II. 
+For most practical applications a two-parameter ACS is sufficient; we suggest either the Weibull or the Pareto II. 
 
 
-The `acs()` function produces autocorrelation values based on any of the four structures and up to a desired lag. Thus, instead of setting each autocorrelation coefficient explicitly (which might be problematic from a technical viewpoint), we can generate series preserving any one of the four ACS’s. For example, you can easily define an ACS and visualize its values up to any lag. Here, all four ACS’s are defined and visualized up to lag 10:
+The `acs()` function produces autocorrelation values based on any of the four structures and any desired lag. Thus, instead of setting each autocorrelation coefficient explicitly (which might be problematic from a technical viewpoint), we can generate series preserving any one of the four ACSs. For example, you can easily define an ACS and visualize its values up to any lag. Here, all four ACSs are defined and visualized up to lag 10. You can see how changing the ACS function changes how the correlation coefficients decay to zero.
 
 ```{r}
 ## specify lag
@@ -131,22 +131,20 @@ ggplot(data = m.dta, mapping = aes(x = lags, y = value, group = variable, colour
   geom_point(size = 2.5) + geom_line(lwd = 1) +
   scale_color_manual(values = c("steelblue4", "red4", "green4", "darkorange"), 
   labels = c("FGN", "Burr XII", "Weibull", "Pareto II"), name = "") +
-  labs(x = bquote(lag ~ tau), y = "Acf") + scale_x_continuous(breaks = lags) + theme_grey()
+  labs(x = bquote(lag ~ tau), y = "ACS") + scale_x_continuous(breaks = lags) + theme_light()
 ```
 
-Thus, we can modify the previous time series generation example by using a parametric ACS up to lag 30:
+We can re-generate the previously generated series which used explicity defined correlations up to lag 4, now with a two parameter Pareto II ACF up to lag 30, which improves the modelling parsimony. More details about the parametric autocorrelation structures can be found in section 3.2 in [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013).
 
-```{r, fig.height=2.5}
-acf = acs(id = "paretoII", t = 0:30, scale = 1, shape = .75)
+```{r}
+acf <- acs(id = "paretoII", t = 0:30, scale = 1, shape = .75)
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
 dta <- data.frame(time = 1:no, value = ggamma_sim[[1]])
 
-ggplot(dta, aes(x=time, y=value)) + geom_line() + theme(aspect.ratio=0.25)
+quickTSPlot(dta$value)
 ```
 
-Note that in this case we use only 2 parameters for autocorrelation and not 30, which increases our simulation parsimony. More details about the parametric autocorrelation structures can be found in section 3.2 in [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013).
-
-Except for the four autocorrelation functions provided by `acs()`, we can also create the our own but make sure that are positive definite, otherwise the autoregressive model cannot be fitted:
+Apart from the four autocorrelation functions provided by `acs()`, we can also create our own. Note that it is important to ensure that the function is positive definite, otherwise the autoregressive model cannot be fitted. This example shows the generation of a time series with the same Generalized Gamma marginal distribution as above, but with a user-defined exponential ACS function up to lag 30. Note that although the time series density is very similar to that in the previous plot, the texture of the time series is very different, due to the changed ACS function.
 
 ```{r}
 my_acf <- exp(seq(0, -2, -0.1))
@@ -155,21 +153,21 @@ quickTSPlot(ggamma_sim[[1]])
 
 ```
 
-## Add Intermittency
+## Adding Intermittency (if required)
 
-`CoSMoS` simulates easily intermittent processes, such as precipitation. The only extra step needs to define the probability zero. For example, you wish to generate 5 mutually independent timeseries having the previously defined Generalized Gamma distribution and the Pareto II ACS and probability zero p0 = 0.9. The generated data thus will have 90% of zero values (dry days). 
+`CoSMoS` easily simulates intermittent processes such as precipitation. The only extra step needed is to define the probability of zero events. For example, say you wish to generate 5 mutually independent timeseries having the previously defined Generalized Gamma distribution with the Pareto II ACS and probability zero p0 = 0.9. The generated data thus will have 90% of zero values (i.e. dry days). 
 
 ```{r, fig.height = 7}
 prob_zero <- .9
-## the argument `TSn = 5` enables the simulation of multiple timeseries.
+## the argument `TSn = 5` enables the simulation of 5 timeseries.
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf, 
                          p0 = prob_zero, TSn = 5)
-plot(x = ggamma_sim, main = "")
+plot(x = ggamma_sim, main = "") + theme_light()
 ```
 
-## Validate the Results
+## Validating the Results
 
-You can readily check some basic statistics of the generated time series by using the `checkTS()` function. The first three moments, probability zero and the first three autocorrelation coefficients are printed.
+You can readily check some basic statistics of the generated time series using the `checkTS()` function, which return the first three moments, probability zero and the first three autocorrelation coefficients.
 
 ```{r}
 checkTS(ggamma_sim)
@@ -179,16 +177,16 @@ checkTS(ggamma_sim)
 
 # Multivariate and Random Fields Simulation  {#section_2}
 
-The above framework can readily be extended to multidimensional cases, thus enabling the simulation spatiotemporally correlated random vectors (e.g. correlated timeseries at multiple locations) and random fields (e.g. gridded data), as discussed in details by [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331). Such an extension requires the introduction of suitable spatiotemporal correlation structures (see [Porcu et al. (2020)](https://doi.org/10.1002/wics.1512) for a thorough review of this topic).
+The above methods can readily be extended to multidimensional cases, thus enabling the simulation of spatiotemporally correlated random vectors (i.e. correlated timeseries at multiple locations) and random fields (i.e. gridded data), as discussed in detail by [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331). This requires the definition of suitable spatiotemporal correlation structures (see [Porcu et al. (2020)](https://doi.org/10.1002/wics.1512) for a thorough review of this topic).
 
 ## Spatiotemporal Correlation Structures
 
-CoSMoS allows the definition of spatiotemporal correlation functions by the function `stcs()`, which the spatiotemporal countepart of the purely temporal `acs()`. Two classes of spatiotemporal correlation functions are provided:
+CoSMoS allows the definition of spatiotemporal correlation functions using the function `stcs()`, which the spatiotemporal counterpart of the purely temporal `acs()`. Two classes of spatiotemporal correlation functions are provided:
 
 *	Clayton [(Papalexiou and Serinaldi 2020)](https://doi.org/10.1029/2019WR026331)
 *	Gneiting [(Gneiting 2002)](https://doi.org/10.1198/016214502760047113)  
 
-The `stcs()` can produce values of the linear spatiotemporal correlation up to desired time lag and spatial distance according to these two classes, which comprise a variety of structures covering most of the cases of practical interest. Here is an example of the Clayton-Weibull spatiotemporal correlation structure:
+The `stcs()` function can produce values of the linear spatiotemporal correlation for any desired time lag and spatial distance using these two correlation function classes, which comprise a variety of structures covering most cases of practical interest. This example shows the Clayton-Weibull spatiotemporal correlation structure:
 
 ```{r, fig.height = 7}
 library(plotly)
@@ -212,9 +210,18 @@ plot_ly(z = ~wc.m) %>% add_surface() %>%
                       zaxis = list(title = "STCF") ) ) %>% hide_colorbar()
 ```
 
-## Multivariate Simulation 
+## Multivariate Time Series Simulation 
 
-Similar to the one-dimensional case (i.e. the function ``generateTS()``),  `CoSMoS` provides the easy to use functions ``generateMTS()`` and ``generateMTSFast()`` to simulate multiple timeseries with specified (identical) marginals and spatiotemporal correlation function. ``generateSRF()`` generates random fields with separable or nonseparable STCF's relying on the simulation of parent Gaussian Vector AutoRegressive (VAR) models(see [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013) and [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331)). Therefore, we need the preliminary computation of the VAR parameters [(Biller and Nelson 2003)](https://doi.org/10.1145/937332.937333)  corresponding to the desired spatiotemporal correlation function of the target process, which done by the function ``fitVAR()``. Therefore, the simulation is as follows
+Similar to the one-dimensional case (i.e. using the function `generateTS()`), `CoSMoS` provides the functions `generateMTS()` and `generateMTSFast()` to simulate multiple timeseries with specified (identical) marginals and spatiotemporal correlation structures (STCs). Gaussian Vector AutoRegressive (VAR) models are used to reproduce the parent-Gaussian STFC (see [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013) and [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331)). The VAR parameters see e.g. [(Biller and Nelson 2003)](https://doi.org/10.1145/937332.937333) corresponding to the desired spatiotemporal correlation function of the target process, are produced by the function `fitVAR()`. 
+
+In this example, a set of five random locations is defined that could represent precipitation in 5 different places. A VAR is then fitted using  
+
+*	a 4^th^ order process (the spatiotemporal correlations will be preserved up to temporal lag 4),  
+* the Burr XII marginal distribution,  
+* a probability zero `p0 = 0.8`,  
+* a Clayton-Weibull spatiotemporal correlation structure (see [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331)), using Weibull functions for both the temporal and spatial correlations.  
+  
+From the 5 locations, and the VAR, a set of 5 timeseries is generated. When the series are plotted, the spatio-temporal correlations among the series can be seen.
 
 ```{r, fig.height = 5}
 ## set a sequence of hypothetical coordinates 
@@ -222,10 +229,15 @@ d <- 5
 coord <- cbind(runif(d)*30, runif(d)*30)
 
 ## compute VAR model parameters  
-fit <- fitVAR(spacepoints = coord, p = 5, margdist ="burrXII",
-                   margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton",
-                   stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
-                   scfarg = list(scale = 25, shape = 0.7), tcfarg = list(scale = 3.1,shape = 0.8) ) )
+fit <- fitVAR(spacepoints = coord, 
+              p = 4, 
+              margdist ="burrXII",
+              margarg = list(scale = 3, shape1 = .9, shape2 = .2), 
+              p0 = 0.8, 
+              stcsid = "clayton",
+              stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
+                   scfarg = list(scale = 25, shape = 0.7), 
+                   tcfarg = list(scale = 3.1, shape = 0.8) ) )
 
 ## generate correlated timeseries  
 sim <- generateMTS(n = 500, STmodel = fit)
@@ -234,10 +246,12 @@ sim <- generateMTS(n = 500, STmodel = fit)
 dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 
 ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
-       facet_grid(facets = variable ~ ., scales = "free_y") 
+       facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
 ```
 
-The function ``generateMTSFast()`` generates multiple time series with approximately separable STCF [(Serinaldi and Kilsby 2018)](https://doi.org/10.1029/2018WR023055). As the algorithm in ``generateMTSFast()`` is computationally less expensive than that implemented in ``generateMTS()``, it allows the simulation of a larger number of cross-correlated and serially dependent  timeseries, at the cost of using separable STCFs and accepting some lack of accuracy in the exact reproduction of some terms of the required STCF [(Serinaldi and Kilsby 2018)](https://doi.org/10.1029/2018WR023055) 
+The function `generateMTSFast()` generates multiple time series with approximately separable STCS [(Serinaldi and Kilsby 2018)](https://doi.org/10.1029/2018WR023055), using an algorithm which is computationally less expensive than that in `generateMTS()`. This allows the simulation of a larger number of cross-correlated and serially dependent timeseries, at the cost of using separable STCSs and accepting some lack of accuracy in the exact reproduction of some terms of the required STCS [(Serinaldi and Kilsby 2018)](https://doi.org/10.1029/2018WR023055). 
+
+This example uses `generateMTSFast()` with similar parameters to the previous example using `generateMTS()`.
 
 ```{r, fig.height = 5}
 ## set a sequence of hypothetical coordinates
@@ -245,22 +259,28 @@ d <- 5
 coord <- cbind(runif(d)*30, runif(d)*30)
 
 ## fit and generate correlated timeseries
-sim <- generateMTSFast(n = 500, spacepoints = coord, p0 = 0.7, margdist ='paretoII',
-                       margarg = list(scale = 1, shape = .3),  
-                       stcsarg = list(scfid = "weibull", tcfid = "weibull", 
-                       scfarg = list(scale = 20, shape = 0.7),
-                       tcfarg = list(scale = 1.1, shape = 0.8)) )
+sim <- generateMTSFast(n = 500, 
+                       spacepoints = coord, 
+                       p0 = 0.7, 
+                       margdist ="burrXII",
+                       margarg = list(scale = 3, shape1 = .9, shape2 = .2),  
+                       stcsarg = list(scfid = "weibull", tcfid = "weibull",
+                       scfarg = list(scale = 25, shape = 0.7),
+                       tcfarg = list(scale = 3.1, shape = 0.8)) )
 
 ## visualize simulated timeseries
 dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 
 ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
-       facet_grid(facets = variable ~ ., scales = "free_y") 
+       facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
 ```
+
 
 ## Random Field Simulation 
 
-`CoSMoS` implements the simulation of spatially and temporally correlated random fields in two main functions called ``generateRF()`` and ``generateRFFast()``, which are the analogous of ``generateMTS()`` and ``generateMTSFast()``, with the same syntax. The only difference is the specification of the spatial points, which reduces to an integer denoting the side lenght \eqn{m} of a square grid \eqn{(mxm)}. As mentioned in the previous section, the algorithm in ``generateRFFast()`` is computationally less expensive than that of ``generateRF()``, thus enabling the simulation of random fields over a larger number of grid points (see, [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331), and [Serinaldi and Kilsby (2018)](https://doi.org/10.1029/2018WR023055) fo more details).
+`CoSMoS` simulates spatially and temporally correlated random fields (isotropic and anisotropic) with the functions `generateRF()` and `generateRFFast()`, which are analogs of `generateMTS()` and `generateMTSFast()`, with the same syntax. The only difference is the specification of the spatial points, which is an integer denoting the side length \eqn{m} of a square grid \eqn{(mxm)}. As was mentioned in the previous section, the algorithm in `generateRFFast()` is computationally less expensive than that of `generateRF()`, enabling the simulation of random fields over a greater number of grid points (see [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331), and [Serinaldi and Kilsby (2018)](https://doi.org/10.1029/2018WR023055) for more details).
+
+The example below shows the use of both `generateRF` and `generateRFFast`. The generation of random fields using `generateRF` took approximately 16 times as long as using `generateRFFast`.
 
 ```{r}
 ## compute VAR model parameters
@@ -271,6 +291,7 @@ fit <- fitVAR(spacepoints = 20, p = 3, margdist ="burrXII",
                   scfarg = list(scale = 20, shape = 0.7), tcfarg = list(scale = 1.1, shape = 0.8) ) )
 
 ## generate random fields with nonseparable correlation structure 
+
 sim1 <- generateRF(n = 1000, STmodel = fit)
 
 ## fast simulation of anisotropic random fields with separable correlation structure
@@ -280,11 +301,14 @@ sim2 <- generateRFFast(n = 1000, spacepoints = 20, p0 = 0.7, margdist ="paretoII
                        scfarg = list(scale = 20, shape = 0.7), 
                        tcfarg = list(scale = 1.1, shape = 0.8)),
                        anisotropyarg = list(phi1 = 0.5, phi2 = 2, theta = -pi/3))
+
 ```
 
-## Validate the Simulated Random Fields
+### Validating the Simulated Random Fields
 
-The properties of the generated time series can be checked with `checkRF()`. The first three moments, and the probability zero at several grid points are printed. `checkRF()` also returns a multi-panel plot comparing theoretical and empirical spatial correlation functions at 0, 1, and  2 time lags, and the empirical and target CDFs. The  graphical output  also yields the contour plot of the target STCF, and level plots of 80 consecutive simulated RFs to visualize the temporal persistence of spatial patterns.
+The properties of the generated random fields can be checked with `checkRF()`. If the parameter `method = "stat"` (the default), the function returns the first three moments, and the probability zero at 20 grid points. If the parameter `method = "statplot"`, `checkRF()` returns a multi-panel plot comparing the theoretical and empirical spatial correlation functions at 0, 1, and 2 time lags, the contour plot of the target STCS, and the empirical and target CDFs. If the parameter `method = "fields"`, the function returns level plots of the selected number of simulated random fields (`nfields`) to visualize the temporal persistence of spatial patterns. If the parameter `method = "movie"`, the fields are written to an animated GIF called "movieRF.gif" in the current working directory.
+
+This example returns the stats, stat plots and fields for the first simulation, which used `generateRF`.
 
 ```{r, fig.height = 6.5}
 ## check random fields
@@ -293,50 +317,51 @@ checkRF(RF = sim1, nfields = 9*9, method = "stat")
 checkRF(RF = sim1, nfields = 9*9, method = "statplot")
 checkRF(RF = sim1, nfields = 9*9, method = "field")
 ```
+
+
+The plots show anisotropic fields for the second example. Note that you can save the results to an animated GIF by changing the `method` parameter from `"field"` to `"movie"`.  
+
+
 ```{r, fig.height = 6.5}
-## check random fields
+## check anisotropic random fields simulated in the previous section
 checkRF(RF = sim2, nfields = 9*9, method = "field")
-
-## Uncomment to save fields as a GIF file named 'movieRF.gif' in the working directory
-## checkRF(RF = sim2, nfields = 9*9, method = "movie")
-
-
 ```
 
 ***
 
 # Stochastic Simulation of Real-World Processes {#section_3}
+In practice, it is often desired to simulate a natural process based on the properties of an observed time series. This section shows how this can easily be done using `CoSMoS` functions.
 
 ## Hourly Precipitation
-In practice, we simulate a natural process based on observed time series. A hydroclimatic variable that can be easily simulated in `CoSMoS` is precipitation. Here is a simulation example of hourly precipitation.
+Precipitation can be easily simulated in `CoSMoS` from observed data. This is an example of a time series of observed hourly precipitation (units are hundredths of an inch).
 
 ```{r}
 data("precip")
-quickTSPlot(precip$value, xlimdf = c(0, 10))
+quickTSPlot(precip$value)
 ```
 
-To generate a synthetic time series with similar characteristics to the observed precipitation, you have to determine (1) the marginal distribution, (2) autocorrelation structure, and (3) probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with `analyzeTS()` and then check the goodness-of-fit with `reportTS()`.
+To generate a synthetic time series with similar characteristics to the observed precipitation, you have to determine (1) the marginal distribution, (2) the autocorrelation structure, and (3) the probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with `analyzeTS()` and then checking the goodness-of-fit with `reportTS()`, which can return the plots of the distribution (`method = "dist"`), ACS (`method = "acs"`) or basic statistics (`method = "stat"`).
 
 ```{r, fig.height = 9}
 ## CPU time: ~75s 
 precip_ggamma <- analyzeTS(TS = precip, season = "month", dist = "ggamma",
                            acsID = "weibull", lag.max = 12)
 
-reportTS(aTS = precip_ggamma, method = "dist")
-reportTS(aTS = precip_ggamma, method = "acs")
+reportTS(aTS = precip_ggamma, method = "dist") + theme_light()
+reportTS(aTS = precip_ggamma, method = "acs") + theme_light()
 reportTS(aTS = precip_ggamma, method = "stat")
 ```
 
-In this example, the Generalized Gamma distribution and the Weibull autocorrelation structure describe well the observed time series. Other combinations might not give so good results. For instance:
+In this example, the Generalized Gamma distribution and the Weibull autocorrelation structure describe well the observed time series. Other combinations might not give such good results. For example, the Pareto II distribution and the Fractional Gaussian Noise ACS do not give good monthly fits:
 
 ```{r, warning = FALSE, fig.height = 9}
 precip_pareto <- analyzeTS(TS = precip, season = "month", dist = "paretoII", acsID = "fgn", lag.max = 12)
 
-reportTS(aTS = precip_pareto, method = "dist")
-reportTS(aTS = precip_pareto, method = "acs")
+reportTS(aTS = precip_pareto, method = "dist")+ theme_light()
+reportTS(aTS = precip_pareto, method = "acs") + theme_light()
 ```
 
-Once you choose the marginal distribution and the autocorrelation structure you can produce as many and as long synthetic series you wish. The generated series will reproduce both the distribution, correlation structure and probability zero (intermittency). Just use the `simulateTS()` function.
+Once you choose the marginal distribution and the autocorrelation structure you can produce as many and as long synthetic series you wish. The generated series will reproduce the distribution, correlation structure and probability zero (intermittency), using the `simulateTS()` function. This example uses the Generalized Gamma distribution and the Weibull autocorrelation structure, which were fitted above.
 
 ```{r}
 sim_precip <- simulateTS(aTS = precip_ggamma, from = as.POSIXct(x = "1978-12-01 00:00:00"),
@@ -346,23 +371,25 @@ dta[, id := "observed"]
 sim_precip[, id := "simulated"]
 dta <- rbind(dta, sim_precip)
 
-ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) 
+ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) + theme_light()
 ```
 
 ## Daily streamflow
 
-We can also apply the same methods to a different dataset - daily streamflow! For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(http://waterdata.usgs.gov/nwis)](http://waterdata.usgs.gov/nwis).
+We can also apply the same methods to daily streamflows. For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(http://waterdata.usgs.gov/nwis)](http://waterdata.usgs.gov/nwis). In this case, the fitted distribution was log-normal, and the ACS was Pareto II.
 
 ```{r, fig.height = 9}
 ## CPU time: ~240s
 data("disch")
 
-str <- analyzeTS(TS = disch, dist = "lonorm", norm = "N2", acsID = "paretoII", 
+str <- analyzeTS(TS = disch, dist = "lnorm", norm = "N2", acsID = "paretoII", 
                  lag.max = 20, constrain = TRUE, season = "month")
 
-reportTS(aTS = str)
+reportTS(aTS = str) + theme_light()
 reportTS(aTS = str, method = "stat")
 ```
+
+Given the fitted values, streamflows can be simulated as
 
 ```{r, fig.height = 3.5}
 sim_str <- simulateTS(aTS = str)
@@ -372,7 +399,7 @@ dta[, id := "observed"]
 sim_str[, id := "simulated"]
 dta <- rbind(dta, sim_str)
 
-ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) 
+ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) + theme_light()
 ```
 # Recommended and Supported Distributions in `CoSMoS` {#section_4}
 
@@ -380,7 +407,7 @@ ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(
 As general guideline we suggest the following distributions for different variables:
 
 *	Precipitation: Generalized Gamma (`ggamma`), Burr type XII (`burrXII`)
-*	Streamflow: Burr type III and XII (`burrIII, `burrXII`), Generalized Gamma (`ggamma`)
+*	Streamflow: Burr type III and XII (`burrIII`, `burrXII`), Generalized Gamma (`ggamma`), Lognormal (`lnorm`)
 *	Relative humidity: Beta (beta), Kumaraswamy (`kumar` in [ `extraDistr`](https://cran.r-project.org/web/packages/extraDistr/index.html)  package)
 *	Wind speed: Weibull (`weibull`), Generalized Gamma (`ggamma`)
 *	Temperature: Normal (`norm`)
@@ -391,16 +418,16 @@ CoSMoS supports most distributions available in `R` with defined quantile, distr
 
 **Burr type III**
 
-distribution argument/name - burrIII    
-parameters - list(scale, shape1, shape2)
+distribution argument/name - `burrIII`    
+parameters - `list(scale, shape1, shape2)`
 
 $$f_{\text{BrIII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}-1} \left(\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}}{\gamma _1}+1\right){}^{-\gamma _1 \gamma _2-1}}{\beta } \\ F_{\text{BrIII}}(x)=\left(\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}}{\gamma _1}+1\right){}^{-\gamma _1 \gamma _2} \\ Q_{\text{BrIII}}(u)=\beta  \left(\gamma _1 \left(u^{-\frac{1}{\gamma _1 \gamma _2}}-1\right)\right){}^{-\gamma _2} \\
 m_{\text{BrIII}}(q)=\frac{\beta ^q \gamma _1^{\gamma _2 (-q)} \Gamma \left(\left(q+\gamma _1\right) \gamma _2\right) \Gamma \left(1-q \gamma _2\right)}{\Gamma \left(\gamma _1 \gamma _2\right)}$$
 
 **Burr type XII**
 
-distribution argument/name - burrXII     
-parameters - list(scale, shape1, shape2)
+distribution argument/name - `burrXII`     
+parameters - `list(scale, shape1, shape2)`
 
 $$f_{\text{BrXII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{\gamma _1-1} \left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right){}^{-\frac{1}{\gamma _1 \gamma _2}-1}}{\beta } \\
 F_{\text{BrXII}}(x)=1-\left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right){}^{-\frac{1}{\gamma _1 \gamma _2}} \\ 
@@ -409,8 +436,8 @@ m_{\text{BrXII}}(q)=\frac{\beta ^q \gamma _2^{-\frac{q}{\gamma _1}-1} B\left(\fr
 
 **Generalized Gamma**
 
-distribution argument/name - ggamma    
-parameters - list(scale, shape1, shape2)
+distribution argument/name - `ggamma`    
+parameters - `list(scale, shape1, shape2)`
 
 $$f_{\mathcal{G}\mathcal{G}}(x)=\frac{\gamma _2 e^{-\left(\frac{x}{\beta }\right)^{\gamma _2}} \left(\frac{x}{\beta }\right)^{\gamma _1-1}}{\beta  \Gamma \left(\frac{\gamma _1}{\gamma _2}\right)} \\
 F_{\mathcal{G}\mathcal{G}}(x)=Q\left(\frac{\gamma _1}{\gamma _2},0,\left(\frac{x}{\beta }\right)^{\gamma _2}\right) \\ 
@@ -419,8 +446,8 @@ m_{\mathcal{G}\mathcal{G}}(q)=\frac{\beta ^q \Gamma \left(\frac{q}{\gamma _2}+\f
 
 **Pareto II** (also known as Lomax)
 
-distribution argument/name - paretoII     
-parameters - list(scale, shape)
+distribution argument/name - `paretoII`     
+parameters - `list(scale, shape)`
 
 $$f_{\text{PII}}(x)=\frac{\left(\frac{\gamma  x}{\beta }+1\right)^{-\frac{1}{\gamma }-1}}{\beta } \\
 F_{\text{PII}}(x)=1-\left(\frac{\gamma  x}{\beta }+1\right)^{-1/\gamma } \\

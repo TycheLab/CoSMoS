@@ -4,12 +4,10 @@
 \alias{quickTSPlot}
 \title{Quick visualization of basic timeseries properties}
 \usage{
-quickTSPlot(TS, xlimdf = NULL, ci = 0.95)
+quickTSPlot(TS, ci = 0.95)
 }
 \arguments{
 \item{TS}{timeseries to plot}
-
-\item{xlimdf}{x-axis limit for the plot the empirical density function (default set to NULL). It can be specified for better visualization of highly skewed distributions)}
 
 \item{ci}{confidence interval around the zero autocorrelation value (default set to 0.95, i.e. 95\% CI)}
 }
