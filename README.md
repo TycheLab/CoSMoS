@@ -30,9 +30,10 @@ library(CoSMoS)
 The package was partly funded by the Global institute for Water Security (GIWS; https://www.usask.ca/water/) and the Global Water Futures (GWF; https://gwf.usask.ca/) program.
 
 # Authors
-Coded and maintained by: Filip Strnad and Francesco Serinaldi     
+Coded by: Filip Strnad and Francesco Serinaldi     
 Conceptual design by: Simon Michael Papalexiou     
 Tested and documented by: Yannis Markonis     
+Maintained by: Kevin Shook
 
 # References
 Papalexiou, S.M., 2018. Unified theory for stochastic modelling of hydroclimatic processes: Preserving marginal distributions, correlation structures, and intermittency. Advances in Water Resources 115, 234-252. https://doi.org/10.1016/j.advwatres.2018.02.013
