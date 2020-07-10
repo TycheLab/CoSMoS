@@ -19,7 +19,7 @@ To install the latest version of the package run:
 
 if (!require('devtools')) {install.packages('devtools'); library(devtools)} 
 
-install_github('strnda/CoSMoS', upgrade = 'never')
+install_github('TycheLab/CoSMoS', upgrade = 'never')
 
 library(CoSMoS)
 
