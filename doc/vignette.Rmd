@@ -17,11 +17,6 @@ editor_options:
 ---
 
 ***
-**For a more intuitive vignette with figures check out [here](http://rpubs.com/Strnda/CoSMoS).** 
-
-***
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval = TRUE,
@@ -31,7 +26,7 @@ knitr::opts_chunk$set(eval = TRUE,
                       message = FALSE)
 library(CoSMoS)
 ```
-`CoSMoS` was conceived back in 2009 (see note in section 4) and was officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind, `CoSMoS` makes **univariate**, **multivariate**, or **random field** simulations easy. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
+`CoSMoS` was conceived back in 2009 (see note in section 5) and was officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind, `CoSMoS` makes **univariate**, **multivariate**, or **random field** simulations easy. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
 
 
 _"Hydroclimatic processes come in all “shapes and sizes”. They are characterized by different spatiotemporal correlation structures and probability distributions that can be continuous, mixed-type, discrete or even binary. Simulating such processes by reproducing precisely their marginal distribution and linear correlation structure, including features like intermittency, can greatly improve hydrological analysis and design. ... Here, a single framework is proposed that unifies, extends, and improves a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific “parent”" Gaussian process."_
@@ -402,15 +397,6 @@ dta <- rbind(dta, sim_str)
 ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) + theme_light()
 ```
 
-# Historical Note {#section_4}
-
-The genesis of CoSMoS dates from 2009 when Simon Papalexiou developed the core of its methods while at National Technical University of Athens (NTUA), Greece. Simon soon invited a few colleagues to build a start-up company, named Oktana, to develop stochastic simulation software. The methods were described in a legal document [(Papalexiou, 2010)](https://www.researchgate.net/publication/333323778_Stochastic_modelling_demystified) as a first step to create proprietary software, although Oktana was never created.
-
-In 2015, Simon with Yannis Markonis reconsidered the idea of a start-up company. In 2017 Simon moved to California and Yannis to Prague, and they started discussing the release of CoSMoS as open source software. The methods were published in arXiv on July 21, 2017 [(Papalexiou, 2017)](http://arxiv.org/abs/1707.06842) and few months later in Advances in Water Resources [(Papalexiou, 2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), followed by a publication on disaggregation (DiPMaC) in WRR [(Papalexiou et al., 2018)](https://doi.org/10.1029/2018WR022726). In the meanwhile, Filip Strnad joined the team in 2018 and coded the first version of CoSMoS in `R`, as the original code had been developed by Simon in Mathematica.
-
-Francesco Serinaldi joined the team in 2019 initially to co-author a paper on random fields with Simon which was published in WRR in January 2020 [(Papalexiou and Serinaldi, 2020)](https://doi.org/10.1029/2019WR026331). Francesco developed the R code of CoSMoS version 2, collaborating with Filip and Kevin, and extending its functionalities to include the methods of the previously mentioned paper, that is, enabling the simulation of random fields and multivariate time series. The last addition to our team is Kevin Shook who has become the package maintainer and offers advice on `R`.
-
-We are serene to see this ten-year Odyssey finally back on track to Ithaca. Leaving the burdens of the past behind, empowered by a great team and standing for dignity and academic integrity, we will keep striving to offer free, innovative, and reliable software for stochastic modelling. As a closing remark, we thank our imitators, after all, as Oscar Wilde said: “Imitation is the sincerest form of flattery that mediocrity can pay to greatness”.
 
 # Recommended and Supported Distributions in `CoSMoS` {#section_5}
 
@@ -419,7 +405,7 @@ As general guideline we suggest the following distributions for different variab
 
 *	Precipitation: Generalized Gamma (`ggamma`), Burr type XII (`burrXII`)
 *	Streamflow: Burr type III and XII (`burrIII`, `burrXII`), Generalized Gamma (`ggamma`), Lognormal (`lnorm`)
-*	Relative humidity: Beta (beta), Kumaraswamy (`kumar` in [ `extraDistr`](https://cran.r-project.org/web/packages/extraDistr/index.html)  package)
+*	Relative humidity: Beta (beta), Kumaraswamy (`kumar` in [ `extraDistr`](https://cran.R-project.org/package=extraDistr)  package)
 *	Wind speed: Weibull (`weibull`), Generalized Gamma (`ggamma`)
 *	Temperature: Normal (`norm`)
 *	Maxima of any variable: GEV (`gev`)
@@ -464,6 +450,17 @@ $$f_{\text{PII}}(x)=\frac{\left(\frac{\gamma  x}{\beta }+1\right)^{-\frac{1}{\ga
 F_{\text{PII}}(x)=1-\left(\frac{\gamma  x}{\beta }+1\right)^{-1/\gamma } \\
 Q_{\text{PII}}(u)=\frac{\beta  \left((1-u)^{-\gamma }-1\right)}{\gamma } \\
 m_{\text{PII}}(q)=\frac{\Gamma (q+1) \left(\frac{\beta }{\gamma }\right)^q \Gamma \left(\frac{1}{\gamma }-q\right)}{\Gamma \left(\frac{1}{\gamma }\right)}$$
+
+# Historical Note {#section_5}
+
+The genesis of CoSMoS dates from 2009 when Simon Papalexiou developed the core of its methods while at National Technical University of Athens (NTUA), Greece. Simon soon invited a few colleagues to build a start-up company, named Oktana, to develop stochastic simulation software. The methods were described in a legal document [(Papalexiou, 2010)](https://www.researchgate.net/publication/333323778_Stochastic_modelling_demystified) as a first step to create proprietary software, although Oktana was never created.
+
+In 2015, Simon with Yannis Markonis reconsidered the idea of a start-up company. In 2017 Simon moved to California and Yannis to Prague, and they started discussing the release of CoSMoS as open source software. The methods were published in arXiv on July 21, 2017 [(Papalexiou, 2017)](http://arxiv.org/abs/1707.06842) and few months later in Advances in Water Resources [(Papalexiou, 2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), followed by a publication on disaggregation (DiPMaC) in WRR [(Papalexiou et al., 2018)](https://doi.org/10.1029/2018WR022726). In the meanwhile, Filip Strnad joined the team in 2018 and coded the first version of CoSMoS in `R`, as the original code had been developed by Simon in Mathematica.
+
+Francesco Serinaldi joined the team in 2019 initially to co-author a paper on random fields with Simon which was published in WRR in January 2020 [(Papalexiou and Serinaldi, 2020)](https://doi.org/10.1029/2019WR026331). Francesco developed the R code of CoSMoS version 2, collaborating with Filip and Kevin, and extending its functionalities to include the methods of the previously mentioned paper, that is, enabling the simulation of random fields and multivariate time series. The last addition to our team is Kevin Shook who has become the package maintainer and offers advice on `R`.
+
+We are serene to see this ten-year Odyssey finally back on track to Ithaca. Leaving the burdens of the past behind, empowered by a great team and standing for dignity and academic integrity, we will keep striving to offer free, innovative, and reliable software for stochastic modelling. As a closing remark, we thank our imitators, after all, as Oscar Wilde said: “Imitation is the sincerest form of flattery that mediocrity can pay to greatness”.
+
 
 # References {#section_6}
 
