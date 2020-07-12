@@ -62,7 +62,7 @@ The four steps are explained below.
 
 The choice of a probability distribution to describe the variable you wish to simulate is crucial. The probability distribution expresses how frequently specific magnitudes of the variable occur in the data set. Air **temperature** is typically described by bell-shaped distributions like the [Normal](https://en.wikipedia.org/wiki/Normal_distribution). **Relative humidity** needs distributions defined in the interval (0,1) such as the [Beta](https://en.wikipedia.org/wiki/Beta_distribution) or the [Kumaraswamy](https://en.wikipedia.org/wiki/Kumaraswamy_distribution). **Streamflow** typically has heavy tails and power-type distributions might be needed to reproduce the behavior of the extremes. **Wind speed** typically can be modelled by positively skewed distributions such as the [Weibull](https://en.wikipedia.org/wiki/Weibull_distribution). **Precipitation** at fine scales has to be modelled by mixed-type (or else zero inflated) distributions, that is, having a probability value to describe the occurrence of zeros, and a continuous distribution, such the [Generalized Gamma](https://en.wikipedia.org/wiki/Generalized_gamma_distribution) or the [Burr type XII](https://en.wikipedia.org/wiki/Burr_distribution), to describe the frequency of nonzero values. 
 
-`CoSMoS` supports **all the standard distribution** functions of `R` and from other packages (tens of distributions) but also comes with some built-in distributions such as Generalized Gamma, the [Pareto type II](https://en.wikipedia.org/wiki/Pareto_distribution), and the Burr type III and XII distributions. More details on the `CoSMoS` distributions and their parameters can be found in [Section 5](#section_5). 
+`CoSMoS` supports **all the standard distribution** functions of `R` and from other packages (tens of distributions) but also comes with some built-in distributions such as Generalized Gamma, the [Pareto type II](https://en.wikipedia.org/wiki/Pareto_distribution), and the Burr type III and XII distributions. More details on the `CoSMoS` distributions and their parameters can be found in [Section 4](#section_4). 
 
 Distributions may have differing numbers and types of parameters (e.g. location, scale, and shape parameters). For example, the Generalized Gamma distribution has one scale and two shape parameters.
 
@@ -398,7 +398,7 @@ ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(
 ```
 
 
-# Recommended and Supported Distributions in `CoSMoS` {#section_5}
+# Recommended and Supported Distributions in `CoSMoS` {#section_4}
 
 ## Recommended Distributions for Hydroclimatic Variables
 As general guideline we suggest the following distributions for different variables:
