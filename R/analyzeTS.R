@@ -10,6 +10,10 @@
 #'  * _relative humidity_: beta
 #'  * _temperature_: norm (Normal distribution)
 #'
+#'  Note: it is *strongly* recommended to use air temperatures in Kelvin (K) instead of Celsius (C) as
+#'  values less than zero will be excluded from some analyses, and zero values are usually handled
+#'  differently from non-zero value
+#'
 #' @param TS time series in format - date, value
 #' @param season name of the season (e.g. month, week)
 #' @param acsID ID of the autocorrelation structure to be fitted
@@ -341,7 +345,8 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
   dist <- attr(aTS, 'dist') ## get necesary info from attributes
   acsID <- attr(aTS, 'acsID')
   season <- attr(aTS, 'season')
-  date <- attr(aTS, 'date')
+  date <- data.table(attr(aTS, "date"))
+  names(date) <- "date"
 
   x <- aTS$data
 

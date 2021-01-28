@@ -62,6 +62,10 @@ Recomended distributions for variables:
 \item \emph{relative humidity}: beta
 \item \emph{temperature}: norm (Normal distribution)
 }
+
+Note: it is \emph{strongly} recommended to use air temperatures in Kelvin (K) instead of Celsius (C) as
+values less than zero will be excluded from some analyses, and zero values are usually handled
+differently from non-zero value
 }
 \examples{
 
