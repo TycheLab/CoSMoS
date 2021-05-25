@@ -1,17 +1,20 @@
-#' Faster simulation of multiple time series with approximately separable spatiotemporal correlation structure
+#' Faster simulation of multiple time series with approximately separable spatiotemporal
+#' correlation structure
 #'
-#' For more details see section 6 in \href{https://doi.org/10.1029/2018WR023055}{Serinaldi and Kilsby (2018)}, and section 2.4 in \href{https://doi.org/10.1029/2019WR026331}{Papalexiou and Serinaldi (2020)}
+#' For more details see section 6 in Serinaldi and Kilsby (2018), and section 2.4 in
+#' Papalexiou and Serinaldi (2020).
 #'
 #' @param n number of fields (time steps) to simulate
-#' @param spacepoints matrix (d x 2) of coordinates (e.g. longitude and latitude) of d spatial locations (e.g. d gauge stations)
-#' @param margdist target marginal distribution of the field
-#' @param margarg list of marginal distribution arguments
+#' @param spacepoints matrix \code{(d x 2)} of coordinates (e.g. longitude and latitude) of \code{d} spatial locations (e.g. \code{d} gauge stations)
+#' @param margdist target marginal distribution
+#' @param margarg  list of marginal distribution arguments. Please consult the documentation of the selected marginal distribution indicated in the argument \code{margdist} for the list of required parameters
 #' @param p0 probability zero
-#' @param distbounds distribution bounds (default set to c(-Inf, Inf))
+#' @param distbounds distribution bounds (default set to \code{c(-Inf, Inf)})
 #' @param stcsid spatiotemporal correlation structure ID
-#' @param stcsarg list of spatiotemporal correlation structure arguments
+#' @param stcsarg  list of spatiotemporal correlation structure arguments. Please consult the documentation of the selected spatiotemporal correlation structure indicated in the argument \code{stcsid} for the list of required parameters
 #' @param scalefactor factor specifying the distance between the centers of two pixels (default set to 1)
-#' @param anisotropyarg list of arguments establishing spatial anisotropy. phi1 and phi2 control the stretch in two orthogonal directions (e.g., longitude and latitude) while the angle theta controls a counterclockwise rotation (default set to list(phi1 = 1, phi2 = 1 , theta = 0) for isotropic fields)
+#' @param anisotropyid spatial anisotropy ID (\code{affine} by default, \code{swirl} or \code{wave})
+#' @param anisotropyarg list of arguments characterizing the spatial anisotropy according to the syntax of the function \code{\link{anisotropyT}}. Isotropic fields by default
 #'
 #' @name generateMTSFast
 #'
@@ -22,13 +25,21 @@
 #'
 #' @export
 #'
+#' @references Serinaldi, F., Kilsby, C.G. (2018). Unsurprising Surprises:
+#' The Frequency of Record-breaking and Overthreshold Hydrological Extremes Under
+#' Spatial and Temporal Dependence. Water Resources Research, 54(9), 6460-6487,
+#' \doi{10.1029/2018WR023055}
+#' @references Papalexiou, S.M., Serinaldi, F. (2020). Random Fields Simplified:
+#' Preserving Marginal Distributions, Correlations, and Intermittency,
+#' With Applications From Rainfall to Humidity. Water Resources Research, 56(2),
+#' e2019WR026331, \doi{10.1029/2019WR026331}
+#'
 #' @details
 #' \code{\link{generateMTSFast}} provides a faster approach to multivariate simulation
 #' compared to \code{\link{generateMTS}} by exploiting circulant embedding
 #' fast Fourier transformation.
 #' However, this approach is feasible only for approximately
-#' separable target spatiotemporal correlation functions (see section 6 in
-#' \href{https://doi.org/10.1029/2018WR023055}{Serinaldi and Kilsby (2018)}).
+#' separable target spatiotemporal correlation functions.
 #' \code{\link{generateMTSFast}} comprises fitting and simulation in a single function.
 #' Here, we give indicative CPU times for some settings, referring to a
 #' Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz,
@@ -57,7 +68,7 @@
 #' )
 #'
 #'
-generateMTSFast <- function(n, spacepoints, margdist, margarg, p0, distbounds = c(-Inf, Inf), stcsid, stcsarg, scalefactor = 1, anisotropyarg = list(phi1 = 1, phi2 = 1 , theta = 0)) {
+generateMTSFast <- function(n, spacepoints, margdist, margarg, p0, distbounds = c(-Inf, Inf), stcsid, stcsarg, scalefactor = 1, anisotropyid = "affine", anisotropyarg = list(phi1 = 1, phi2 = 1, phi12 = 0, theta = 0)) {
 
     DHMgenSj <- function(acvf) {
         MM <- length(acvf) - 1
@@ -89,16 +100,13 @@ generateMTSFast <- function(n, spacepoints, margdist, margarg, p0, distbounds = 
         stop("spacepoints should be a matrix (dx2)")
     }
 
-    phi1 <- anisotropyarg$phi1
-    phi2 <- anisotropyarg$phi2
-    theta <- anisotropyarg$theta
-    The <- matrix(c(cos(theta) ,sin(theta), -sin(theta), cos(theta)), ncol = 2)
-    Phi <- matrix(c(1/phi1, 0, 0, 1/phi2), ncol = 2)
-    dd <- t(Phi %*%  The %*% t(dd))
+    anisotropyarg$spacepoints <- dd
+    dd <- anisotropyT2(anisotropyid, anisotropyarg)
     dis <- as.matrix(dist(dd, diag = T, upper = T))
 
     pnts <- actpnts(margdist = margdist, margarg = margarg, p0 = p0,distbounds = distbounds)
     actfpara <- fitactf(pnts)
+
     scf <- actf( acs(id=stcsarg$scfid, t = dis, scale = stcsarg$scfarg$scale,
                      shape = stcsarg$scfarg$shape),
                  b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
@@ -115,9 +123,9 @@ generateMTSFast <- function(n, spacepoints, margdist, margarg, p0, distbounds = 
         out[i,] <- DHMgenSim(Sj = Sj, rn = rn[ ,i])
     }
 
-    x <- as.matrix(out)
+    x <- t(as.matrix(out))
     x <- pnorm(x, mean(x), sd(x))
-    x[x < p0] <- 0
+    x[x <= p0] <- 0
     x[x > p0] <- do.call(paste0("q", margdist), args = c(list(p = (x[x > p0] - p0)/(1-p0)), margarg))
 
     d <- seq(0, max(dis), length = 200)
@@ -131,7 +139,7 @@ generateMTSFast <- function(n, spacepoints, margdist, margarg, p0, distbounds = 
 
     fout <- actfInv(tcf0%*%t(scf0),b = actfpara$actfcoef[1], c = actfpara$actfcoef[2])
 
-    structure(.Data = t(x), class = c("matrix", "cosmosts"), STmodel=list(margdist = margdist, margarg = margarg,
+    structure(.Data = x, class = c("matrix", "cosmosts"), STmodel=list(margdist = margdist, margarg = margarg,
                                                                           p0 = p0, stcs = fout, s.lags = d, t.lags=u, grid.lags = dis))
 }
 

@@ -1,8 +1,19 @@
 #' The Functions analyzeTS, reportTS, and simulateTS
 #'
-#' Provide a complete set of tools to make time series analysis a piece of cake - analyzeTS() automatically performs seasonal analysis, fits distributions and correlation structures, reportTS provides visualizations of the fitted distributions and correlation structures, and a table with the values of the fitted parameters and basic descriptive statistics, simulateTS automatically takes the results of the analyseTS and generates syntetic ones.
+#' Provide a complete set of tools to make time series analysis a piece of cake -
+#' \code{analyzeTS} automatically performs seasonal analysis, fits distributions
+#' and correlation structures, \code{reportTS} provides visualizations of the fitted
+#' distributions and correlation structures, and a table with the values of the fitted
+#' parameters and basic descriptive statistics, \code{simulateTS} automatically takes
+#' the results of \code{analyzeTS} and generates synthetic ones.
 #'
-#' In practice, we usually want to simulate a natural process using some sampled time series. To generate a synthetic time series with similar characteristics to the observed values, we have to determine marginal distribution, autocorrelation structure and probability zero for each individual month. This can is done by fitting distributions and autocorrelation structures with analyzeTS(). Result can be checked with reportTS(). Syynthetic time series with the same statistical properties can be produced with simulateTS().
+#' In practice, we usually want to simulate a natural process using some sampled time series.
+#' To generate a synthetic time series with similar characteristics to the observed values,
+#' we have to determine marginal distribution, autocorrelation structure and probability zero
+#' for each individual month. This can is done by fitting distributions and autocorrelation
+#' structures with \code{analyzeTS}. Result can be checked with \code{reportTS}.
+#' Syynthetic time series with the same statistical properties can be produced with
+#' \code{simulateTS}.
 #'
 #' Recomended distributions for variables:
 #'  * _precipitation_: ggamma (Generalized Gamma), burr### (Burr type)
@@ -10,16 +21,12 @@
 #'  * _relative humidity_: beta
 #'  * _temperature_: norm (Normal distribution)
 #'
-#'  Note: it is *strongly* recommended to use air temperatures in Kelvin (K) instead of Celsius (C) as
-#'  values less than zero will be excluded from some analyses, and zero values are usually handled
-#'  differently from non-zero value
-#'
 #' @param TS time series in format - date, value
 #' @param season name of the season (e.g. month, week)
 #' @param acsID ID of the autocorrelation structure to be fitted
 #' @param lag.max max lag for the empirical autocorrelation structure
 #' @param aTS analyzed timeseries
-#' @param method report method - 'dist' for distribution fits, 'acs' for ACS fits and 'stat' for basic statistical report
+#' @param method report method - \code{dist} for distribution fits, \code{acs} for ACS fits and \code{stat} for basic statistical report
 #' @param from starting date/time of the simulation
 #' @param to end date/time of the simulation
 #' @inheritParams N
@@ -345,8 +352,7 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
   dist <- attr(aTS, 'dist') ## get necesary info from attributes
   acsID <- attr(aTS, 'acsID')
   season <- attr(aTS, 'season')
-  date <- data.table(attr(aTS, "date"))
-  names(date) <- "date"
+  date <- attr(aTS, 'date')
 
   x <- aTS$data
 

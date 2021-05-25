@@ -12,7 +12,7 @@ quickTSPlot(TS, ci = 0.95)
 \item{ci}{confidence interval around the zero autocorrelation value (default set to 0.95, i.e. 95\% CI)}
 }
 \description{
-Return timeseries diagram, empirical density function, and empirical autocorrelation function
+Return timeseries diagram, empirical density function, and empirical autocorrelation function.
 }
 \examples{
 no <- 1000

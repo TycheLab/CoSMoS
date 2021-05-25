@@ -2,7 +2,8 @@
 % Please edit documentation in R/generateRFFast.r
 \name{generateRFFast}
 \alias{generateRFFast}
-\title{Faster simulation of random fields with approximately separable spatiotemporal correlation structure}
+\title{Faster simulation of random fields with approximately separable spatiotemporal
+correlation structure}
 \usage{
 generateRFFast(
   n,
@@ -14,40 +15,43 @@ generateRFFast(
   stcsid,
   stcsarg,
   scalefactor = 1,
-  anisotropyarg = list(phi1 = 1, phi2 = 1, theta = 0)
+  anisotropyid = "affine",
+  anisotropyarg = list(phi1 = 1, phi2 = 1, phi12 = 0, theta = 0)
 )
 }
 \arguments{
 \item{n}{number of fields (time steps) to simulate}
 
-\item{spacepoints}{side length m of the square field (m x m)}
+\item{spacepoints}{side length m of the square field \code{(m x m)}}
 
 \item{margdist}{target marginal distribution of the field}
 
-\item{margarg}{list of marginal distribution arguments}
+\item{margarg}{list of marginal distribution arguments. Please consult the documentation of the selected marginal distribution indicated in the argument \code{margdist} for the list of required parameters}
 
 \item{p0}{probability zero}
 
-\item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
+\item{distbounds}{distribution bounds (default set to \code{c(-Inf, Inf)})}
 
 \item{stcsid}{spatiotemporal correlation structure ID}
 
-\item{stcsarg}{list of spatiotemporal correlation structure arguments}
+\item{stcsarg}{list of spatiotemporal correlation structure arguments. Please consult the documentation of the selected spatiotemporal correlation structure indicated in the argument \code{stcsid} for the list of required parameters}
 
 \item{scalefactor}{factor specifying the distance between the centers of two pixels (default set to 1)}
 
-\item{anisotropyarg}{list of arguments establishing spatial anisotropy. phi1 and phi2 control the stretch in two orthogonal directions (e.g., longitude and latitude) while the angle theta controls a counterclockwise rotation (default set to list(phi1 = 1, phi2 = 1 , theta = 0) for isotropic fields)}
+\item{anisotropyid}{spatial anisotropy ID (\code{affine} by default, \code{swirl} or \code{wave})}
+
+\item{anisotropyarg}{list of arguments characterizing the spatial anisotropy according to the syntax of the function \code{\link{anisotropyT}}. Isotropic fields by default}
 }
 \description{
-For more details see section 6 in \href{https://doi.org/10.1029/2018WR023055}{Serinaldi and Kilsby (2018)}, and section 2.4 in \href{https://doi.org/10.1029/2019WR026331}{Papalexiou and Serinaldi (2020)}
+For more details see section 6 in Serinaldi and Kilsby (2018), and section 2.4
+in Papalexiou and Serinaldi (2020).
 }
 \details{
 \code{\link{generateRFFast}} provides a faster approach to RF simulation
 compared to \code{\link{generateRF}} by exploiting circulant embedding
 fast Fourier transformation.
 However, this approach is feasible only for approximately
-separable target spatiotemporal correlation functions (see section 6 in
-\href{https://doi.org/10.1029/2018WR023055}{Serinaldi and Kilsby (2018)}).
+separable target spatiotemporal correlation functions.
 \code{\link{generateRFFast}} comprises fitting and simulation in a single function.
 Here, we give indicative CPU times for some settings, referring to a
 Windows 10 Pro x64 laptop with Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz,
@@ -78,4 +82,15 @@ checkRF(sim,
           lags = 10,
           nfields = 49)
 
+}
+\references{
+Serinaldi, F., Kilsby, C.G. (2018). Unsurprising Surprises:
+The Frequency of Record-breaking and Overthreshold Hydrological Extremes Under
+Spatial and Temporal Dependence. Water Resources Research, 54(9), 6460-6487,
+\doi{10.1029/2018WR023055}
+
+Papalexiou, S.M., Serinaldi, F. (2020). Random Fields Simplified:
+Preserving Marginal Distributions, Correlations, and Intermittency,
+With Applications From Rainfall to Humidity. Water Resources Research, 56(2),
+e2019WR026331, \doi{10.1029/2019WR026331}
 }

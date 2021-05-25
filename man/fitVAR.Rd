@@ -14,7 +14,10 @@ fitVAR(
   stcsid,
   stcsarg,
   scalefactor = 1,
-  anisotropyarg = list(phi1 = 1, phi2 = 1, theta = 0)
+  anisotropyid = "affine",
+  anisotropyarg = list(phi1 = 1, phi2 = 1, phi12 = 0, theta = 0),
+  advectionid = "uniform",
+  advectionarg = list(u = 0, v = 0)
 )
 }
 \arguments{
@@ -24,27 +27,33 @@ fitVAR(
 
 \item{margdist}{target marginal distribution of the field}
 
-\item{margarg}{list of marginal distribution arguments. Please consult the documentation of the selected marginal distribution indicated in the argument “margdist” for the list of required parameters}
+\item{margarg}{list of marginal distribution arguments. Please consult the documentation of the selected marginal distribution indicated in the argument \code{margdist} for the list of required parameters}
 
 \item{p0}{probability zero}
 
-\item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
+\item{distbounds}{distribution bounds (default set to \code{c(-Inf, Inf)})}
 
 \item{stcsid}{spatiotemporal correlation structure ID}
 
-\item{stcsarg}{list of spatiotemporal correlation structure arguments. Please consult the documentation of the selected spatiotemporal correlation structure indicated in the argument “stcsid” for the list of required parameters}
+\item{stcsarg}{list of spatiotemporal correlation structure arguments. Please consult the documentation of the selected spatiotemporal correlation structure indicated in the argument \code{stcsid} for the list of required parameters}
 
 \item{scalefactor}{factor specifying the distance between the centers of two pixels (default set to 1)}
 
-\item{anisotropyarg}{list of arguments establishing spatial anisotropy. phi1 and phi2 control the stretch in two orthogonal directions (e.g., longitude and latitude) while the angle theta controls a counterclockwise rotation (default set to list(phi1 = 1, phi2 = 1 , theta = 0) for isotropic fields)}
+\item{anisotropyid}{spatial anisotropy ID (\code{affine} by default, \code{swirl} or \code{wave})}
+
+\item{anisotropyarg}{list of arguments characterizing the spatial anisotropy according to the syntax of the function \code{\link{anisotropyT}}. Isotropic fields by default}
+
+\item{advectionid}{advection field ID (\code{uniform} by default, \code{rotation}, \code{spiral}, \code{spiralCE}, \code{radial}, or \code{hyperbolic})}
+
+\item{advectionarg}{list of arguments characterizing the advection field according to the syntax of the function \code{\link{advectionF}}. No advection by default}
 }
 \description{
-Compute VAR model parameters to simulate parent Gaussian random vectors with specified spatiotemporal correlation structure using the method described by \href{https://doi.org/10.1145/937332.937333}{Biller and Nelson (2003)}
+Compute VAR model parameters to simulate parent Gaussian random vectors with specified spatiotemporal correlation structure using the method described by Biller and Nelson (2003).
 }
 \details{
-The fitting algorithm has \eqn{O(mxm)^3} complexity for a \eqn{(mxm)} field
+The fitting algorithm has \eqn{O(m*m)^3} complexity for a \eqn{(m*m)} field
 or equivalently \eqn{O(d^3)} complexity for a \eqn{d}-dimensional vector.
-Very large values of \eqn{(mxm)} (or \eqn{d}) and high order AR correlation
+Very large values of \eqn{(m*m)} (or \eqn{d}) and high order AR correlation
 structures can be unpractical on standard machines.
 
 Here, we give indicative CPU times for some settings, referring to a
@@ -55,6 +64,12 @@ d = 100 or m = 10, p = 1: ~  0.4s \cr
 d = 900 or m = 30, p = 1: ~  6.0s \cr
 d = 900 or m = 30, p = 5: ~ 47.0s \cr
 d = 2500 or m = 50, p = 1: ~100.0s
+}
+\note{
+While all the advection types can be applied to isotropic random fields,
+anisotropic random fields require more care. We suggest combining \code{affine}
+anysotropy with \code{uniform} advection, and \code{swirl} anisotropy
+with \code{rotation} or \code{spiral} advection with the same rotation center.
 }
 \examples{
 ## for multivariate simulation
@@ -96,7 +111,7 @@ fit <- fitVAR(
   stcsarg = list(scfid = "weibull", tcfid = "weibull",
                  copulaarg = 2,
                  scfarg = list(scale = 20, shape = 0.7),
-                tcfarg = list(scale = 1.1, shape = 0.8))
+                 tcfarg = list(scale = 1.1, shape = 0.8))
 )
 
 dim(fit$alpha)
@@ -106,4 +121,23 @@ fit$m
 fit$margarg
 fit$margdist
 
+}
+\references{
+Biller, B., Nelson, B.L. (2003). Modeling and generating multivariate
+time-series input processes using a vector autoregressive technique.
+ACM Trans. Model. Comput. Simul. 13(3), 211-237, \doi{10.1145/937332.937333}
+
+Papalexiou, S.M. (2018). Unified theory for stochastic modelling of
+hydroclimatic processes: Preserving marginal distributions, correlation structures,
+and intermittency. Advances in Water Resources, 115, 234-252,
+\doi{10.1016/j.advwatres.2018.02.013}
+
+Papalexiou, S.M.,  Serinaldi, F. (2020). Random Fields Simplified:
+Preserving Marginal Distributions, Correlations, and Intermittency,
+With Applications From Rainfall to Humidity. Water Resources Research, 56(2),
+e2019WR026331, \doi{10.1029/2019WR026331}
+
+Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). Advancing
+Space-Time Simulation of Random Fields: From Storms to Cyclones and Beyond.
+Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 }

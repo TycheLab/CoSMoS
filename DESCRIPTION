@@ -1,13 +1,14 @@
 Package: CoSMoS
 Type: Package
 Title: Complete Stochastic Modelling Solution
-Version: 2.0.0
-Authors@R: c(person("Filip", "Strnad",
-                     role = "aut"),
-             person("Simon Michael", "Papalexiou", 
-                      role = c("aut")),
+Version: 2.1.0
+Date: 2021-05-20
+Authors@R: c(person("Simon Michael", "Papalexiou", 
+                      role = "aut"),
              person("Francesco", "Serinaldi", 
                       role = "aut"),
+             person("Filip", "Strnad",
+                     role = "aut"),
              person("Yannis", "Markonis", 
                       role = "aut"),
              person("Kevin", "Shook", 
@@ -17,9 +18,9 @@ Authors@R: c(person("Filip", "Strnad",
 Description: A single framework, unifying, extending, and improving a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific 'parent' Gaussian process Papalexiou (2018) <doi:10.1016/j.advwatres.2018.02.013>.
 License: GPL-3
 Depends: R (>= 3.5.0), ggplot2, data.table
-Imports: 
+Imports:
     utils,
-    methods, 
+    methods,
     stats,
     grDevices,
     nloptr,
@@ -32,6 +33,7 @@ Imports:
     cowplot,
     directlabels,
     animation,
+    ggquiver,
     pracma
 Encoding: UTF-8
 LazyData: true

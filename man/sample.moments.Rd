@@ -20,7 +20,7 @@ sample.moments(x, na.rm = FALSE, raw = T, central = T, coef = T, order = 1:4)
 \item{order}{vector of integers - raw moment orders}
 }
 \description{
-Estimation of sample moments
+Estimation of sample moments.
 }
 \examples{
 

@@ -1,9 +1,11 @@
 #' Simulation of random field with given marginals and spatiotemporal properties
 #'
-#' Generates random field with given marginals and spatiotemporal properties, just provide (1) the output of 'fitVAR' function, and (2) the number of time steps to simulate
+#' Generates random field with given marginals and spatiotemporal properties,
+#' just provide (1) the output of \code{\link{fitVAR}} function, and (2) the number of time
+#' steps to simulate.
 #'
 #' @param n number of fields (time steps) to simulate
-#' @param STmodel list of arguments resulting from 'fitVAR' function
+#' @param STmodel list of arguments resulting from \code{\link{fitVAR}} function
 #'
 #' @name generateRF
 #'

@@ -11,7 +11,7 @@ test_that('test burr type III dist', {
                tolerance = 0.01)
 
   set.seed(666)
-  expect_equal(rburrIII(1, scale, shape1, shape2),      1.45,
+  expect_equal(rburrIII(1, scale, shape1, shape2),      0.794,
                tolerance = 0.01)
 
   expect_equal(mburrIII(1, scale, shape1, shape2),      0.518,

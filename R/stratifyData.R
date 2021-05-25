@@ -1,4 +1,4 @@
-#' Stratiffy timeseries by season
+#' Stratify timeseries by season
 #'
 #' @inheritParams seasonalACF
 #'

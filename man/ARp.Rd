@@ -22,7 +22,7 @@ ARp(margdist, margarg, acsvalue, actfpara, n, p = NULL, p0 = 0)
 \item{p0}{probability zero}
 }
 \description{
-Generates time series from an Autoregressive model of order \emph{p}
+Generates time series from an Autoregressive model of order \emph{p}.
 }
 \examples{
 

@@ -14,7 +14,7 @@ actf(rhox, b, c)
 \item{c}{2nd line parameter}
 }
 \description{
-Provides tranformation for continuous distributions, based on two parameters
+Provides tranformation for continuous distributions, based on two parameters.
 }
 \examples{
 

@@ -1,18 +1,18 @@
 #' Numerical and visual check of generated random fields
 #'
 #' Compares generated random fields sample statistics with the theoretically
-#' expected values (similar to checkTS). It also returns graphical output for
-#' visual check
+#' expected values (similar to \code{\link{checkTS}}). It also returns graphical output for
+#' visual check.
 #'
 #' @param RF output of \code{\link{generateRF}}
 #' @param lags number of lags of empirical STCF to be considered in the
 #' graphical output (default set to 30)
 #' @param nfields number of fields to be used in the numerical and graphical
 #' output (default set to 49). As the plots are arranged in a matrix with nrows as close as possible to ncol, we suggest using values such as 3x3, 3x4, 7x8, etc.
-#' @param method report method - 'stat' for basic statistical report,
-#' 'statplot'for graphical check of lagged SCS, target STCS, and marginal
-#' distribution, 'field' for plotting a matrix of the first 'nfields',
-#' and 'movie' to save the first 'nfields' as a GIF file named "movieRF.gif"
+#' @param method report method - \code{'stat'} for basic statistical report,
+#' \code{'statplot'} for graphical check of lagged SCS, target STCS, and marginal
+#' distribution, \code{'field'} for plotting a matrix of the first \code{nfields},
+#' and \code{'movie'} to save the first \code{nfields} as a GIF file named "movieRF.gif"
 #' in the current working directory
 
 #' @name checkRF
@@ -254,6 +254,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
     else aux <- RF[1:nfields, ]
     animation::ani.options(loop=0)
     animation::saveGIF({
+      par(mar = rep(0, 4))
       for(i in 1:nfields){
         z <- mba.surf(data.frame(x = ud[ ,1], y = ud[ ,2], z = aux[i, ]), 100, 100)$xyz.est$z
         if(p0 > 0) z[z < 0] <- 0

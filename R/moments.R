@@ -1,6 +1,7 @@
 #' Numerical estimation of moments
 #'
-#' Uses numerical integration to caclulate the theoretical raw or central moments of the specified distribution
+#' Uses numerical integration to caclulate the theoretical raw or central moments
+#' of the specified distribution.
 #'
 #' @param dist distribution
 #' @param distarg list of distribution arguments
@@ -102,6 +103,8 @@ moments <- function(dist, distarg, p0 = 0, raw = T, central = T, coef = T, distb
 }
 
 #' Estimation of sample moments
+#'
+#' Estimation of sample moments.
 #'
 #' @param x a numeric vector of values
 #' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds

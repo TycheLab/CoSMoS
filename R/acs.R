@@ -1,14 +1,18 @@
 #' AutoCorrelation Structure
 #'
-#' Provides a parametric function that describes the values of the linear autocorrelation up to desired lags. For more details on the parametric autocorrelation structures see section 3.2 in \href{https://doi.org/10.1016/j.advwatres.2018.02.013}{(Papalexiou 2018)}
+#' Provides a parametric function that describes the values of the linear autocorrelation up to desired lags. For more details on the parametric autocorrelation structures see section 3.2 in Papalexiou (2018).
 #'
-#' @param id autocorrelation tructure id
+#' @param id autocorrelation structure id
 #' @param ... other arguments (t as lag and acs parameters)
 #'
 #' @name acs
 #'
 #' @import ggplot2
 #' @export
+#'
+#' @references Papalexiou, S.M. (2018). Unified theory for stochastic modelling of hydroclimatic
+#' processes: Preserving marginal distributions, correlation structures,
+#' and intermittency. Advances in Water Resources, 115, 234-252, \doi{10.1016/j.advwatres.2018.02.013}
 #'
 #' @examples
 #'

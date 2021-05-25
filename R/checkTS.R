@@ -80,6 +80,8 @@ checkTS <- function(TS, distbounds = c(-Inf, Inf)) {
 
 #' Plot method for check results
 #'
+#' Plot method for check results.
+#'
 #' @param x check result
 #' @param ... other args
 #'

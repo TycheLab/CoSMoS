@@ -41,37 +41,37 @@ zero if you wish to simulate an intermittent process.
 \details{
 A step-by-step guide:
 \itemize{
-\item First define the target marginal (margdist), that is, the probability distribution
-of the generated data. For example set margdist = 'ggamma' if you wish to generate
-data following the Generalized Gamma distribution, margidst = 'burrXII' for Burr
+\item First define the target marginal (\code{margdist}), that is, the probability distribution
+of the generated data. For example set \code{margdist = 'ggamma'} if you wish to generate
+data following the Generalized Gamma distribution, \code{margidst = 'burrXII'} for Burr
 type XII distribution etc. For a full list of the distributions we support see the
-help vignette: \code{vignette('vignette', package = 'CoSMoS')}. In general, the package
-supports all build-in distribution functions of R and of other packages.
-\item Define the parameters’ values (margarg) of the distribution you selected. For example
+help \href{https://cran.r-project.org/web/packages/CoSMoS/vignettes/vignette.html}{vignette}.
+In general, the package supports all build-in distribution functions of R and of other packages.
+\item Define the parameters' values (\code{margarg}) of the distribution you selected. For example
 the Generalized Gamma has one scale and two shape parameters so set the desired value,
-e.g., margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8). Note distributions might
+e.g., \code{margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8)}. Note distributions might
 have different number of parameters and different type of parameters (location, scale, shape).
-To see the parameters of each distribution we support, see the help vignette:
-\code{vignette('vignette', package = 'CoSMoS')}.
+See the help \href{https://cran.r-project.org/web/packages/CoSMoS/vignettes/vignette.html}{vignette}
+for details on the parameters of each distribution we support.
 \item If you wish your time series to be intermittent (e.g., precipitation), then define the
 probability zero. For example, set p0 = 0.9, if you wish your generated data to have
-90\\% of zero values (dry days).
+90\% of zero values (dry days).
 \item Define your linear autocorrelations.
 \itemize{
 \item You can supply specific lag autocorrelations starting from lag 0
-and up to a desired lag, e.g., acs = c(1, 0.9, 0.8, 0.7); this will generate
+and up to a desired lag, e.g., \code{acs = c(1, 0.9, 0.8, 0.7)}; this will generate
 a process with lag1, 2 and 3 autocorrelations equal with 0.9, 0.8 and 0.7.
 \item Alternatively, you can use a parametric autocorrelation structure (see section 3.2 in
-\href{https://doi.org/10.1016/j.advwatres.2018.02.013}{Papalexiou 2018}).
+Papalexiou (2018).
 We support the following autocorrelation structures (acs) weibull, paretoII,
-fgn and burrXII. See also \link[CoSMoS]{acs} examples.
+fgn and burrXII. See also \code{\link[CoSMoS]{acs}} examples.
 }
 \item Define the order to the autoregressive model p. For example if you aim to preserve
 the first 10 lag autocorrelations then just set p = 10. Otherwise set it p = NULL and
 the model will decide the value of p in order to preserve the whole autocorrelation
 structure.
-\item Lastly just define the time series length, e.g., n = 1000 and number of time series
-you wish to generate, e.g., TSn = 10.
+\item Lastly just define the time series length, e.g., \code{n = 1000} and number of time series
+you wish to generate, e.g., \code{TSn = 10}.
 }
 
 Play around with the following given examples which will make the whole
@@ -163,4 +163,10 @@ plot(z)
 
 }
 
+}
+\references{
+Papalexiou, S.M. (2018). Unified theory for stochastic modelling of
+hydroclimatic processes: Preserving marginal distributions, correlation structures,
+and intermittency. Advances in Water Resources, 115, 234-252,
+\doi{10.1016/j.advwatres.2018.02.013}
 }
