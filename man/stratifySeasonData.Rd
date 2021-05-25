@@ -2,7 +2,7 @@
 % Please edit documentation in R/stratifyData.R
 \name{stratifySeasonData}
 \alias{stratifySeasonData}
-\title{Stratiffy timeseries by season}
+\title{Stratify timeseries by season}
 \usage{
 stratifySeasonData(TS, season)
 }
@@ -12,7 +12,7 @@ stratifySeasonData(TS, season)
 \item{season}{name of the season}
 }
 \description{
-Stratiffy timeseries by season
+Stratify timeseries by season
 }
 \examples{
 

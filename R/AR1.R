@@ -1,6 +1,6 @@
 #' Autoregressive model of first order
 #'
-#' Generates time series from an AR1 model
+#' Generates time series from an AR1 model.
 #'
 #' @param n number of values
 #' @param alpha lag-1 autocorrelation

@@ -1,9 +1,9 @@
 #' AutoCorrelation Transformation Function visualisation
 #'
 #' Visualizes the autocorrelation tranformation integral
-#' (there are two possible methods for plotting - base graphics and ggplot2 package)
+#' (there are two possible methods for plotting - base graphics and ggplot2 package).
 #'
-#' @param x fitactf result object
+#' @param x \code{\link{fitactf}} result object
 #' @param ... other arguments
 #'
 #' @export

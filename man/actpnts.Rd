@@ -16,7 +16,11 @@ actpnts(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf))
 \item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
 }
 \description{
-Transforms a gaussian process in order to match a target marginal lowers its autocorrelation values. The actpnts evaluates the corresponding autocorrelations for the given target marginal for a set of gaussian correlations, i.e., it returns  (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x} and \eqn{\rho_z} represent, respectively, the autocorrelations of the target and gaussian process.
+Transforms a Gaussian process in order to match a target marginal lowers its
+autocorrelation values. The actpnts evaluates the corresponding autocorrelations
+for the given target marginal for a set of Gaussian correlations, i.e., it returns
+(\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x} and \eqn{\rho_z} represent,
+respectively, the autocorrelations of the target and Gaussian process.
 }
 \examples{
 

@@ -9,10 +9,12 @@ generateRF(n, STmodel)
 \arguments{
 \item{n}{number of fields (time steps) to simulate}
 
-\item{STmodel}{list of arguments resulting from 'fitVAR' function}
+\item{STmodel}{list of arguments resulting from \code{\link{fitVAR}} function}
 }
 \description{
-Generates random field with given marginals and spatiotemporal properties, just provide (1) the output of 'fitVAR' function, and (2) the number of time steps to simulate
+Generates random field with given marginals and spatiotemporal properties,
+just provide (1) the output of \code{\link{fitVAR}} function, and (2) the number of time
+steps to simulate.
 }
 \details{
 Referring to the documentation of \code{\link{fitVAR}} for details on

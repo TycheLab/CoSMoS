@@ -15,12 +15,12 @@ acti(x, y, dist, distarg, rhoz, p0)
 
 \item{distarg}{a list of distribution arguments}
 
-\item{rhoz}{gaussian correlation}
+\item{rhoz}{Gaussian correlation}
 
 \item{p0}{probability od zero values}
 }
 \description{
-Expression supplied to double integral
+Expression supplied to double integral.
 }
 \examples{
 

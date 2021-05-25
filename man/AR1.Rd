@@ -16,7 +16,7 @@ AR1(n, alpha, mean = 0, sd = 1)
 \item{sd}{standard deviation}
 }
 \description{
-Generates time series from an AR1 model
+Generates time series from an AR1 model.
 }
 \examples{
 

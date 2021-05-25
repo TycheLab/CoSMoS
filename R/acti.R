@@ -1,12 +1,12 @@
 #' ACTI - autocorrelation transformation integral function
 #'
-#' Expression supplied to double integral
+#' Expression supplied to double integral.
 #'
 #' @param x x-plain value
 #' @param y y-plain value
 #' @param dist distribution
 #' @param distarg a list of distribution arguments
-#' @param rhoz gaussian correlation
+#' @param rhoz Gaussian correlation
 #' @param p0 probability od zero values
 #'
 #' @export
@@ -31,7 +31,11 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 
 #' AutoCorrelation Transformed Points
 #'
-#' Transforms a gaussian process in order to match a target marginal lowers its autocorrelation values. The actpnts evaluates the corresponding autocorrelations for the given target marginal for a set of gaussian correlations, i.e., it returns  (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x} and \eqn{\rho_z} represent, respectively, the autocorrelations of the target and gaussian process.
+#' Transforms a Gaussian process in order to match a target marginal lowers its
+#' autocorrelation values. The actpnts evaluates the corresponding autocorrelations
+#' for the given target marginal for a set of Gaussian correlations, i.e., it returns
+#' (\eqn{\rho_x , \rho_z}) points where \eqn{\rho_x} and \eqn{\rho_z} represent,
+#' respectively, the autocorrelations of the target and Gaussian process.
 #'
 #' @param margdist target marginal distribution
 #' @param margarg list of marginal distribution arguments
@@ -39,7 +43,7 @@ acti <- function(x, y, dist, distarg, rhoz, p0) {
 #' @inheritParams moments
 #'
 #' @export
-#' @import stats ggplot2 pracma
+#' @import stats ggplot2
 #'
 #' @examples
 #'
@@ -90,42 +94,42 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 
   for (i in 1:dim(rho)[1]) {
 
-    temp <- integral2(acti, ## ACTI calculation using pracma
-                      ymin = .min,
-                      ymax = .max,
-                      xmin = .min,
-                      xmax = .max,
-                      rhoz = rho[i, 'rhoz'],
-                      p0 = p0,
-                      dist = margdist,
-                      distarg = margarg)$Q
+    # temp <- integral2(acti, ## ACTI calculation using pracma
+    #                   ymin = .min,
+    #                   ymax = .max,
+    #                   xmin = .min,
+    #                   xmax = .max,
+    #                   rhoz = rho[i, 'rhoz'],
+    #                   p0 = p0,
+    #                   dist = margdist,
+    #                   distarg = margarg)$Q
 
-    # temp <- integrate( ## ACTI using base
-    #   f = function(y) {
-    #     sapply(y, function(y) {
-    #       integrate(
-    #         f = function(x) {
-    #           acti(x = x,
-    #                y = y,
-    #                rhoz = rho[i, 'rhoz'],
-    #                p0 = p0,
-    #                dist = margdist,
-    #                distarg = margarg)
-    #         },
-    #         lower = .min,
-    #         upper = .max,
-    #         subdivisions = 1.0e4,
-    #         rel.tol = 1.0e-5#,
-    #         # stop.on.error = FALSE
-    #       )$value
-    #     })
-    #   },
-    #   lower = .min,
-    #   upper = .max,
-    #   subdivisions = 1.0e4,
-    #   rel.tol = 1.0e-5#,
-    #   # stop.on.error = FALSE
-    # )$value
+    temp <- integrate( ## ACTI using base
+      f = function(y) {
+        sapply(y, function(y) {
+          integrate(
+            f = function(x) {
+              acti(x = x,
+                   y = y,
+                   rhoz = rho[i, 'rhoz'],
+                   p0 = p0,
+                   dist = margdist,
+                   distarg = margarg)
+            },
+            lower = .min,
+            upper = .max,
+            subdivisions = 1.0e4,
+            rel.tol = 1.0e-5#,
+            # stop.on.error = FALSE
+          )$value
+        })
+      },
+      lower = .min,
+      upper = .max,
+      subdivisions = 1.0e4,
+      rel.tol = 1.0e-5#,
+      # stop.on.error = FALSE
+    )$value
 
     rho[i, 'rhox'] <- (temp - m[[1]]['mu1'] ^ 2) / (m[[1]]['mu2'])
   }
@@ -135,7 +139,7 @@ actpnts <- function(margdist, margarg, p0 = 0, distbounds = c(-Inf, Inf)) {
 
 #' Fit the AutoCorrelation Transformation Function
 #'
-#' Fits the ACTF (Autocorrelation Transformation Function) to the estimated points (\eqn{\rho_x, \rho_z}) using nls
+#' Fits the ACTF (Autocorrelation Transformation Function) to the estimated points (\eqn{\rho_x, \rho_z}) using \code{nls}.
 #'
 #' @param actpnts estimated ACT points
 #' @param discrete logical - is the marginal distribution discrete?

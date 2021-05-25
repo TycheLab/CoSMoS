@@ -1,6 +1,6 @@
 #' Quick visualization of basic timeseries properties
 #'
-#' Return timeseries diagram, empirical density function, and empirical autocorrelation function
+#' Return timeseries diagram, empirical density function, and empirical autocorrelation function.
 #'
 #' @param TS timeseries to plot
 #' @param ci confidence interval around the zero autocorrelation value (default set to 0.95, i.e. 95% CI)

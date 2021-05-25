@@ -12,10 +12,13 @@ regenerateTS(ts, TSn = 1)
 \item{TSn}{number of timeseries to be (re)generated}
 }
 \description{
-Resamples given Timeseries
+Resamples given timeseries.
 }
 \details{
-You have used the generateTS function and you wish to generate more time series. Instead of re-running generateTS you can use regenerateTS, which generates timeseries using the parameters previously calculated by the generateTS function,  and thus it is faster.
+You have used the \code{\link{generateTS}} function and you wish to generate more time
+series. Instead of re-running \code{\link{generateTS}} you can use \code{\link{regenerateTS}},
+which generates timeseries using the parameters previously calculated by the
+\code{\link{generateTS}} function,  and thus it is faster.
 }
 \examples{
 

@@ -3,12 +3,56 @@ note <- sprintf("R package version %s", meta$Version)
 
 bibentry(
   bibtype  = "Manual",
-  title    = "{CoSMoS}: Complete Stochastic Modelling Solution",
-  author   = c(person("Filip", "Strnad"),
-               person("Simon", "Papalexiou"),
-               person("Yanis", "Markonis"),
-               person("Francesco", "Serinaldi")),
+  title    = "CoSMoS: Complete Stochastic Modelling Solution",
+  author   = c(person(given = c("Simon", "Michael"), family = "Papalexiou"),
+               person(given = "Francesco", family = "Serinaldi"),
+               person(given = "Filip", family = "Strnad"),
+               person(given = "Yannis", family = "Markonis"),
+               person(given = "Kevin", family = "Shook")
+               ),
   year     = year,
   note     = note,
   url      = "https://CRAN.R-project.org/package=CoSMoS "
 )
+
+bibentry(bibtype = "Article",
+          title = "Unified theory for stochastic modelling of hydroclimatic processes:                    Preserving marginal distributions, correlation structures,
+                   and intermittency",
+          journal = "Advances in Water Resources",
+          volume = "115",
+          pages = "234-252",
+          year = "2018",
+          url = "https://www.sciencedirect.com/science/article/pii/S0309170817309892",
+          author = person(given = c("Simon", "Michael"), family = "Papalexiou"),
+)
+
+
+bibentry(bibtype = "Article",
+          author   = c(person(given = c("Simon", "Michael"), family = "Papalexiou"),
+                       person(given = "Francesco", family = "Serinaldi")
+                       ),
+          title = "Random Fields Simplified: Preserving Marginal Distributions,                            Correlations, and Intermittency, With Applications From Rainfall
+                    to Humidity",
+          journal = "Water Resources Research",
+          volume = "56",
+          number = "2",
+          pages = "e2019WR026331",
+          url = "https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2019WR026331",
+          year = "2020"
+)
+
+
+bibentry(bibtype = "Article",
+          author   = c(person(given = c("Simon", "Michael"), family = "Papalexiou"),
+                       person(given = "Francesco", family = "Serinaldi"),
+                       person(given = "Emilio", family = "Porcu")
+                       ),
+          title = "Advancing Space-Time Simulation of Random Fields: From Storms to                       Cyclones and Beyond",
+          journal = "Water Resources Research",
+          volume = "",
+          number = "",
+          pages = "",
+          url = "https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2020WR029466",
+          year = "2021"
+)
+

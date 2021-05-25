@@ -37,7 +37,7 @@ popkurt(dist, distarg, p0 = 0, distbounds = c(-Inf, Inf))
 \item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
 }
 \description{
-Provides theoretical descriptive statistics
+Provides theoretical descriptive statistics.
 }
 \examples{
 
