@@ -33,7 +33,8 @@ moments(
 \item{order}{vector of integers - raw moment orders}
 }
 \description{
-Uses numerical integration to caclulate the theoretical raw or central moments of the specified distribution
+Uses numerical integration to caclulate the theoretical raw or central moments
+of the specified distribution.
 }
 \examples{
 

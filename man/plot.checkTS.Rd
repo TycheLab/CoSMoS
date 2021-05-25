@@ -12,7 +12,7 @@
 \item{...}{other args}
 }
 \description{
-Plot method for check results
+Plot method for check results.
 }
 \examples{
 

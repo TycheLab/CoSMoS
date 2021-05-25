@@ -12,6 +12,19 @@ stcs2(id, arglist)
 \item{arglist}{list of additional arguments (t as time lag, s as spatial lag (distance),  and stcs parameters)}
 }
 \description{
-Provides a parametric function that describes the values of the linear spatiotemporal autocorrelation up to desired lags. For more details on the parametric spatiotemporal correlation structures see section 2.3 and 2.4 in \href{https://doi.org/10.1029/2019WR026331}{Papalexiou and Serinaldi (2020)}
+Provides a parametric function that describes the values of the linear
+spatiotemporal autocorrelation up to desired lags.
+For more details on the parametric spatiotemporal correlation structures see
+section 2.3 and 2.4 in Papalexiou and Serinaldi (2020).
+}
+\references{
+Papalexiou, S.M., Serinaldi, F. (2020). Random Fields Simplified:
+Preserving Marginal Distributions, Correlations, and Intermittency,
+With Applications From Rainfall to Humidity. Water Resources Research, 56(2),
+e2019WR026331, \doi{10.1029/2019WR026331}
+
+Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). Advancing
+Space-Time Simulation of Random Fields: From Storms to Cyclones and Beyond.
+Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 }
 \keyword{internal}

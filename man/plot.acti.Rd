@@ -7,13 +7,13 @@
 \method{plot}{acti}(x, ...)
 }
 \arguments{
-\item{x}{fitactf result object}
+\item{x}{\code{\link{fitactf}} result object}
 
 \item{...}{other arguments}
 }
 \description{
 Visualizes the autocorrelation tranformation integral
-(there are two possible methods for plotting - base graphics and ggplot2 package)
+(there are two possible methods for plotting - base graphics and ggplot2 package).
 }
 \examples{
 

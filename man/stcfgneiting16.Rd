@@ -24,7 +24,8 @@ stcfgneiting16(t, s, a, c, alpha, beta, nu, tau)
 \item{tau}{space-time interaction parameter. Valid range: \eqn{\ge 1} (for 2-dimensional fields)}
 }
 \description{
-Provides spatiotemporal correlation structure function proposed by \href{https://doi.org/10.1198/016214502760047113}{Gneiting (2002)} (Eq.16 at p. 594)
+Provides spatiotemporal correlation structure function proposed by
+Gneiting (2002; Eq.16 at p. 594).
 }
 \examples{
 
@@ -61,4 +62,9 @@ plot_ly(z = ~g16.m) \%>\%
     ) \%>\%
     hide_colorbar()
 
+}
+\references{
+Gneiting, T. (2002). Nonseparable, Stationary Covariance Functions
+for Space-Time Data, Journal of the American Statistical Association,
+97:458, 590-600, \doi{10.1198/016214502760047113}
 }

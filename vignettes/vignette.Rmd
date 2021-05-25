@@ -1,13 +1,13 @@
 ---
-title: "CoSMoS-R | Complete Stochatic Modelling Solution"
-author: "Simon Papalexiou, Filip Strnad, Francesco Serinaldi, Yannis Markonis, Kevin Shook"
+title: "CoSMoS R | Complete Stochastic Modelling Solution"
+author: "Simon Michael Papalexiou, Francesco Serinaldi, Filip Strnad, Yannis Markonis, Kevin Shook"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: true
     number_sections: yes
 vignette: >
-  %\VignetteIndexEntry{CoSMoS-R | Complete Stochatic Modelling Solution}
+  %\VignetteIndexEntry{CoSMoS R | Complete Stochastic Modelling Solution}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
   header-includes:
@@ -26,20 +26,25 @@ knitr::opts_chunk$set(eval = TRUE,
                       message = FALSE)
 library(CoSMoS)
 ```
-`CoSMoS` was conceived back in 2009 (see note in section 5) and was officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind, `CoSMoS` makes **univariate**, **multivariate**, or **random field** simulations easy. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
+`CoSMoS` was conceived back in 2009 (see note in section 5) and was officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind, **`CoSMoS` makes univariate, multivariate, or random field simulations easy**. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
 
+<br>
+~_Unified Theory of Stochastic Modelling_ | [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013)
 
 _"Hydroclimatic processes come in all “shapes and sizes”. They are characterized by different spatiotemporal correlation structures and probability distributions that can be continuous, mixed-type, discrete or even binary. Simulating such processes by reproducing precisely their marginal distribution and linear correlation structure, including features like intermittency, can greatly improve hydrological analysis and design. ... Here, a single framework is proposed that unifies, extends, and improves a general-purpose modelling strategy, based on the assumption that any process can emerge by transforming a specific “parent”" Gaussian process."_
 
-~_Unified Theory of Stochastic Modelling_ | [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013)
+~_Precise Temporal Disaggregation_ | [Papalexiou et al. (2018)](https://doi.org/10.1029/2018WR022726)
 
 _"Hydroclimatic variables such as precipitation and temperature are often measured or simulated by climate models at coarser spatiotemporal scales than those needed for operational purposes. … Here we introduce a novel disaggregation method, named Disaggregation Preserving Marginals and Correlations (DiPMaC), that is able to disaggregate a coarse-scale time series to any finer scale, while reproducing the probability distribution and the linear correlation structure of the fine-scale process. DiPMaC is also generalized for arbitrary nonstationary scenarios to reproduce time varying marginals."_
 
-~_Precise Temporal Disaggregation_ | [Papalexiou et al. (2018)](https://doi.org/10.1029/2018WR022726)
+~_Random Fields Simplified_ | [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331)
 
 _"Nature manifests itself in space and time. The spatiotemporal complexity of processes such as precipitation, temperature, and wind, does not allow purely deterministic modeling. Spatiotemporal random fields have a long history in modeling such processes, and yet a single unified framework offering the flexibility to simulate processes that may differ profoundly does not exist. Here we introduce a blueprint to efficiently simulate spatiotemporal random fields that preserve any marginal distribution, any valid spatiotemporal correlation structure, and intermittency."_
 
-~_Random Fields Simplified_ | [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331)
+~_Advancing Space-Time Simulation_ | [Papalexiou, Serinaldi and Porcu (2021)](https://doi.org/10.1029/2020WR029466)
+
+
+_"...we advance random field simulation by introducing the concepts of general velocity fields and general anisotropy transformations. To illustrate the potential of CoSMoS, we simulate random fields with complex patterns and motion mimicking rainfall storms moving across an area, spiraling fields resembling weather cyclones, fields converging to (or diverging from) a point, and colliding air masses."_
 
 ***
 # Step by step guide to timeseries simulation {#section_1}
@@ -270,10 +275,11 @@ ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
        facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
 ```
 
+## Random Fields Simulation 
 
-## Random Field Simulation 
+### Isotropic Random Fields
 
-`CoSMoS` simulates spatially and temporally correlated random fields (isotropic and anisotropic) with the functions `generateRF()` and `generateRFFast()`, which are analogs of `generateMTS()` and `generateMTSFast()`, with the same syntax. The only difference is the specification of the spatial points, which is an integer denoting the side length \eqn{m} of a square grid \eqn{(mxm)}. As was mentioned in the previous section, the algorithm in `generateRFFast()` is computationally less expensive than that of `generateRF()`, enabling the simulation of random fields over a greater number of grid points (see [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331), and [Serinaldi and Kilsby (2018)](https://doi.org/10.1029/2018WR023055) for more details).
+`CoSMoS` simulates spatially and temporally correlated isotropic random fields with the functions `generateRF()` and `generateRFFast()`, which are analogs of `generateMTS()` and `generateMTSFast()`, with the same syntax. The only difference is the specification of the spatial points, which is an integer denoting the side length \eqn{m} of a square grid \eqn{(mxm)}. As was mentioned in the previous section, the algorithm in `generateRFFast()` is computationally less expensive than that of `generateRF()`, enabling the simulation of random fields over a greater number of grid points (see [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), [Papalexiou and Serinaldi (2020)](https://doi.org/10.1029/2019WR026331), and [Serinaldi and Kilsby (2018)](https://doi.org/10.1029/2018WR023055) for more details).
 
 The example below shows the use of both `generateRF` and `generateRFFast`. The generation of random fields using `generateRF` took approximately 16 times as long as using `generateRFFast`.
 
@@ -281,21 +287,19 @@ The example below shows the use of both `generateRF` and `generateRFFast`. The g
 ## compute VAR model parameters
 ## CPU time: ~15s 
 fit <- fitVAR(spacepoints = 20, p = 3, margdist ="burrXII",
-                  margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton",
-                  stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
-                  scfarg = list(scale = 20, shape = 0.7), tcfarg = list(scale = 1.1, shape = 0.8) ) )
+              margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton",
+              stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
+              scfarg = list(scale = 20, shape = 0.7), tcfarg = list(scale = 1.1, shape = 0.8) ) )
 
-## generate random fields with nonseparable correlation structure 
-
+## generate isotropic random fields with nonseparable correlation structure 
 sim1 <- generateRF(n = 1000, STmodel = fit)
 
-## fast simulation of anisotropic random fields with separable correlation structure
+## fast simulation of isotropic random fields with separable correlation structure
 sim2 <- generateRFFast(n = 1000, spacepoints = 20, p0 = 0.7, margdist ="paretoII",
                        margarg = list(scale = 1, shape = .3),
                        stcsarg = list(scfid = "weibull", tcfid = "weibull",
                        scfarg = list(scale = 20, shape = 0.7), 
-                       tcfarg = list(scale = 1.1, shape = 0.8)),
-                       anisotropyarg = list(phi1 = 0.5, phi2 = 2, theta = -pi/3))
+                       tcfarg = list(scale = 1.1, shape = 0.8)))
 
 ```
 
@@ -313,13 +317,72 @@ checkRF(RF = sim1, nfields = 9*9, method = "statplot")
 checkRF(RF = sim1, nfields = 9*9, method = "field")
 ```
 
+### Anisotropic Random Fields
 
-The plots show anisotropic fields for the second example. Note that you can save the results to an animated GIF by changing the `method` parameter from `"field"` to `"movie"`.  
+The functions `generateRF()` and `generateRFFast()` allows for the simulation of spatially and temporally correlated anisotropic random fields by specifying the arguments `anisotropyid` and `anisotropyarg` when calculating the model parameters via `fitVAR()`. Three types of anisotropic effects are supported, namely: affine (rotation and stretching), and swirl-like, and "wavy" deformation (see the documentation of the function `anisotropyT`, [Papalexiou, Serinaldi and Porcu (2021)](https://doi.org/10.1029/2020WR029466), and references therein for more details).    
 
+The example below reports the simulation of swirl-like random fields mimicking for instance the shape of atmospheric cyclones. Firstly, one can visualize the  the transformed of the coordinate system   
 
-```{r, fig.height = 6.5}
-## check anisotropic random fields simulated in the previous section
-checkRF(RF = sim2, nfields = 9*9, method = "field")
+```{r, fig.width = 4, fig.height = 4}
+## specify a grid of coordinates
+m = 30
+aux <- seq(0, m - 1, length = m)
+coord <- expand.grid(aux, aux)
+
+## transform the coordinate system
+at <- anisotropyTswirl(spacepoints = coord, x0 = floor(m / 2), y0 = floor(m / 2), 
+                       b = 10, alpha = 1.8 * pi)
+
+## visualize transformed coordinate system
+  aux = data.frame(lon = at[ ,1], lat = at[ ,2], id1 = rep(1:m, each = m), id2 = rep(1:m, m))
+  ggplot(aux, aes(x = lon, y = lat)) + 
+    geom_path(aes(group = id1)) + geom_path(aes(group = id2)) + geom_point(col = 2) + theme_light()
+
+```  
+
+Then, one can generate a set of swirl-like random fields with the desired spatiotemporal correlation structure and visualize them
+
+```{r, fig.height = 7}
+## compute VAR model parameters
+fit <- fitVAR(spacepoints = m, p = 1, margdist = 'burrXII', 
+              margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.1, stcsid = "clayton", 
+              stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2,
+                        scfarg = list(scale = 2, shape = 0.7), tcfarg = list(scale = 20.1, shape = 0.8)),
+              anisotropyid = "swirl", 
+              anisotropyarg = list(x0 = floor(m / 2), y0 = floor(m / 2), b = 10, alpha = 1.8 * pi) )
+
+## generate
+set.seed(9)
+sim3 <- generateRF(n=25, STmodel = fit)
+
+## check
+checkRF(RF = sim3, nfields = 5*5, method = "field")
+
+```
+
+### Lagrangian Random Fields
+
+`CoSMoS` implements advances in space-time simulation presented in [Papalexiou, Serinaldi and Porcu (2021)](https://doi.org/10.1029/2020WR029466) that enable the simulation of Lagrangian random fields, i.e. random fields characterized by mass transport (advection). The motion is described by velocity vectors with specified orthogonal components _u_ and _v_ at each grid point. Motion vectors can be specified by setting the arguments `advectionid` and `advectionarg` of `fitVAR` function. Several types of advection fields are supported, but users can create their own following the structure of the existing functions  (see the documentation of the function `advectionF` for more details).
+
+The example below refers to the generation of random fields with affine anisotropy and uniform advection, mimicking rainfall storms moving north-easterly.
+
+```{r, fig.height = 7.0}
+## compute VAR model parameters
+fit <- fitVAR(spacepoints = 30, p = 1, margdist = 'burrXII', 
+              margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton", 
+              stcsarg = list(scfid = "weibull", tcfid = "weibull", copulaarg = 2, 
+                      scfarg = list(scale = 20, shape = 0.7), tcfarg = list(scale = 30.1, shape = 0.8)),
+              anisotropyid = "affine", 
+              anisotropyarg = list(phi1 = 2., phi2 = 0.5, phi12 = 0, theta = -pi/3),
+              advectionid = "uniform", advectionarg = list(u = 2.5, v = 1.5) )
+
+## generate
+set.seed(10) # 1 # 5
+sim3 <- generateRF(n=81, STmodel = fit)
+
+## check
+checkRF(RF = sim3, nfields = 9*9, method = "field")
+
 ```
 
 ***
@@ -366,12 +429,13 @@ dta[, id := "observed"]
 sim_precip[, id := "simulated"]
 dta <- rbind(dta, sim_precip)
 
-ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) + theme_light()
+ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + 
+  facet_wrap(facets = ~id, ncol = 1) + theme_light()
 ```
 
 ## Daily streamflow
 
-We can also apply the same methods to daily streamflows. For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(http://waterdata.usgs.gov/nwis)](http://waterdata.usgs.gov/nwis). In this case, the fitted distribution was log-normal, and the ACS was Pareto II.
+We can also apply the same methods to daily streamflows. For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(https://waterdata.usgs.gov/nwis)](https://waterdata.usgs.gov/nwis). In this case, the fitted distribution was log-normal, and the ACS was Pareto II.
 
 ```{r, fig.height = 9}
 ## CPU time: ~240s
@@ -394,7 +458,8 @@ dta[, id := "observed"]
 sim_str[, id := "simulated"]
 dta <- rbind(dta, sim_str)
 
-ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + facet_wrap(facets = ~id, ncol = 1) + theme_light()
+ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + 
+  facet_wrap(facets = ~id, ncol = 1) + theme_light()
 ```
 
 
@@ -418,7 +483,13 @@ CoSMoS supports most distributions available in `R` with defined quantile, distr
 distribution argument/name - `burrIII`    
 parameters - `list(scale, shape1, shape2)`
 
-$$f_{\text{BrIII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}-1} \left(\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}}{\gamma _1}+1\right){}^{-\gamma _1 \gamma _2-1}}{\beta } \\ F_{\text{BrIII}}(x)=\left(\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}}{\gamma _1}+1\right){}^{-\gamma _1 \gamma _2} \\ Q_{\text{BrIII}}(u)=\beta  \left(\gamma _1 \left(u^{-\frac{1}{\gamma _1 \gamma _2}}-1\right)\right){}^{-\gamma _2} \\
+$$f_{\text{BrIII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}-1} 
+\left(\gamma_1^{-1} \left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}+1\right)
+^{-\gamma_1 \gamma_2-1}}{\beta } \\
+F_{\text{BrIII}}(x)=
+\left(\gamma_1^{-1} \left(\frac{x}{\beta }\right)^{-\frac{1}{\gamma _2}}+1\right)
+^{-\gamma _1 \gamma _2} 
+\\ Q_{\text{BrIII}}(u)=\beta  \left(\gamma _1 \left(u^{-\frac{1}{\gamma _1 \gamma _2}}-1\right)\right)^{-\gamma _2} \\
 m_{\text{BrIII}}(q)=\frac{\beta ^q \gamma _1^{\gamma _2 (-q)} \Gamma \left(\left(q+\gamma _1\right) \gamma _2\right) \Gamma \left(1-q \gamma _2\right)}{\Gamma \left(\gamma _1 \gamma _2\right)}$$
 
 **Burr type XII**
@@ -426,9 +497,9 @@ m_{\text{BrIII}}(q)=\frac{\beta ^q \gamma _1^{\gamma _2 (-q)} \Gamma \left(\left
 distribution argument/name - `burrXII`     
 parameters - `list(scale, shape1, shape2)`
 
-$$f_{\text{BrXII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{\gamma _1-1} \left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right){}^{-\frac{1}{\gamma _1 \gamma _2}-1}}{\beta } \\
-F_{\text{BrXII}}(x)=1-\left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right){}^{-\frac{1}{\gamma _1 \gamma _2}} \\ 
-Q_{\text{BrXII}}(u)=\beta  \left(-\frac{1-(1-u)^{-\gamma _1 \gamma _2}}{\gamma _2}\right){}^{\frac{1}{\gamma _1}} \\
+$$f_{\text{BrXII}}(x)=\frac{\left(\frac{x}{\beta }\right)^{\gamma _1-1} \left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right)^{-\frac{1}{\gamma _1 \gamma _2}-1}}{\beta } \\
+F_{\text{BrXII}}(x)=1-\left(\gamma _2 \left(\frac{x}{\beta }\right)^{\gamma _1}+1\right)^{-\frac{1}{\gamma _1 \gamma _2}} \\ 
+Q_{\text{BrXII}}(u)=\beta  \left(-\frac{1-(1-u)^{-\gamma _1 \gamma _2}}{\gamma _2}\right)^{\frac{1}{\gamma _1}} \\
 m_{\text{BrXII}}(q)=\frac{\beta ^q \gamma _2^{-\frac{q}{\gamma _1}-1} B\left(\frac{q+\gamma _1}{\gamma _1},\frac{1-q \gamma _2}{\gamma _1 \gamma _2}\right)}{\gamma _1}$$
 
 **Generalized Gamma**
@@ -438,7 +509,7 @@ parameters - `list(scale, shape1, shape2)`
 
 $$f_{\mathcal{G}\mathcal{G}}(x)=\frac{\gamma _2 e^{-\left(\frac{x}{\beta }\right)^{\gamma _2}} \left(\frac{x}{\beta }\right)^{\gamma _1-1}}{\beta  \Gamma \left(\frac{\gamma _1}{\gamma _2}\right)} \\
 F_{\mathcal{G}\mathcal{G}}(x)=Q\left(\frac{\gamma _1}{\gamma _2},0,\left(\frac{x}{\beta }\right)^{\gamma _2}\right) \\ 
-Q_{\mathcal{G}\mathcal{G}}(u)=\beta  Q^{-1}\left(\frac{\gamma _1}{\gamma _2},0,u\right){}^{\frac{1}{\gamma _2}} \\ 
+Q_{\mathcal{G}\mathcal{G}}(u)=\beta  Q^{-1}\left(\frac{\gamma _1}{\gamma _2},0,u\right)^{\frac{1}{\gamma _2}} \\ 
 m_{\mathcal{G}\mathcal{G}}(q)=\frac{\beta ^q \Gamma \left(\frac{q}{\gamma _2}+\frac{\gamma _1}{\gamma _2}\right)}{\Gamma \left(\frac{\gamma _1}{\gamma _2}\right)}$$
 
 **Pareto II** (also known as Lomax)
@@ -451,25 +522,30 @@ F_{\text{PII}}(x)=1-\left(\frac{\gamma  x}{\beta }+1\right)^{-1/\gamma } \\
 Q_{\text{PII}}(u)=\frac{\beta  \left((1-u)^{-\gamma }-1\right)}{\gamma } \\
 m_{\text{PII}}(q)=\frac{\Gamma (q+1) \left(\frac{\beta }{\gamma }\right)^q \Gamma \left(\frac{1}{\gamma }-q\right)}{\Gamma \left(\frac{1}{\gamma }\right)}$$
 
+
 # Historical Note {#section_5}
 
-The genesis of CoSMoS dates from 2009 when Simon Papalexiou developed the core of its methods while at National Technical University of Athens (NTUA), Greece. Simon soon invited a few colleagues to build a start-up company, named Oktana, to develop stochastic simulation software. The methods were described in a legal document [(Papalexiou, 2010)](https://www.researchgate.net/publication/333323778_Stochastic_modelling_demystified) as a first step to create proprietary software, although Oktana was never created.
+The genesis of CoSMoS dates from 2009 when Simon Michael Papalexiou developed the core of its methods while at National Technical University of Athens (NTUA), Greece, and applied them initially for multivariate rainfall modeling for the needs of an internal project at NTUA. Simon soon invited a few "colleagues" to build a start-up company, named Oktana, to develop stochastic simulation software. The details were described in a legal document [(Papalexiou, 2010)](https://www.researchgate.net/publication/333323778_Stochastic_modelling_demystified) as a first step to create proprietary software, although Oktana was never created.
 
-In 2015, Simon with Yannis Markonis reconsidered the idea of a start-up company. In 2017 Simon moved to California and Yannis to Prague, and they started discussing the release of CoSMoS as open source software. The methods were published in arXiv on July 21, 2017 [(Papalexiou, 2017)](http://arxiv.org/abs/1707.06842) and few months later in Advances in Water Resources [(Papalexiou, 2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), followed by a publication on disaggregation (DiPMaC) in WRR [(Papalexiou et al., 2018)](https://doi.org/10.1029/2018WR022726). In the meanwhile, Filip Strnad joined the team in 2018 and coded the first version of CoSMoS in `R`, as the original code had been developed by Simon in Mathematica.
+In 2015, Simon with Yannis Markonis reconsidered the idea of a start-up company participating in the Climate-KIC competition. In 2017 Simon moved to California and Yannis to Prague, and they started discussing the release of CoSMoS as open-source software. The methods were published in arXiv on July 21, 2017 [(Papalexiou, 2017)](https://arxiv.org/abs/1707.06842) and few months later in Advances in Water Resources [(Papalexiou, 2018)](https://doi.org/10.1016/j.advwatres.2018.02.013), followed by a publication on disaggregation (DiPMaC) in WRR [(Papalexiou et al., 2018)](https://doi.org/10.1029/2018WR022726). In the meanwhile, Filip Strnad joined the team in 2018 and coded the first version of CoSMoS in `R`, as the original code was developed by Simon in Mathematica.
 
 Francesco Serinaldi joined the team in 2019 initially to co-author a paper on random fields with Simon which was published in WRR in January 2020 [(Papalexiou and Serinaldi, 2020)](https://doi.org/10.1029/2019WR026331). Francesco developed the R code of CoSMoS version 2, collaborating with Filip and Kevin, and extending its functionalities to include the methods of the previously mentioned paper, that is, enabling the simulation of random fields and multivariate time series. The last addition to our team is Kevin Shook who has become the package maintainer and offers advice on `R`.
+
+The latest version of CoSMoS implements major advances in space time modeling introduced in [Papalexiou, Serinaldi and Porcu (2021)](https://doi.org/10.1029/2020WR029466) that allow realistic simulations of hydro-environmental fluxes, including rainfall storms, fields resembling weather cyclones, fields converging to (or diverging from) a point, colliding air masses, and more. 
 
 We are serene to see this ten-year Odyssey finally back on track to Ithaca. Leaving the burdens of the past behind, empowered by a great team and standing for dignity and academic integrity, we will keep striving to offer free, innovative, and reliable software for stochastic modelling. As a closing remark, we thank our imitators, after all, as Oscar Wilde said: “Imitation is the sincerest form of flattery that mediocrity can pay to greatness”.
 
 
 # References {#section_6}
 
-* Papalexiou, S.M. (2018). Unified theory for stochastic modelling of hydroclimatic processes: Preserving marginal distributions, correlation structures, and intermittency. Advances in Water Resources, 115, 234–252. [link](https://doi.org/10.1016/j.advwatres.2018.02.013)
-*	Papalexiou, S.M., Markonis, Y., Lombardo, F., AghaKouchak, A., & Foufoula‐Georgiou, E. (2018). Precise Temporal Disaggregation Preserving Marginals and Correlations (DiPMaC) for Stationary and Nonstationary Processes. Water Resources Research, 54(10), 7435– 7458. [link](https://doi.org/10.1029/2018WR022726)
-*	Papalexiou, S.M., & Serinaldi, F. (2020). Random Fields Simplified: Preserving Marginal Distributions, Correlations, and Intermittency, With Applications From Rainfall to Humidity. Water Resources Research, 56(2), e2019WR026331.
-[link](https://doi.org/10.1029/2019WR026331)
-*	Serinaldi, F., & Kilsby, C. G. (2018). Unsurprising Surprises: The Frequency of Record-breaking and Overthreshold Hydrological Extremes Under Spatial and Temporal Dependence. Water Resources Research, 54(9), 6460–6487.
-[link](https://doi.org/10.1029/2018WR023055)
-* Papalexiou, S. M. (2017). A unified theory for exact stochastic modelling of univariate and multivariate processes with continuous, mixed type, or discrete marginal distributions and any correlation structure. ArXiv:1707.06842 [Math, Stat]. [link](http://arxiv.org/abs/1707.06842)
-* Papalexiou, S. M. (2010). Stochastic modelling demystified. 10.13140/RG.2.2.34889.60008.[link](https://www.researchgate.net/publication/333323778_Stochastic_modelling_demystified)
+1. Papalexiou, S.M. (2018). _Unified theory for stochastic modelling of hydroclimatic processes: Preserving marginal distributions, correlation structures, and intermittency_. Advances in Water Resources, 115, 234-252, [link](https://doi.org/10.1016/j.advwatres.2018.02.013)
+2.	Papalexiou, S.M., Markonis, Y., Lombardo, F., AghaKouchak, A., Foufoula-Georgiou, E. (2018). _Precise Temporal Disaggregation Preserving Marginals and Correlations (DiPMaC) for Stationary and Nonstationary Processes_. Water Resources Research, 54(10), 7435-7458, [link](https://doi.org/10.1029/2018WR022726)
+3.	Papalexiou, S.M., Serinaldi, F. (2020). _Random Fields Simplified: Preserving Marginal Distributions, Correlations, and Intermittency, With Applications From Rainfall to Humidity_. Water Resources Research, 56(2), e2019WR026331, [link](https://doi.org/10.1029/2019WR026331)
+4. Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). _Advancing Space-Time Simulation of Random Fields: From Storms to Cyclones and Beyond_. Water Resources Research, 57, e2020WR029466, [link](https://doi.org/10.1029/2020WR029466)
+5.	Serinaldi, F., Kilsby, C.G. (2018). _Unsurprising Surprises: The Frequency of Record-breaking and Overthreshold Hydrological Extremes Under Spatial and Temporal Dependence_. Water Resources Research, 54(9), 6460-6487, [link](https://doi.org/10.1029/2018WR023055)
+
+
+* Papalexiou, S.M. (2010). _Stochastic modelling demystified_. 10.13140/RG.2.2.34889.60008.[link](https://www.researchgate.net/publication/333323778_Stochastic_modelling_demystified)
+* Papalexiou, S.M. (2017). _A unified theory for exact stochastic modelling of univariate and multivariate processes with continuous, mixed type, or discrete marginal distributions and any correlation structure_. ArXiv:1707.06842 [Math, Stat]. [link](https://arxiv.org/abs/1707.06842)
+
 

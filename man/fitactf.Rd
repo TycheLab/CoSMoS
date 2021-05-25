@@ -12,7 +12,7 @@ fitactf(actpnts, discrete = FALSE)
 \item{discrete}{logical - is the marginal distribution discrete?}
 }
 \description{
-Fits the ACTF (Autocorrelation Transformation Function) to the estimated points (\eqn{\rho_x, \rho_z}) using nls
+Fits the ACTF (Autocorrelation Transformation Function) to the estimated points (\eqn{\rho_x, \rho_z}) using \code{nls}.
 }
 \examples{
 

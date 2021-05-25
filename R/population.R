@@ -1,6 +1,6 @@
 #' Population statistics
 #'
-#' Provides theoretical descriptive statistics
+#' Provides theoretical descriptive statistics.
 #'
 #' @inheritParams moments
 #' @param stat define what you what to calculate - possible population desc. statistics ('mean', 'sd', 'var', 'cvar', 'skew', 'kurt')

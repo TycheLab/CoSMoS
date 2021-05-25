@@ -84,7 +84,7 @@ qburrIII <- function(p, scale, shape1, shape2, lower.tail = TRUE, log.p = FALSE)
     if (!lower.tail) {p <- 1 - p}
     if (log.p) {p <- log(p)}
 
-    q <- scale*(-((1 - (1 - p)^(-(shape1*shape2)))/shape2))^shape1^(-1)
+    q <- scale*(shape1*(p^(-1/(shape1*shape2)) - 1))^(-shape2)
 
     return(q)
   }
@@ -100,7 +100,7 @@ rburrIII <- function(n, scale, shape1, shape2) {
     return(NaN)
   } else {
 
-    return(qburrIII(pnorm(rnorm(n)), scale, shape1, shape2))
+    return(qburrIII(runif(n), scale, shape1, shape2))
   }
 }
 

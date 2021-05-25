@@ -14,7 +14,7 @@ actfdiscrete(rhox, b, c)
 \item{c}{2nd line parameter}
 }
 \description{
-Provides tranformation for discrete distributions, based on two parameters
+Provides tranformation for discrete distributions, based on two parameters.
 }
 \examples{
 

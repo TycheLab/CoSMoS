@@ -1,6 +1,6 @@
 #' Autoregressive model of order \emph{p}
 #'
-#' Generates time series from an Autoregressive model of order \emph{p}
+#' Generates time series from an Autoregressive model of order \emph{p}.
 #'
 #' @inheritParams actpnts
 #' @param n number of values

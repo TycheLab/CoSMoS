@@ -1,6 +1,8 @@
 inst/doc
 .Rproj.user
 .Rbuildignore
-#doc
-Meta
+.RData
+.Rhistory
 doc
+Meta
+

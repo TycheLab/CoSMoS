@@ -1,9 +1,11 @@
 #' Simulation of multiple time series with given marginals and spatiotemporal properties
 #'
-#' Generates multiple time series with given marginals and spatiotemporal properties, just provide (1) the output of 'fitVAR' function, and (2) the number of time steps to simulate
+#' Generates multiple time series with given marginals and spatiotemporal properties,
+#' just provide (1) the output of \code{\link{fitVAR}} function, and (2) the number of time
+#' steps to simulate.
 #'
 #' @param n number of fields (time steps) to simulate
-#' @param STmodel list of arguments resulting from 'fitVAR' function
+#' @param STmodel list of arguments resulting from \code{\link{fitVAR}} function
 #'
 #' @name generateMTS
 #'
@@ -24,8 +26,8 @@
 #' d = 900, p = 5, n = 100: ~280s \cr
 #' d = 900, p = 5, n = 1000: ~302s \cr
 #' d = 2500, p = 1, n = 1000 : ~160s \cr
-#' d = 2500, p = 1, n = 10000 : ~570s
-#' where d denotes the number of spatial locations
+#' d = 2500, p = 1, n = 10000 : ~570s \cr
+#' where \eqn{d} denotes the number of spatial locations
 #'
 #' @examples
 #' ## Simulation of a 4-dimensional vector with VAR(1) correlation structure
