@@ -16,7 +16,8 @@
 #'
 #' @examples
 #'
-#' library(CoSMoS)
+#' library(ggquiver)
+#' library(ggplot2)
 #'
 #' ## specify coordinates
 #' m = 25
@@ -85,6 +86,8 @@ advectionF2 <- function(id, arglist) {
 #'
 #' @examples
 #'
+#' library(ggquiver)
+#' library(ggplot2)
 #' ## specify coordinates
 #' m = 25
 #' aux <- seq(0, m - 1, length = m)
@@ -134,6 +137,8 @@ advectionFuniform <- function(spacepoints, u, v) {
 #'
 #' @examples
 #'
+#' library(ggquiver)
+#' library(ggplot2)
 #' ## specify coordinates
 #' m = 25
 #' aux <- seq(0, m - 1, length = m)
@@ -156,7 +161,7 @@ advectionFrotation <- function(spacepoints, x0, y0, a, b) {
   x <- spacepoints[,1] - x0
   y <- spacepoints[,2] - y0
   u <-    a * y
-  v <- (- b * x)
+  v <- (-b * x)
   return( data.frame(u = u, v = v) )
 }
 
@@ -189,6 +194,8 @@ advectionFrotation <- function(spacepoints, x0, y0, a, b) {
 #'
 #' @examples
 #'
+#' library(ggquiver)
+#' library(ggplot2)
 #' ## specify coordinates
 #' m = 25
 #' aux <- seq(0, m - 1, length = m)
@@ -212,12 +219,12 @@ advectionFspiral <- function(spacepoints, x0, y0, a, b, rotation = 1) {
   x <- spacepoints[,1] - x0
   y <- spacepoints[,2] - y0
   if (rotation == 1) {
-    u <-  (  b * y - a * x)
-    v <-  (- a * x - b * y)
+    u <-  ( b * y - a * x)
+    v <-  (-a * x - b * y)
   }
   if (rotation == 2) {
-    u <-  (- a * x - b * y)
-    v <-  (  a * x - b * y)
+    u <-  (-a * x - b * y)
+    v <-  ( a * x - b * y)
   }
   return( data.frame(u = u, v = v) )
 }
@@ -242,7 +249,8 @@ advectionFspiral <- function(spacepoints, x0, y0, a, b, rotation = 1) {
 #' Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 #'
 #' @examples
-#'
+#' library(ggquiver)
+#' library(ggplot2)
 #' ## specify coordinates
 #' m = 25
 #' aux <- seq(0, m - 1, length = m)
@@ -268,7 +276,7 @@ advectionFspiralCE <- function(spacepoints, a, C) {
               (2 * (1 - x))) * ((1 - cos(C * pi * y)) * (1 - y)^2)
   dPPdy <- ((1 - cos(C * pi * x)) * (1 - x)^2) * (sin(C * pi * y) * (C * pi) *
                                                     (1 - y)^2 - (1 - cos(C * pi * y)) * (2 * (1 - y)))
-  u <- - a * dPPdy
+  u <- -a * dPPdy
   v <- a * dPPdx
 
   return( data.frame(u = u, v = v) )
@@ -301,6 +309,8 @@ advectionFspiralCE <- function(spacepoints, a, C) {
 #' Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 #'
 #' @examples
+#' library(ggquiver)
+#' library(ggplot2)
 #'
 #' ## specify coordinates
 #' m = 25
@@ -356,7 +366,8 @@ advectionFradial <- function(spacepoints, x0, y0, a, b) {
 #' Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 #'
 #' @examples
-#'
+#' library(ggquiver)
+#' library(ggplot2)
 #' ## specify coordinates
 #' m = 25
 #' aux <- seq(0, m - 1, length = m)

@@ -30,6 +30,8 @@ Provides an advection field corresponding to a spiral motion to/from a specified
 }
 \examples{
 
+library(ggquiver)
+library(ggplot2)
 ## specify coordinates
 m = 25
 aux <- seq(0, m - 1, length = m)

@@ -29,8 +29,7 @@ Gneiting (2002; Eq.16 at p. 594).
 }
 \examples{
 
-library(CoSMoS)
-library(plotly)
+library(plot3D)
 
 ## specify grid of spatial and temporal lags
 d <- 31
@@ -51,16 +50,11 @@ g16 <- stcfgneiting16(t = st[, 1],
 g16.m <- matrix(g16,
                 nrow = d)
 
-plot_ly(z = ~g16.m) \%>\%
-    add_surface() \%>\%
-    layout(
-        scene = list(
-            xaxis = list(title = "Time lag"),
-            yaxis = list(title = "Distance"),
-            zaxis = list(title = "STCF")
-        )
-    ) \%>\%
-    hide_colorbar()
+persp3D(z = g16.m, x = 1: nrow(g16.m), y = 1:ncol(g16.m),
+        expand = 1, main = "", scale = TRUE, facets = TRUE,
+        xlab="Time lag", ylab = "Distance", zlab = "STCF",
+        colkey = list(side = 4, length = 0.5), phi = 20, theta = 120,
+        resfac = 5,  col= gg2.col(100))
 
 }
 \references{
