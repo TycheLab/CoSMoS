@@ -28,6 +28,8 @@ Provides an advection field corresponding to radial motion from or towards a spe
 }
 
 \examples{
+library(ggquiver)
+library(ggplot2)
 
 ## specify coordinates
 m = 25

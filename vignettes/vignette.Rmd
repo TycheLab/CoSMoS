@@ -25,6 +25,7 @@ knitr::opts_chunk$set(eval = TRUE,
                       warning = FALSE,
                       message = FALSE)
 library(CoSMoS)
+library(plot3D)
 ```
 `CoSMoS` was conceived back in 2009 (see note in section 5) and was officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind, **`CoSMoS` makes univariate, multivariate, or random field simulations easy**. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
 
@@ -79,7 +80,7 @@ The correlation structure expresses how much the random variables depend upon ea
 
 For example, you can generate a time series with lag-1 autocorrelation $\rho_1 = 0.8$ and Generalized Gamma marginal distribution by:
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 ## (i) specifying the sample size
 no <- 1000
 ## (ii) defining the type of marginal distribution and its parameters
@@ -96,7 +97,7 @@ quickTSPlot(ggamma_sim[[1]])
 
 You can specify also as many autocorrelation values as you wish. In this example, autocorrelation values are specified up to lag 4:
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 acf <- c(1, 0.6, 0.5, 0.4, 0.3) #up to lag-4
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
 quickTSPlot(ggamma_sim[[1]])
@@ -113,7 +114,7 @@ For most practical applications a two-parameter ACS is sufficient; we suggest ei
 
 The `acs()` function produces autocorrelation values based on any of the four structures and any desired lag. Thus, instead of setting each autocorrelation coefficient explicitly (which might be problematic from a technical viewpoint), we can generate series preserving any one of the four ACSs. For example, you can easily define an ACS and visualize its values up to any lag. Here, all four ACSs are defined and visualized up to lag 10. You can see how changing the ACS function changes how the correlation coefficients decay to zero.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 ## specify lag
 lags <- 0:10
 
@@ -136,7 +137,7 @@ ggplot(data = m.dta, mapping = aes(x = lags, y = value, group = variable, colour
 
 We can re-generate the previously generated series which used explicity defined correlations up to lag 4, now with a two parameter Pareto II ACF up to lag 30, which improves the modelling parsimony. More details about the parametric autocorrelation structures can be found in section 3.2 in [Papalexiou (2018)](https://doi.org/10.1016/j.advwatres.2018.02.013).
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 acf <- acs(id = "paretoII", t = 0:30, scale = 1, shape = .75)
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
 dta <- data.frame(time = 1:no, value = ggamma_sim[[1]])
@@ -146,7 +147,7 @@ quickTSPlot(dta$value)
 
 Apart from the four autocorrelation functions provided by `acs()`, we can also create our own. Note that it is important to ensure that the function is positive definite, otherwise the autoregressive model cannot be fitted. This example shows the generation of a time series with the same Generalized Gamma marginal distribution as above, but with a user-defined exponential ACS function up to lag 30. Note that although the time series density is very similar to that in the previous plot, the texture of the time series is very different, due to the changed ACS function.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 my_acf <- exp(seq(0, -2, -0.1))
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = my_acf)
 quickTSPlot(ggamma_sim[[1]])
@@ -157,7 +158,7 @@ quickTSPlot(ggamma_sim[[1]])
 
 `CoSMoS` easily simulates intermittent processes such as precipitation. The only extra step needed is to define the probability of zero events. For example, say you wish to generate 5 mutually independent timeseries having the previously defined Generalized Gamma distribution with the Pareto II ACS and probability zero p0 = 0.9. The generated data thus will have 90% of zero values (i.e. dry days). 
 
-```{r, fig.height = 7}
+```{r, fig.height = 7, warning=FALSE, message=FALSE}
 prob_zero <- .9
 ## the argument `TSn = 5` enables the simulation of 5 timeseries.
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf, 
@@ -169,7 +170,7 @@ plot(x = ggamma_sim, main = "") + theme_light()
 
 You can readily check some basic statistics of the generated time series using the `checkTS()` function, which return the first three moments, probability zero and the first three autocorrelation coefficients.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 checkTS(ggamma_sim)
 ```
 
@@ -188,8 +189,7 @@ CoSMoS allows the definition of spatiotemporal correlation functions using the f
 
 The `stcs()` function can produce values of the linear spatiotemporal correlation for any desired time lag and spatial distance using these two correlation function classes, which comprise a variety of structures covering most cases of practical interest. This example shows the Clayton-Weibull spatiotemporal correlation structure:
 
-```{r, fig.height = 7}
-library(plotly)
+```{r, fig.height = 7, warning=FALSE, message=FALSE}
 
 ## specify grid of spatial and temporal lags
 d <- 51
@@ -205,9 +205,10 @@ j <- tail(which(wc.m[1, ] > 0.15), 1)
 i <- tail(which(wc.m[, 1] > 0.15), 1)
 wc.m <- wc.m[1:i, 1:j]
 
-plot_ly(z = ~wc.m) %>% add_surface() %>%
-  layout(scene = list(xaxis = list(title = "Time lag"), yaxis = list(title = "Distance"), 
-                      zaxis = list(title = "STCF") ) ) %>% hide_colorbar()
+persp3D(z = wc.m, x = 1: nrow(wc.m), y = 1:ncol(wc.m),
+expand = 1, main = "", scale = TRUE, facets = TRUE,
+xlab="Time lag", ylab = "Distance", zlab = "STCF", colkey = list(side = 4, length = 0.5),
+phi = 20, theta = 120, resfac = 5,  col= gg2.col(100))
 ```
 
 ## Multivariate Time Series Simulation 
@@ -223,7 +224,7 @@ In this example, a set of five random locations is defined that could represent 
   
 From the five locations, and the VAR, a set of five timeseries is generated. When the series are plotted, the spatio-temporal correlations among the series can be seen.
 
-```{r, fig.height = 5}
+```{r, fig.height = 5, warning=FALSE, message=FALSE}
 ## set a sequence of hypothetical coordinates 
 d <- 5
 coord <- cbind(runif(d)*30, runif(d)*30)
@@ -231,7 +232,7 @@ coord <- cbind(runif(d)*30, runif(d)*30)
 ## compute VAR model parameters  
 fit <- fitVAR(spacepoints = coord, 
               p = 4, 
-              margdist ="burrXII",
+              margdist = "burrXII",
               margarg = list(scale = 3, shape1 = .9, shape2 = .2), 
               p0 = 0.8, 
               stcsid = "clayton",
@@ -253,7 +254,7 @@ The function `generateMTSFast()` generates multiple time series with approximate
 
 This example uses `generateMTSFast()` with similar parameters to the previous example using `generateMTS()`.
 
-```{r, fig.height = 5}
+```{r, fig.height = 5, warning=FALSE, message=FALSE}
 ## set a sequence of hypothetical coordinates
 d <- 5
 coord <- cbind(runif(d)*30, runif(d)*30)
@@ -283,7 +284,7 @@ ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
 
 The example below shows the use of both `generateRF` and `generateRFFast`. The generation of random fields using `generateRF` took approximately 16 times as long as using `generateRFFast`.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 ## compute VAR model parameters
 ## CPU time: ~15s 
 fit <- fitVAR(spacepoints = 20, p = 3, margdist ="burrXII",
@@ -309,7 +310,7 @@ The properties of the generated random fields can be checked with `checkRF()`. I
 
 This example returns the stats, stat plots and fields for the first simulation, which used `generateRF`.
 
-```{r, fig.height = 6.5}
+```{r, fig.height = 6.5, warning=FALSE, message=FALSE}
 ## check random fields
 ## CPU time: ~20s 
 checkRF(RF = sim1, nfields = 9*9, method = "stat")
@@ -323,7 +324,7 @@ The functions `generateRF()` and `generateRFFast()` allows for the simulation of
 
 The example below reports the simulation of swirl-like random fields mimicking for instance the shape of atmospheric cyclones. Firstly, one can visualize the  the transformed of the coordinate system   
 
-```{r, fig.width = 4, fig.height = 4}
+```{r, fig.width = 4, fig.height = 4, warning=FALSE, message=FALSE}
 ## specify a grid of coordinates
 m = 30
 aux <- seq(0, m - 1, length = m)
@@ -342,7 +343,7 @@ at <- anisotropyTswirl(spacepoints = coord, x0 = floor(m / 2), y0 = floor(m / 2)
 
 Then, one can generate a set of swirl-like random fields with the desired spatiotemporal correlation structure and visualize them
 
-```{r, fig.height = 7}
+```{r, fig.height = 7, warning=FALSE, message=FALSE}
 ## compute VAR model parameters
 fit <- fitVAR(spacepoints = m, p = 1, margdist = 'burrXII', 
               margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.1, stcsid = "clayton", 
@@ -366,7 +367,7 @@ checkRF(RF = sim3, nfields = 5*5, method = "field")
 
 The example below refers to the generation of random fields with affine anisotropy and uniform advection, mimicking rainfall storms moving north-easterly.
 
-```{r, fig.height = 7.0}
+```{r, fig.height = 7.0, warning=FALSE, message=FALSE}
 ## compute VAR model parameters
 fit <- fitVAR(spacepoints = 30, p = 1, margdist = 'burrXII', 
               margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton", 
@@ -393,14 +394,14 @@ In practice, it is often desired to simulate a natural process based on the prop
 ## Hourly Precipitation
 Precipitation can be easily simulated in `CoSMoS` from observed data. This is an example of a time series of observed hourly precipitation (units are hundredths of an inch).
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 data("precip")
 quickTSPlot(precip$value)
 ```
 
 To generate a synthetic time series with similar characteristics to the observed precipitation, you have to determine (1) the marginal distribution, (2) the autocorrelation structure, and (3) the probability zero for each individual month. This can be done by trying to fit various distributions and autocorrelation structures with `analyzeTS()` and then checking the goodness-of-fit with `reportTS()`, which can return the plots of the distribution (`method = "dist"`), ACS (`method = "acs"`) or basic statistics (`method = "stat"`).
 
-```{r, fig.height = 9}
+```{r, fig.height = 9, warning=FALSE, message=FALSE}
 ## CPU time: ~75s 
 precip_ggamma <- analyzeTS(TS = precip, season = "month", dist = "ggamma",
                            acsID = "weibull", lag.max = 12)
@@ -412,7 +413,7 @@ reportTS(aTS = precip_ggamma, method = "stat")
 
 In this example, the Generalized Gamma distribution and the Weibull autocorrelation structure describe well the observed time series. Other combinations might not give such good results. For example, the Pareto II distribution and the Fractional Gaussian Noise ACS do not give good monthly fits:
 
-```{r, warning = FALSE, fig.height = 9}
+```{r, fig.height = 9, warning=FALSE, message=FALSE}
 precip_pareto <- analyzeTS(TS = precip, season = "month", dist = "paretoII", acsID = "fgn", lag.max = 12)
 
 reportTS(aTS = precip_pareto, method = "dist")+ theme_light()
@@ -421,7 +422,7 @@ reportTS(aTS = precip_pareto, method = "acs") + theme_light()
 
 Once you choose the marginal distribution and the autocorrelation structure you can produce as many and as long synthetic series you wish. The generated series will reproduce the distribution, correlation structure and probability zero (intermittency), using the `simulateTS()` function. This example uses the Generalized Gamma distribution and the Weibull autocorrelation structure, which were fitted above.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 sim_precip <- simulateTS(aTS = precip_ggamma, from = as.POSIXct(x = "1978-12-01 00:00:00"),
                          to = as.POSIXct(x = "2008-12-01 00:00:00"))
 dta <- precip
@@ -437,7 +438,7 @@ ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) +
 
 We can also apply the same methods to daily streamflows. For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(https://waterdata.usgs.gov/nwis)](https://waterdata.usgs.gov/nwis). In this case, the fitted distribution was log-normal, and the ACS was Pareto II.
 
-```{r, fig.height = 9}
+```{r, fig.height = 9, warning=FALSE, message=FALSE}
 ## CPU time: ~240s
 data("disch")
 
@@ -450,7 +451,7 @@ reportTS(aTS = str, method = "stat")
 
 Given the fitted values, streamflows can be simulated as
 
-```{r, fig.height = 3.5}
+```{r, fig.height = 3.5, warning=FALSE, message=FALSE}
 sim_str <- simulateTS(aTS = str)
 
 dta <- disch

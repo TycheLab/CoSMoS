@@ -16,7 +16,8 @@ Provides parametric functions that describe different types of advection fields.
 }
 \examples{
 
-library(CoSMoS)
+library(ggquiver)
+library(ggplot2)
 
 ## specify coordinates
 m = 25

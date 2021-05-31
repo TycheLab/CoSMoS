@@ -352,7 +352,7 @@ simulateTS <- function(aTS, from = NULL, to = NULL) {
   dist <- attr(aTS, 'dist') ## get necesary info from attributes
   acsID <- attr(aTS, 'acsID')
   season <- attr(aTS, 'season')
-  date <- attr(aTS, 'date')
+  date <- data.table(attr(aTS, 'date'))
 
   x <- aTS$data
 

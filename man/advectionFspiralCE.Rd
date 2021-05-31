@@ -17,7 +17,8 @@ advectionFspiralCE(spacepoints, a, C)
 Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://people.sc.fsu.edu/~jburkardt/f77_src/spiral_data/spiral_data.html}{John Burkardt's website}).
 }
 \examples{
-
+library(ggquiver)
+library(ggplot2)
 ## specify coordinates
 m = 25
 aux <- seq(0, m - 1, length = m)

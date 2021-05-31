@@ -45,13 +45,13 @@ A step-by-step guide:
 of the generated data. For example set \code{margdist = 'ggamma'} if you wish to generate
 data following the Generalized Gamma distribution, \code{margidst = 'burrXII'} for Burr
 type XII distribution etc. For a full list of the distributions we support see the
-help \href{https://cran.r-project.org/web/packages/CoSMoS/vignettes/vignette.html}{vignette}.
+help \href{https://CRAN.R-project.org/package=CoSMoS/vignettes/vignette.html}{vignette}.
 In general, the package supports all build-in distribution functions of R and of other packages.
 \item Define the parameters' values (\code{margarg}) of the distribution you selected. For example
 the Generalized Gamma has one scale and two shape parameters so set the desired value,
 e.g., \code{margarg = list(scale = 2, shape1 = 0.9, shape2 = 0.8)}. Note distributions might
 have different number of parameters and different type of parameters (location, scale, shape).
-See the help \href{https://cran.r-project.org/web/packages/CoSMoS/vignettes/vignette.html}{vignette}
+See the help \href{https://CRAN.R-project.org/package=CoSMoS/vignettes/vignette.html}{vignette}
 for details on the parameters of each distribution we support.
 \item If you wish your time series to be intermittent (e.g., precipitation), then define the
 probability zero. For example, set p0 = 0.9, if you wish your generated data to have

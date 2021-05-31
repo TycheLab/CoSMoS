@@ -29,6 +29,8 @@ Provides an advection field corresponding to rotation around a specified center.
 
 \examples{
 
+library(ggquiver)
+library(ggplot2)
 ## specify coordinates
 m = 25
 aux <- seq(0, m - 1, length = m)
