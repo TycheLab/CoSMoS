@@ -22,7 +22,7 @@ bibentry(bibtype = "Article",
           volume = "115",
           pages = "234-252",
           year = "2018",
-          url = "https://www.sciencedirect.com/science/article/pii/S0309170817309892",
+          url = "https://doi.org/10.1016/j.advwatres.2018.02.013",
           author = person(given = c("Simon", "Michael"), family = "Papalexiou"),
 )
 
