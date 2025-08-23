@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#'
+#' library(data.table)
 #' data('precip')
 #'
 #'\dontshow{

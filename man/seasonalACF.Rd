@@ -17,7 +17,7 @@ seasonalACF(TS, season, lag.max = 50)
 Calculate seasonal ACF
 }
 \examples{
-
+library(data.table)
 data('precip')
 
 \dontshow{

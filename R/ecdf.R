@@ -6,7 +6,7 @@
 #'
 #' @keywords internal
 #' @export
-#'
+#' @import data.table
 #' @examples
 #'
 #' ECDF(round(rnorm(100)))

@@ -17,6 +17,7 @@ Provides a parametric function that describes the values of the linear autocorre
 \examples{
 
 library(CoSMoS)
+library(data.table)
 
 ## specify lag
 t <- 0:10

@@ -233,7 +233,7 @@ advectionFspiral <- function(spacepoints, x0, y0, a, b, rotation = 1) {
 
 #' Spiraling advection field satisfying continuity equation
 #'
-#' Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://people.sc.fsu.edu/~jburkardt/f77_src/spiral_data/spiral_data.html}{John Burkardt's website}).
+#' Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://github.com/johannesgerer/jburkardt-m/blob/master/spiral_data/spiral_data.html}{GitHub}).
 #'
 #' @param spacepoints vector of coordinates (2 x d), where d is the number of locations/grid points
 #' @param a parameter controlling the intensity of rotational velocity (a > 0 clokwise; a < 0 conter-clockwise)

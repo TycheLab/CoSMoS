@@ -19,5 +19,5 @@
 #' @references Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). Advancing Space-Time Simulation of Random Fields: From Storms to Cyclones and Beyond. Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 #' @docType package
 #' @name CoSMoS-package
-NULL
-#> NULL
+#' @keywords package
+"_PACKAGE"

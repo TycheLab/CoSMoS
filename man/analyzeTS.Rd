@@ -77,6 +77,7 @@ Recomended distributions for variables:
 \examples{
 
 library(CoSMoS)
+library(data.table)
 
 ## Load data included in the package
 ## (to find out more about the data use ?precip)
