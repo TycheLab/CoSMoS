@@ -14,7 +14,7 @@ advectionFspiralCE(spacepoints, a, C)
 \item{C}{parameter ranging in (0, 2*pi)}
 }
 \description{
-Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://people.sc.fsu.edu/~jburkardt/f77_src/spiral_data/spiral_data.html}{John Burkardt's website}).
+Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://github.com/johannesgerer/jburkardt-m/blob/master/spiral_data/spiral_data.html}{GitHub}).
 }
 \examples{
 library(ggquiver)
