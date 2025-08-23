@@ -17,7 +17,7 @@ seasonalAR(x, ACS, season = "month")
 Seasonal AR model
 }
 \examples{
-
+library(data.table)
 data('precip')
 
 \dontshow{

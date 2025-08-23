@@ -26,6 +26,7 @@ knitr::opts_chunk$set(eval = TRUE,
                       message = FALSE)
 library(CoSMoS)
 library(plot3D)
+library(data.table)
 ```
 `CoSMoS` was conceived back in 2009 (see note in section 5) and was officially released on CRAN in April 2019. Since then `CoSMoS` has become one of the leading and most widely downloaded R packages for stochastic simulation of non-Gaussian time series. Designed with the end user in mind, **`CoSMoS` makes univariate, multivariate, or random field simulations easy**. You can reliably generate time series or fields of rainfall, streamflow, wind speed, relative humidity, or any other environmental variable in seconds. Just choose the probability distribution and correlation properties of the time series you want to generate, and it will do the rest.
 
@@ -247,7 +248,7 @@ sim <- generateMTS(n = 500, STmodel = fit)
 dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 
 ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
-       facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
+       facet_grid(rows = vars(variable), scales = "free_y") + theme_light()
 ```
 
 The function `generateMTSFast()` generates multiple time series with approximately separable STCS [(Serinaldi and Kilsby 2018)](https://doi.org/10.1029/2018WR023055), using an algorithm which is computationally less expensive than that in `generateMTS()`. This allows the simulation of a larger number of cross-correlated and serially dependent timeseries, at the cost of using separable STCSs and accepting some lack of accuracy in the exact reproduction of some terms of the required STCS [(Serinaldi and Kilsby 2018)](https://doi.org/10.1029/2018WR023055). 
@@ -273,7 +274,7 @@ sim <- generateMTSFast(n = 500,
 dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 
 ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
-       facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
+       facet_grid(rows = vars(variable), scales = "free_y") + theme_light()
 ```
 
 ## Random Fields Simulation 

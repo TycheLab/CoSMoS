@@ -7,7 +7,7 @@
 #'
 #' @name acs
 #'
-#' @import ggplot2
+#' @import ggplot2 data.table
 #' @export
 #'
 #' @references Papalexiou, S.M. (2018). Unified theory for stochastic modelling of hydroclimatic
@@ -17,6 +17,7 @@
 #' @examples
 #'
 #' library(CoSMoS)
+#' library(data.table)
 #'
 #' ## specify lag
 #' t <- 0:10

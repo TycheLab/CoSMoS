@@ -6,8 +6,9 @@ knitr::opts_chunk$set(eval = TRUE,
                       message = FALSE)
 library(CoSMoS)
 library(plot3D)
+library(data.table)
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 ## (i) specifying the sample size
 no <- 1000
 ## (ii) defining the type of marginal distribution and its parameters
@@ -21,12 +22,12 @@ ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsva
 quickTSPlot(ggamma_sim[[1]]) 
 
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 acf <- c(1, 0.6, 0.5, 0.4, 0.3) #up to lag-4
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
 quickTSPlot(ggamma_sim[[1]])
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 ## specify lag
 lags <- 0:10
 
@@ -46,30 +47,30 @@ ggplot(data = m.dta, mapping = aes(x = lags, y = value, group = variable, colour
   labels = c("FGN", "Burr XII", "Weibull", "Pareto II"), name = "") +
   labs(x = bquote(lag ~ tau), y = "ACS") + scale_x_continuous(breaks = lags) + theme_light()
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 acf <- acs(id = "paretoII", t = 0:30, scale = 1, shape = .75)
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf)
 dta <- data.frame(time = 1:no, value = ggamma_sim[[1]])
 
 quickTSPlot(dta$value)
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 my_acf <- exp(seq(0, -2, -0.1))
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = my_acf)
 quickTSPlot(ggamma_sim[[1]])
 
 
-## ---- fig.height = 7, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 7, warning=FALSE, message=FALSE-----------------------------
 prob_zero <- .9
 ## the argument `TSn = 5` enables the simulation of 5 timeseries.
 ggamma_sim <- generateTS(n = no, margdist = marginaldist, margarg = param, acsvalue = acf, 
                          p0 = prob_zero, TSn = 5)
 plot(x = ggamma_sim, main = "") + theme_light()
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 checkTS(ggamma_sim)
 
-## ---- fig.height = 7, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 7, warning=FALSE, message=FALSE-----------------------------
 
 ## specify grid of spatial and temporal lags
 d <- 51
@@ -90,7 +91,7 @@ expand = 1, main = "", scale = TRUE, facets = TRUE,
 xlab="Time lag", ylab = "Distance", zlab = "STCF", colkey = list(side = 4, length = 0.5),
 phi = 20, theta = 120, resfac = 5,  col= gg2.col(100))
 
-## ---- fig.height = 5, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 5, warning=FALSE, message=FALSE-----------------------------
 ## set a sequence of hypothetical coordinates 
 d <- 5
 coord <- cbind(runif(d)*30, runif(d)*30)
@@ -113,9 +114,9 @@ sim <- generateMTS(n = 500, STmodel = fit)
 dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 
 ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
-       facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
+       facet_grid(rows = vars(variable), scales = "free_y") + theme_light()
 
-## ---- fig.height = 5, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 5, warning=FALSE, message=FALSE-----------------------------
 ## set a sequence of hypothetical coordinates
 d <- 5
 coord <- cbind(runif(d)*30, runif(d)*30)
@@ -134,9 +135,9 @@ sim <- generateMTSFast(n = 500,
 dta <- melt(data = data.table(time = 1:nrow(sim), sim[,1:d]), id.vars = "time")
 
 ggplot(data = dta, mapping = aes(x = time, y = value)) + geom_line() +
-       facet_grid(facets = variable ~ ., scales = "free_y") + theme_light()
+       facet_grid(rows = vars(variable), scales = "free_y") + theme_light()
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 ## compute VAR model parameters
 ## CPU time: ~15s 
 fit <- fitVAR(spacepoints = 20, p = 3, margdist ="burrXII",
@@ -155,14 +156,14 @@ sim2 <- generateRFFast(n = 1000, spacepoints = 20, p0 = 0.7, margdist ="paretoII
                        tcfarg = list(scale = 1.1, shape = 0.8)))
 
 
-## ---- fig.height = 6.5, warning=FALSE, message=FALSE--------------------------
+## ----fig.height = 6.5, warning=FALSE, message=FALSE---------------------------
 ## check random fields
 ## CPU time: ~20s 
 checkRF(RF = sim1, nfields = 9*9, method = "stat")
 checkRF(RF = sim1, nfields = 9*9, method = "statplot")
 checkRF(RF = sim1, nfields = 9*9, method = "field")
 
-## ---- fig.width = 4, fig.height = 4, warning=FALSE, message=FALSE-------------
+## ----fig.width = 4, fig.height = 4, warning=FALSE, message=FALSE--------------
 ## specify a grid of coordinates
 m = 30
 aux <- seq(0, m - 1, length = m)
@@ -178,7 +179,7 @@ at <- anisotropyTswirl(spacepoints = coord, x0 = floor(m / 2), y0 = floor(m / 2)
     geom_path(aes(group = id1)) + geom_path(aes(group = id2)) + geom_point(col = 2) + theme_light()
 
 
-## ---- fig.height = 7, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 7, warning=FALSE, message=FALSE-----------------------------
 ## compute VAR model parameters
 fit <- fitVAR(spacepoints = m, p = 1, margdist = 'burrXII', 
               margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.1, stcsid = "clayton", 
@@ -195,7 +196,7 @@ sim3 <- generateRF(n=25, STmodel = fit)
 checkRF(RF = sim3, nfields = 5*5, method = "field")
 
 
-## ---- fig.height = 7.0, warning=FALSE, message=FALSE--------------------------
+## ----fig.height = 7.0, warning=FALSE, message=FALSE---------------------------
 ## compute VAR model parameters
 fit <- fitVAR(spacepoints = 30, p = 1, margdist = 'burrXII', 
               margarg = list(scale = 3, shape1 = .9, shape2 = .2), p0 = 0.8, stcsid = "clayton", 
@@ -213,11 +214,11 @@ sim3 <- generateRF(n=81, STmodel = fit)
 checkRF(RF = sim3, nfields = 9*9, method = "field")
 
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 data("precip")
 quickTSPlot(precip$value)
 
-## ---- fig.height = 9, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 9, warning=FALSE, message=FALSE-----------------------------
 ## CPU time: ~75s 
 precip_ggamma <- analyzeTS(TS = precip, season = "month", dist = "ggamma",
                            acsID = "weibull", lag.max = 12)
@@ -226,13 +227,13 @@ reportTS(aTS = precip_ggamma, method = "dist") + theme_light()
 reportTS(aTS = precip_ggamma, method = "acs") + theme_light()
 reportTS(aTS = precip_ggamma, method = "stat")
 
-## ---- fig.height = 9, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 9, warning=FALSE, message=FALSE-----------------------------
 precip_pareto <- analyzeTS(TS = precip, season = "month", dist = "paretoII", acsID = "fgn", lag.max = 12)
 
 reportTS(aTS = precip_pareto, method = "dist")+ theme_light()
 reportTS(aTS = precip_pareto, method = "acs") + theme_light()
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
+## ----warning=FALSE, message=FALSE---------------------------------------------
 sim_precip <- simulateTS(aTS = precip_ggamma, from = as.POSIXct(x = "1978-12-01 00:00:00"),
                          to = as.POSIXct(x = "2008-12-01 00:00:00"))
 dta <- precip
@@ -243,7 +244,7 @@ dta <- rbind(dta, sim_precip)
 ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) + 
   facet_wrap(facets = ~id, ncol = 1) + theme_light()
 
-## ---- fig.height = 9, warning=FALSE, message=FALSE----------------------------
+## ----fig.height = 9, warning=FALSE, message=FALSE-----------------------------
 ## CPU time: ~240s
 data("disch")
 
@@ -253,7 +254,7 @@ str <- analyzeTS(TS = disch, dist = "lnorm", norm = "N2", acsID = "paretoII",
 reportTS(aTS = str) + theme_light()
 reportTS(aTS = str, method = "stat")
 
-## ---- fig.height = 3.5, warning=FALSE, message=FALSE--------------------------
+## ----fig.height = 3.5, warning=FALSE, message=FALSE---------------------------
 sim_str <- simulateTS(aTS = str)
 
 dta <- disch

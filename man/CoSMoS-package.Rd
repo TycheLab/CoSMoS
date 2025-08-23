@@ -2,6 +2,7 @@
 % Please edit documentation in R/CoSMoS.R
 \docType{package}
 \name{CoSMoS-package}
+\alias{CoSMoS}
 \alias{CoSMoS-package}
 \title{CoSMoS: Complete Stochastic Modelling Solution}
 \description{
@@ -25,6 +26,13 @@ Papalexiou, S.M., Serinaldi, F. (2020). Random Fields Simplified: Preserving Mar
 
 Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). Advancing Space-Time Simulation of Random Fields: From Storms to Cyclones and Beyond. Water Resources Research, 57, e2020WR029466, \doi{10.1029/2020WR029466}
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/TycheLab/CoSMoS}
+}
+
+}
 \author{
 \strong{Coded by:} Filip Strnad \email{strnadf@fzp.czu.cz} and Francesco Serinaldi \email{francesco.serinaldi@ncl.ac.uk}
 
@@ -34,3 +42,4 @@ Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). Advancing Space-Time Simulati
 
 \strong{Maintained by:} Kevin Shook \email{kevin.shook@usask.ca}
 }
+\keyword{package}

@@ -86,7 +86,7 @@ checkTS <- function(TS, distbounds = c(-Inf, Inf)) {
 #' @param ... other args
 #'
 #' @export
-#' @import ggplot2
+#' @import ggplot2 data.table
 #' @method plot checkTS
 #'
 #' @examples

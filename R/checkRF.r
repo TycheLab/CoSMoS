@@ -17,7 +17,7 @@
 
 #' @name checkRF
 #'
-#' @import  grDevices  directlabels  cowplot  animation
+#' @import  grDevices  directlabels  cowplot  animation data.table
 #'
 #' @importFrom MBA mba.surf
 #'

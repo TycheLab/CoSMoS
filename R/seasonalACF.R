@@ -9,7 +9,7 @@
 #' @import data.table
 #'
 #' @examples
-#'
+#' library(data.table)
 #' data('precip')
 #'
 #'\dontshow{
