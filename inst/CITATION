@@ -37,7 +37,7 @@ bibentry(bibtype = "Article",
           volume = "56",
           number = "2",
           pages = "e2019WR026331",
-          url = "https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2019WR026331",
+          url = "https://doi.org/10.1029/2019WR026331 ",
           year = "2020"
 )
 
@@ -52,7 +52,7 @@ bibentry(bibtype = "Article",
           volume = "",
           number = "",
           pages = "",
-          url = "https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2020WR029466",
+          url = "https://doi.org/10.1029/2020WR029466",
           year = "2021"
 )
 
