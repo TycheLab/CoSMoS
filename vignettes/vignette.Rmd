@@ -437,7 +437,7 @@ ggplot(data = dta) + geom_line(mapping = aes(x = date, y = value)) +
 
 ## Daily streamflow
 
-We can also apply the same methods to daily streamflows. For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(https://waterdata.usgs.gov/nwis)](https://waterdata.usgs.gov/nwis). In this case, the fitted distribution was log-normal, and the ACS was Pareto II.
+We can also apply the same methods to daily streamflows. For this example we have used the streamflow records of the Nassawango Creek near Snow Hill (Maryland, US; USGS Id 01485500) from the US Geological Survey (USGS) repository [(https://waterdata.usgs.gov)](https://waterdata.usgs.gov). In this case, the fitted distribution was log-normal, and the ACS was Pareto II.
 
 ```{r, fig.height = 9, warning=FALSE, message=FALSE}
 ## CPU time: ~240s
