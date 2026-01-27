@@ -2,7 +2,7 @@ Package: CoSMoS
 Type: Package
 Title: Complete Stochastic Modelling Solution
 Version: 2.1.2
-Date: 2026-01-25
+Date: 2026-01-27
 Authors@R: c(person("Simon Michael", "Papalexiou", 
                       role = "aut"),
              person("Francesco", "Serinaldi", 
