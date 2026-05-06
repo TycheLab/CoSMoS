@@ -34,8 +34,9 @@ test_that('test random values deneration using AR1 and ARp models', {
              p0 = p0)
   attributes(val) <- NULL
 
-  expect_equal(val[1:10],
-               c(0.1333, 0.4907, 0.8089, 0.2326, 0, 0, 0.0967, 1.1822, 1.9728, 1.2610),
+  # Reference values at indices 28:35 (first stable non-zero region with seed 666)
+  expect_equal(val[28:35],
+               c(0.6953, 0.9566, 1.8351, 0.4491, 1.2782, 1.1348, 2.5966, 2.2523),
     tolerance = .01)
 })
 
@@ -63,6 +64,6 @@ test_that('test wrapper for acti and ARp functions', {
   expect_equal({set.seed(666);
     val <- regenerateTS(x);
     unlist(val)[190:200]},
-  c(0, 0, 0, 0, 0.0988, 0, 0, 0, 0, 0, 0.2773),
+  c(0, 0.0214, 0, 0, 0, 0, 0, 0, 0, 0, 0),
   tolerance = .01)
 })

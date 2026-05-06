@@ -14,8 +14,10 @@
 #' @param anisotropyid spatial anisotropy ID (\code{affine} by default, \code{swirl} or \code{wave})
 #' @param anisotropyarg list of arguments characterizing the spatial anisotropy according to the syntax of the function \code{\link{anisotropyT}}. Isotropic fields by default
 #' @param advectionid advection field ID (\code{uniform} by default, \code{rotation}, \code{spiral}, \code{spiralCE}, \code{radial}, or \code{hyperbolic})
-#' @param advectionarg list of arguments characterizing the advection field according to the syntax of the function \code{\link{advectionF}}. No advection by default
-#'
+#' @param advectionarg list of arguments characterizing the advection field according to the syntax of \code{advectionF}. No advection by default
+#' @param dsid dependence structure ID (\code{gauss} by default, \code{student}, \code{bardossy}, and \code{bardossyF})
+#' @param dsarg argument characterizing the dependence structure: \code{NULL} for \code{gauss} by default, number of degrees of freedom for \code{student} or parameter \code{m} in \code{(-Inf, Inf)} for \code{bardossy} (see Note section for more details)
+
 #' @name fitVAR
 #'
 #' @importFrom Matrix nearPD
@@ -42,8 +44,18 @@
 #' While all the advection types can be applied to isotropic random fields,
 #' anisotropic random fields require more care. We suggest combining \code{affine}
 #' anysotropy with \code{uniform} advection, and \code{swirl} anisotropy
-#' with \code{rotation} or \code{spiral} advection with the same rotation center.
+#' with \code{rotation} or \code{spiral} advection with the same rotation center..\cr
+#' Concerning the Bardossy model, the increase of the parameter \code{m}
+#' leads to a more and more symmetrical copula, and if \code{m} tends to \code{Inf},
+#' then the copula converges to the Gaussian copula. The \code{bardossy} model is
+#' characterized by lower tail dependence weaker than the upper tail dependence, while the
+#' flipped Bárdossy dependence structure, denoted as  \code{bardossyF}, has lower tail
+#' dependence stronger than the upper tail dependence.
+#' See Bárdossy (2006) for more details about the properties and
+#' parametrization of the multivariate Bardossy distribution
 #'
+#' @references Bárdossy, A. (2006), Copula-based geostatistical models for groundwater
+#' quality parameters, Water Resour. Res., 42, W11416, \doi{10.1029/2005WR004754}
 #' @references Biller, B., Nelson, B.L. (2003). Modeling and generating multivariate
 #' time-series input processes using a vector autoregressive technique.
 #' ACM Trans. Model. Comput. Simul. 13(3), 211-237, \doi{10.1145/937332.937333}
@@ -109,17 +121,21 @@
 #' fit$margarg
 #' fit$margdist
 #'
-fitVAR <- function(spacepoints, p, margdist, margarg, p0, distbounds = c(-Inf, Inf), stcsid, stcsarg, scalefactor = 1, anisotropyid = "affine", anisotropyarg = list(phi1 = 1, phi2 = 1, phi12 = 0, theta = 0), advectionid = "uniform", advectionarg = list(u = 0, v = 0)) {
+fitVAR <- function(spacepoints, p, margdist, margarg, p0, distbounds = c(-Inf, Inf),
+                   stcsid, stcsarg, scalefactor = 1, anisotropyid = "affine",
+                   anisotropyarg = list(phi1 = 1, phi2 = 1, phi12 = 0, theta = 0),
+                   advectionid = "uniform", advectionarg = list(u = 0, v = 0),
+                   dsid = "gauss", dsarg = NULL) {
 
-  if(class(spacepoints)[1] == "numeric"){
+  if (is.numeric(spacepoints) && length(spacepoints) == 1) {
     mm <- spacepoints^2
     d <- seq(0, spacepoints - 1, length = spacepoints) * scalefactor
     dd0 <- expand.grid(d, d)
   } else {
-    if(class(spacepoints)[1] %in% c("matrix", "array")){
-      mm <- dim(spacepoints)[1]
+    if (is.matrix(spacepoints) || is.array(spacepoints)) {
+      mm <- nrow(spacepoints)
       dd0 <- spacepoints
-    } else stop("spacepoints should be an integer or a matrix (dx2)")
+    } else stop("spacepoints should be an integer or a matrix (d x 2)")
   }
 
   anisotropyarg$spacepoints <- dd0
@@ -136,7 +152,12 @@ fitVAR <- function(spacepoints, p, margdist, margarg, p0, distbounds = c(-Inf, I
     y0 =  anisotropyarg$y0
   }
 
-  pnts <- actpnts(margdist = margdist, margarg = margarg, p0 = p0, distbounds = distbounds)
+  if (dsid %in% c("gauss", "student")) {
+    pnts <- actpnts(margdist = margdist, margarg = margarg, p0 = p0, distbounds = distbounds)
+  }
+  if (dsid %in% c("bardossy", "bardossyF")) {
+    pnts <- actpntsB6(margdist = margdist, margarg = margarg, m = dsarg, p0 = p0)
+  }
   actfpara <- fitactf(pnts)
 
   sigma.i <- array(NA,c(mm, mm, p+1))
@@ -178,8 +199,8 @@ fitVAR <- function(spacepoints, p, margdist, margarg, p0, distbounds = c(-Inf, I
   stcsarg$s <- ud[ ,2]
   fout <- (matrix(stcs2(stcsid, stcsarg) , nrow = length(u)))
 
-  return(list(alpha = alpha, res.cov = sigma.u, spacepoints = spacepoints, mm = mm, p = p, margdist = margdist, margarg = margarg, p0 = p0,
-              stcs = fout, s.lags = d, t.lags=u, grid.lags = dis, distbounds = distbounds))
+  list(alpha = alpha, res.cov = sigma.u, spacepoints = spacepoints, mm = mm, p = p, margdist = margdist, margarg = margarg, p0 = p0,
+              stcs = fout, s.lags = d, t.lags=u, grid.lags = dis, distbounds = distbounds, dsid = dsid, dsarg = dsarg)
 }
 
 

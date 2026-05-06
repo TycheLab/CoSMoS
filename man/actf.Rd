@@ -9,16 +9,21 @@ actf(rhox, b, c)
 \arguments{
 \item{rhox}{marginal correlation value}
 
-\item{b}{1st line parameter}
+\item{b}{1st parameter}
 
-\item{c}{2nd line parameter}
+\item{c}{2nd parameter}
+}
+\value{
+numeric vector of transformed Gaussian correlations
 }
 \description{
-Provides tranformation for continuous distributions, based on two parameters.
+Provides transformation for continuous distributions, based on two parameters.
 }
 \examples{
-
 actf(.4, 1, 0)
 
+}
+\seealso{
+\code{\link{actpnts}}, \code{\link{fitactf}}
 }
 \keyword{internal}

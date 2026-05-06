@@ -15,10 +15,10 @@ graphical output (default set to 30)}
 \item{nfields}{number of fields to be used in the numerical and graphical
 output (default set to 49). As the plots are arranged in a matrix with nrows as close as possible to ncol, we suggest using values such as 3x3, 3x4, 7x8, etc.}
 
-\item{method}{report method - \code{'stat'} for basic statistical report,
-\code{'statplot'} for graphical check of lagged SCS, target STCS, and marginal
-distribution, \code{'field'} for plotting a matrix of the first \code{nfields},
-and \code{'movie'} to save the first \code{nfields} as a GIF file named "movieRF.gif"
+\item{method}{report method - \code{"stat"} for basic statistical report,
+\code{"statplot"} for graphical check of lagged SCS, target STCS, and marginal
+distribution, \code{"field"} for plotting a matrix of the first \code{nfields},
+and \code{"movie"} to save the first \code{nfields} as a GIF file named "movieRF.gif"
 in the current working directory}
 }
 \description{
@@ -40,7 +40,7 @@ visual check.
 fit <- fitVAR(
   spacepoints = 10,
   p = 1,
-  margdist ='burrXII',
+  margdist ="burrXII",
   margarg = list(scale = 3, shape1 = .9, shape2 = .2),
   p0 = 0.8,
   stcsid = "clayton",

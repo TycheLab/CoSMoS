@@ -26,30 +26,38 @@ popskew(dist, distarg, p0 = 0, distbounds = c(-Inf, Inf))
 popkurt(dist, distarg, p0 = 0, distbounds = c(-Inf, Inf))
 }
 \arguments{
-\item{stat}{define what you what to calculate - possible population desc. statistics ('mean', 'sd', 'var', 'cvar', 'skew', 'kurt')}
+\item{stat}{character; statistic to compute — one of \code{"mean"},
+\code{"sd"}, \code{"var"}, \code{"cvar"}, \code{"skew"}, \code{"kurt"}}
 
-\item{dist}{distribution}
+\item{dist}{character; distribution name (e.g. \code{"norm"},
+\code{"paretoII"})}
 
 \item{distarg}{list of distribution arguments}
 
-\item{p0}{probability zero}
+\item{p0}{numeric; probability zero (default 0)}
 
-\item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
+\item{distbounds}{numeric vector of length 2; distribution bounds (default
+\code{c(-Inf, Inf)})}
+}
+\value{
+scalar numeric
 }
 \description{
-Provides theoretical descriptive statistics.
+Computes theoretical descriptive statistics of a distribution.
 }
 \examples{
 
 library(CoSMoS)
 
-## check population statistics
-populationstat('mean', 'norm', list(mean = 2, sd = 1))
-populationstat('sd', 'norm', list(mean = 2, sd = 1))
-populationstat('var', 'norm', list(mean = 2, sd = 1))
-populationstat('cvar', 'norm', list(mean = 2, sd = 1))
-populationstat('skew', 'norm', list(mean = 2, sd = 1))
-populationstat('kurt', 'norm', list(mean = 2, sd = 1))
+populationstat("mean", "norm", list(mean = 2, sd = 1))
+populationstat("sd",   "norm", list(mean = 2, sd = 1))
+populationstat("var",  "norm", list(mean = 2, sd = 1))
+populationstat("cvar", "norm", list(mean = 2, sd = 1))
+populationstat("skew", "norm", list(mean = 2, sd = 1))
+populationstat("kurt", "norm", list(mean = 2, sd = 1))
 
+}
+\seealso{
+\code{\link{moments}}, \code{\link{checkTS}}
 }
 \keyword{internal}

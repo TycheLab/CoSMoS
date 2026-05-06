@@ -17,7 +17,9 @@ fitVAR(
   anisotropyid = "affine",
   anisotropyarg = list(phi1 = 1, phi2 = 1, phi12 = 0, theta = 0),
   advectionid = "uniform",
-  advectionarg = list(u = 0, v = 0)
+  advectionarg = list(u = 0, v = 0),
+  dsid = "gauss",
+  dsarg = NULL
 )
 }
 \arguments{
@@ -45,7 +47,11 @@ fitVAR(
 
 \item{advectionid}{advection field ID (\code{uniform} by default, \code{rotation}, \code{spiral}, \code{spiralCE}, \code{radial}, or \code{hyperbolic})}
 
-\item{advectionarg}{list of arguments characterizing the advection field according to the syntax of the function \code{\link{advectionF}}. No advection by default}
+\item{advectionarg}{list of arguments characterizing the advection field according to the syntax of \code{advectionF}. No advection by default}
+
+\item{dsid}{dependence structure ID (\code{gauss} by default, \code{student}, \code{bardossy}, and \code{bardossyF})}
+
+\item{dsarg}{argument characterizing the dependence structure: \code{NULL} for \code{gauss} by default, number of degrees of freedom for \code{student} or parameter \code{m} in \code{(-Inf, Inf)} for \code{bardossy} (see Note section for more details)}
 }
 \description{
 Compute VAR model parameters to simulate parent Gaussian random vectors with specified spatiotemporal correlation structure using the method described by Biller and Nelson (2003).
@@ -69,7 +75,15 @@ d = 2500 or m = 50, p = 1: ~100.0s
 While all the advection types can be applied to isotropic random fields,
 anisotropic random fields require more care. We suggest combining \code{affine}
 anysotropy with \code{uniform} advection, and \code{swirl} anisotropy
-with \code{rotation} or \code{spiral} advection with the same rotation center.
+with \code{rotation} or \code{spiral} advection with the same rotation center..\cr
+Concerning the Bardossy model, the increase of the parameter \code{m}
+leads to a more and more symmetrical copula, and if \code{m} tends to \code{Inf},
+then the copula converges to the Gaussian copula. The \code{bardossy} model is
+characterized by lower tail dependence weaker than the upper tail dependence, while the
+flipped Bárdossy dependence structure, denoted as  \code{bardossyF}, has lower tail
+dependence stronger than the upper tail dependence.
+See Bárdossy (2006) for more details about the properties and
+parametrization of the multivariate Bardossy distribution
 }
 \examples{
 ## for multivariate simulation
@@ -123,6 +137,9 @@ fit$margdist
 
 }
 \references{
+Bárdossy, A. (2006), Copula-based geostatistical models for groundwater
+quality parameters, Water Resour. Res., 42, W11416, \doi{10.1029/2005WR004754}
+
 Biller, B., Nelson, B.L. (2003). Modeling and generating multivariate
 time-series input processes using a vector autoregressive technique.
 ACM Trans. Model. Comput. Simul. 13(3), 211-237, \doi{10.1145/937332.937333}

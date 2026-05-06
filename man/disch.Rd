@@ -28,6 +28,6 @@ Station details
 }
 }
 \details{
-more details can be found \href{https://waterdata.usgs.gov/nwis/dv?referred_module=sw&site_no=01485500}{here}.
+more details can be found \href{https://waterdata.usgs.gov/monitoring-location/USGS-01485500/}{here}.
 }
 \keyword{datasets}

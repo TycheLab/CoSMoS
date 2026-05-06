@@ -1,0 +1,7 @@
+# src/Makevars
+# Unix/macOS: OpenMP is enabled only when the compiler supports it.
+# Apple Clang on macOS does not ship with OpenMP by default; the
+# $(SHLIB_OPENMP_CXXFLAGS) variable is empty in that case, so the
+# package compiles and runs correctly without parallelism.
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS     = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)

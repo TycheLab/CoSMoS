@@ -37,7 +37,7 @@ bibentry(bibtype = "Article",
           volume = "56",
           number = "2",
           pages = "e2019WR026331",
-          url = "https://doi.org/10.1029/2019WR026331 ",
+          url = "https://doi.org/10.1029/2019WR026331",
           year = "2020"
 )
 
@@ -47,7 +47,7 @@ bibentry(bibtype = "Article",
                        person(given = "Francesco", family = "Serinaldi"),
                        person(given = "Emilio", family = "Porcu")
                        ),
-          title = "Advancing Space-Time Simulation of Random Fields: From Storms to                       Cyclones and Beyond",
+          title = "Advancing Space-Time Simulation of Random Fields: From Storms to Cyclones and Beyond",
           journal = "Water Resources Research",
           volume = "",
           number = "",

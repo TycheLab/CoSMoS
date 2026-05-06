@@ -24,19 +24,19 @@
 #' coord <- expand.grid(aux, aux)
 #'
 #' ## get the anisotropy field
-#' at1 <- anisotropyT('affine',
+#' at1 <- anisotropyT("affine",
 #'                  spacepoints = coord,
 #'                  phi1 = 0.5,
 #'                  phi2 = 2,
 #'                  phi12 = 0,
 #'                  theta = -pi/3)
-#' at2 <- anisotropyT('swirl',
+#' at2 <- anisotropyT("swirl",
 #'                  spacepoints = coord,
 #'                  x0 = floor(m / 2),
 #'                  y0 = floor(m / 2),
 #'                  b = 10,
 #'                  alpha = 1.5 * pi)
-#' at3 <- anisotropyT('wave',
+#' at3 <- anisotropyT("wave",
 #'                  spacepoints = coord,
 #'                  phi1 = 0.5,
 #'                  phi2 = 2,
@@ -54,7 +54,7 @@
 anisotropyT <- function(id, ...) {
 
     .args <- list(...)
-    do.call(paste0('anisotropyT', id), args = .args)
+    do.call(paste0("anisotropyT", id), args = .args)
 }
 
 
@@ -75,7 +75,7 @@ anisotropyT <- function(id, ...) {
 #'
 anisotropyT2 <- function(id, arglist) {
 
-  do.call(paste0('anisotropyT', id), args = arglist)
+  do.call(paste0("anisotropyT", id), args = arglist)
 }
 
 
@@ -125,7 +125,7 @@ anisotropyTaffine <- function(spacepoints, phi1, phi2, phi12, theta) {
 
   The <- matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), ncol = 2)
   Phi <- matrix(c(phi1, phi12, phi12, phi2), ncol = 2)
-  return( t(Phi %*%  The %*% t(spacepoints)) )
+  t(Phi %*%  The %*% t(spacepoints))
 }
 
 #' Swirl anisotropy transformation
@@ -170,7 +170,7 @@ anisotropyTaffine <- function(spacepoints, phi1, phi2, phi12, theta) {
 #' geom_path(aes(group = id2)) +
 #' geom_point(col = 2) +
 #' theme_light()
-#
+#'
 anisotropyTswirl <- function(spacepoints, x0, y0, b, alpha) {
 
   x <- spacepoints[,1]
@@ -179,7 +179,7 @@ anisotropyTswirl <- function(spacepoints, x0, y0, b, alpha) {
   The <- alpha * exp(-(r / b)^2)
   xani <- (x - x0) * cos(The) - (y - y0) * sin(The) + x0
   yani <- (x - x0) * sin(The) + (y - y0) * cos(The) + y0
-  return(cbind(xani, yani))
+  cbind(xani, yani)
 }
 
 #' Wave anisotropy transformation
@@ -228,5 +228,5 @@ anisotropyTwave <- function(spacepoints, phi1, phi2, beta, theta) {
   y <- spacepoints[,2]
   xani <- phi1 * x * cos(theta) - y * sin(theta)
   yani <- x * sin(theta) + phi1 * y * cos(theta) + beta * sin(x)
-  return(cbind(xani, yani))
+  cbind(xani, yani)
 }
