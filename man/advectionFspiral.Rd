@@ -49,6 +49,7 @@ dta <- data.frame(lon = coord[ ,1], lat = coord[ ,2], u = af[ ,1], v = af[ ,2])
 ggplot(dta, aes(x = lon, y = lat, u = u, v = v)) +
 geom_quiver() +
 theme_light()
+
 }
 \references{
 Papalexiou, S.M., Serinaldi, F., Porcu, E. (2021). Advancing

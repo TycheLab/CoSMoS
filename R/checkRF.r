@@ -9,16 +9,17 @@
 #' graphical output (default set to 30)
 #' @param nfields number of fields to be used in the numerical and graphical
 #' output (default set to 49). As the plots are arranged in a matrix with nrows as close as possible to ncol, we suggest using values such as 3x3, 3x4, 7x8, etc.
-#' @param method report method - \code{'stat'} for basic statistical report,
-#' \code{'statplot'} for graphical check of lagged SCS, target STCS, and marginal
-#' distribution, \code{'field'} for plotting a matrix of the first \code{nfields},
-#' and \code{'movie'} to save the first \code{nfields} as a GIF file named "movieRF.gif"
+#' @param method report method - \code{"stat"} for basic statistical report,
+#' \code{"statplot"} for graphical check of lagged SCS, target STCS, and marginal
+#' distribution, \code{"field"} for plotting a matrix of the first \code{nfields},
+#' and \code{"movie"} to save the first \code{nfields} as a GIF file named "movieRF.gif"
 #' in the current working directory
-
+#'
 #' @name checkRF
 #'
-#' @import  grDevices  directlabels  cowplot  animation data.table
+#' @import patchwork animation
 #'
+#' @importFrom grDevices colorRampPalette n2mfrow
 #' @importFrom MBA mba.surf
 #'
 #' @export
@@ -37,7 +38,7 @@
 #' fit <- fitVAR(
 #'   spacepoints = 10,
 #'   p = 1,
-#'   margdist ='burrXII',
+#'   margdist ="burrXII",
 #'   margarg = list(scale = 3, shape1 = .9, shape2 = .2),
 #'   p0 = 0.8,
 #'   stcsid = "clayton",
@@ -54,7 +55,7 @@
 #'           nfields = 12)
 #'
 #'
-checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
+checkRF <- function(RF, lags = 30, nfields = 49, method = "stat") {
 
   att <- attributes(RF)$STmodel
   margdist <- att$margdist
@@ -74,7 +75,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
   stcs.sim <- acf(as.matrix(RF)[ , 1:npoints], lag.max = lags, plot=F)[[1]][ , , 1]
 
 
-  if(method == 'stat') {
+  if(method == "stat") {
     out <- data.frame(mean = c(popmean(margdist, margarg, distbounds = distbounds,
                                        p0 = p0), apply(RF[,1:npoints], 2, mean)), sd = c(popsd(margdist, margarg,
                                                                                                distbounds = distbounds, p0 = p0), apply(RF[,1:npoints], 2, sd)), skew = c(popskew(margdist,
@@ -84,29 +85,27 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
     row.names(out) <- c("expected", paste0("sample location ", 1:npoints))
     out <- round(out, 2)
 
-    structure(.Data = as.matrix(out), class = c("matrix"),
-              margdist = margdist, margarg = margarg, p0 = p0)
-    return(out)
+    out
 
   }
 
 
-  if(method == 'statplot') {
+  if(method == "statplot") {
 
     ## STCS  slices
 
     DataS <- data.table(grid.lags[1:npoints], t(as.matrix(stcs.sim[1:3, ])))
-    colnames(DataS) <- c('Lag', 'scf1', 'scf2', 'scf3')
-    DataS <- melt(DataS, id.vars = 'Lag')
+    colnames(DataS) <- c("Lag", "scf1", "scf2", "scf3")
+    DataS <- melt(DataS, id.vars = "Lag")
 
     i.lag <- which(s.lags <= max(grid.lags[1:npoints]) )
     DataT <- data.table(s.lags[i.lag], t(as.matrix(stcs[1:3, i.lag])))
-    colnames(DataT) <- c('Lag', 'scf1', 'scf2', 'scf3')
-    DataT <- melt(DataT, id.vars = 'Lag')
+    colnames(DataT) <- c("Lag", "scf1", "scf2", "scf3")
+    DataT <- melt(DataT, id.vars = "Lag")
 
     ran <- range(c(DataT$Lag, DataS$Lag))
 
-    Lag <- value <- variable <- NULL
+    Lag <- value <- variable <- level <- x <- y <- NULL
 
     p1 <- ggplot() +
       geom_point(data = DataS,
@@ -121,42 +120,39 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
                 lwd = .5,
                 alpha = 1) +
       xlim(ran) +
-      scale_color_viridis_d(labels = c(expression(paste(tau, ' = 0')),
-                                      expression(paste(tau, ' = 1')),
-                                      expression(paste(tau, ' = 2'))
+      scale_color_viridis_d(labels = c(expression(paste(tau, " = 0")),
+                                      expression(paste(tau, " = 1")),
+                                      expression(paste(tau, " = 2"))
                                       ),
-                           option = 'D') +
-      labs(x = expression(paste('Distance ', delta)),
-           y = 'SCS',
-           title = 'Lagged spatial correlation structure',
+                           option = "D") +
+      labs(x = expression(paste("Distance ", delta)),
+           y = "SCS",
+           title = "Lagged spatial correlation structure",
            color = "Time lag") +
       theme_light() +
       theme(legend.position=c(0.99,0.99),
             legend.justification=c(1,1),
-            strip.background = element_rect(fill = 'grey5'),
-            strip.text = element_text(colour = 'grey95'))
+            strip.background = element_rect(fill = "grey5"),
+            strip.text = element_text(colour = "grey95"))
 
 
     ## STCS plot
     Data0 <- cbind(expand.grid(s.lags, (1:lags) - 1), as.numeric(t(stcs[1:lags, ])) )
-    colnames(Data0) <- c('x', 'y', 'z')
+    colnames(Data0) <- c("x", "y", "z")
 
-    p2.0 <- ggplot() +
-      stat_contour(data = Data0, aes_string(x = "x", y = "y",
-                                    z = "z", colour = "..level.."),
+    p2 <- ggplot() +
+      stat_contour(data = Data0,
+                   aes(x = x, y = y, z = z, colour = after_stat(level)),
                    breaks = seq(0, 1, 0.1),
-                   size = 1) +
+                   linewidth = 1) +
       scale_color_viridis_c(option = 'D') +
       labs(x = expression(paste('Distance ', delta)),
            y = expression(paste('Time lag ', tau)),
-           title = 'Target STCS') +
+           title = 'Target STCS',
+           colour = "STCS") +
       theme_light() +
-      theme(legend.position= 'none',
-            legend.justification=c(1,1),
-            strip.background = element_rect(fill = 'grey5'),
+      theme(strip.background = element_rect(fill = 'grey5'),
             strip.text = element_text(colour = 'grey95'))
-
-    p2 <- directlabels::direct.label(p2.0, list("bottom.pieces", cex = 0.8)) #
 
 
     ## CDF plot
@@ -170,7 +166,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
       x = do.call(paste0("q", margdist),
                   args = c(list(p = seq(0.001, 0.999, by = 0.001)), margarg)),
       cdf = seq(0.001, 0.999, by = 0.001),
-      type = 'theo')
+      type = "theo")
 
     Data <- rbind(Data.simu, Data.theo)
 
@@ -181,27 +177,23 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
                     linetype  = factor(Data$type)),
                 lwd = 1) +
       xlim(range(Data$x)) +
-      ## scale_color_viridis_d(labels = c('Simulated', 'Fitted')) +
-      scale_color_manual(labels = c('Simulated', 'Fitted'),
-                            values = c('royalblue4', 'red4')) +
-      scale_linetype(labels = c('Simulated', 'Fitted')) +
-      labs(x = 'Nonzero values',
-           y = 'Nonexceedence probability',
-           title = 'Probability distribution fit') +
+      ## scale_color_viridis_d(labels = c("Simulated", "Fitted")) +
+      scale_color_manual(labels = c("Simulated", "Fitted"),
+                            values = c("royalblue4", "red4")) +
+      scale_linetype(labels = c("Simulated", "Fitted")) +
+      labs(x = "Nonzero values",
+           y = "Nonexceedence probability",
+           title = "Probability distribution fit") +
       guides(color = guide_legend(title=NULL),
              linetype = guide_legend(title=NULL)) +
       theme_light() +
       theme(legend.position=c(0.99,0.01),
             legend.justification=c(1,0),
-            strip.background = element_rect(fill = 'grey5'),
-            strip.text = element_text(colour = 'grey95'))
+            strip.background = element_rect(fill = "grey5"),
+            strip.text = element_text(colour = "grey95"))
 
-    out <- ggdraw() +
-      draw_plot(p1, x = 0, y = .5, width = 1, height = .5) +
-      draw_plot(p2, x = 0, y = 0, width = .5, height = .5) +
-      draw_plot(p3, x = .5, y = 0, width = .5, height = .5)
+    p1 / (p2 | p3)
 
-    return(out)
   }
 
   my.colors <- colorRampPalette( c(
@@ -212,7 +204,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
     "#81783C", "#645F27", "#545316", "#43440A", "#303401", "#173F3B", "#1D6447",
     "#1E803A", "#169517", "#42B218", "#8DCC3C", "#C8E065"))
 
-  if(method == 'field') {
+  if(method == "field") {
 
     ## Matrix of fields
     op <- par(no.readonly = TRUE) # the whole list of settable par's.
@@ -236,7 +228,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
       if(p0 > 0) z[z < 0] <- 0
       image(matrix(z, 100, 100), axes=F, col = my.colors(40), zlim = range(aux))
       legend("topleft", legend = i, adj = c(1.3, 0.1), cex = 1.2,
-             pch = NA, lty = 0, bty = 'n', text.col = "darkgrey", text.font = 2)
+             pch = NA, lty = 0, bty = "n", text.col = "darkgrey", text.font = 2)
       box(col = "darkgrey")
     }
 
@@ -245,7 +237,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
   }
 
 
-  if(method == 'movie') {
+  if(method == "movie") {
 
     d <- u <- seq(0, m - 1, length = m)
     ud <- expand.grid(u, d)
@@ -260,7 +252,7 @@ checkRF <- function(RF, lags = 30, nfields = 49, method = 'stat') {
         if(p0 > 0) z[z < 0] <- 0
         image(matrix(z, 100, 100), axes=F, col = my.colors(40), zlim = range(sqrt(RF[1:nfields,])))
         legend("topleft", legend = i, adj = c(1.3, 0.1), cex = 1.2,
-               pch = NA, lty = 0, bty = 'n', text.col = "darkgrey", text.font = 2)
+               pch = NA, lty = 0, bty = "n", text.col = "darkgrey", text.font = 2)
         box(col = "darkgrey")
       }
     }, movie.name = "movieRF.gif",

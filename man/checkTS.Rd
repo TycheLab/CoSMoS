@@ -2,28 +2,37 @@
 % Please edit documentation in R/checkTS.R
 \name{checkTS}
 \alias{checkTS}
-\title{Check generated timeseries}
+\title{Check generated time series}
 \usage{
 checkTS(TS, distbounds = c(-Inf, Inf))
 }
 \arguments{
-\item{TS}{generated timeseries}
+\item{TS}{a \code{cosmosts} object from \code{\link{generateTS}}, or a list
+of numeric vectors, or a single numeric vector}
 
-\item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
+\item{distbounds}{numeric vector of length 2; distribution bounds (default
+\code{c(-Inf, Inf)})}
+}
+\value{
+An object of class \code{c("checkTS", "matrix")} with rows
+\code{"expected"} and one row per simulated series, and columns for
+\code{mean}, \code{sd}, \code{skew}, \code{p0}, \code{acf_t1},
+\code{acf_t2}, \code{acf_t3}. Attributes \code{margdist}, \code{margarg},
+and \code{p0} are attached for use by \code{\link{plot.checkTS}}.
 }
 \description{
-Compares generated time series sample statistics with the theoretically expected values.
+Compares sample statistics of generated time series against theoretically
+expected values.
 }
 \examples{
 
 library(CoSMoS)
 
-## check your generated timeseries
-x <- generateTS(margdist = 'burrXII',
+x <- generateTS(margdist = "burrXII",
                 margarg = list(scale = 1,
                                shape1 = .75,
                                shape2 = .25),
-                acsvalue = acs(id = 'weibull',
+                acsvalue = acs(id = "weibull",
                                t = 0:30,
                                scale = 10,
                                shape = .75),
@@ -31,4 +40,8 @@ x <- generateTS(margdist = 'burrXII',
 
 checkTS(x)
 
+}
+\seealso{
+\code{\link{generateTS}}, \code{\link{plot.checkTS}},
+\code{\link{moments}}
 }

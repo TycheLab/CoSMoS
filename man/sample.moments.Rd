@@ -2,25 +2,42 @@
 % Please edit documentation in R/moments.R
 \name{sample.moments}
 \alias{sample.moments}
-\title{Estimation of sample moments}
+\title{Sample moments}
 \usage{
-sample.moments(x, na.rm = FALSE, raw = T, central = T, coef = T, order = 1:4)
+sample.moments(
+  x,
+  na.rm = FALSE,
+  raw = TRUE,
+  central = TRUE,
+  coef = TRUE,
+  order = 1:4
+)
 }
 \arguments{
-\item{x}{a numeric vector of values}
+\item{x}{numeric vector of values}
 
-\item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds}
+\item{na.rm}{logical; strip \code{NA} values before computation?}
 
-\item{raw}{logical - calculate raw moments?}
+\item{raw}{logical; compute raw moments?}
 
-\item{central}{logical - calculate central moments?}
+\item{central}{logical; compute central moments?}
 
-\item{coef}{logical - calculate coefficients (coefficient of variation, skewness and kurtosis)?}
+\item{coef}{logical; compute standardised coefficients (CV, skewness,
+kurtosis)?}
 
-\item{order}{vector of integers - raw moment orders}
+\item{order}{integer vector; raw moment orders (default \code{1:4})}
+}
+\value{
+a named list with zero or more of:
+\describe{
+\item{\code{m}}{raw moments}
+\item{\code{mu}}{central moments}
+\item{\code{coefficients}}{CV, skewness, kurtosis}
+}
 }
 \description{
-Estimation of sample moments.
+Computes raw moments, central moments, and standardised coefficients (CV,
+skewness, kurtosis) from a numeric sample.
 }
 \examples{
 
@@ -32,5 +49,8 @@ sample.moments(x)
 y <- rparetoII(1000, 10, .1)
 sample.moments(y)
 
+}
+\seealso{
+\code{\link{moments}}, \code{\link{checkTS}}
 }
 \keyword{moments}

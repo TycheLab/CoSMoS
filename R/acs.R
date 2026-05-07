@@ -1,115 +1,111 @@
+## acs.R
+## AutoCorrelation Structure dispatcher and parametric acf* functions.
+## Group D refactoring — style pass; acf* helpers unexported (BUG-05).
+
+
 #' AutoCorrelation Structure
 #'
-#' Provides a parametric function that describes the values of the linear autocorrelation up to desired lags. For more details on the parametric autocorrelation structures see section 3.2 in Papalexiou (2018).
+#' Provides a parametric function that describes the values of the linear
+#' autocorrelation up to desired lags. For more details on the parametric
+#' autocorrelation structures see section 3.2 in Papalexiou (2018).
 #'
-#' @param id autocorrelation structure id
-#' @param ... other arguments (t as lag and acs parameters)
+#' @param id autocorrelation structure id.
+#' @param ... other arguments (\code{t} as lag and ACS parameters).
+#'
+#' @return A numeric vector of autocorrelation values at the supplied lags.
 #'
 #' @name acs
 #'
-#' @import ggplot2 data.table
+#' @import ggplot2
 #' @export
 #'
-#' @references Papalexiou, S.M. (2018). Unified theory for stochastic modelling of hydroclimatic
-#' processes: Preserving marginal distributions, correlation structures,
-#' and intermittency. Advances in Water Resources, 115, 234-252, \doi{10.1016/j.advwatres.2018.02.013}
+#' @references Papalexiou, S.M. (2018). Unified theory for stochastic
+#'   modelling of hydroclimatic processes: Preserving marginal distributions,
+#'   correlation structures, and intermittency. Advances in Water Resources,
+#'   115, 234-252, \doi{10.1016/j.advwatres.2018.02.013}
+#'
+#' @seealso \code{\link{actpnts}}, \code{\link{fitACS}}, \code{\link{fitactf}}
 #'
 #' @examples
 #'
 #' library(CoSMoS)
-#' library(data.table)
 #'
 #' ## specify lag
 #' t <- 0:10
 #'
 #' ## get the ACS
-#' f <- acs('fgn', t = t, H = .75)
-#' b <- acs('burrXII', t = t, scale = 1, shape1 = .6, shape2 = .4)
-#' w <- acs('weibull', t = t, scale = 2, shape = 0.8)
-#' p <- acs('paretoII', t = t, scale = 3, shape = 0.3)
+#' f <- acs("fgn",     t = t, H = .75)
+#' b <- acs("burrXII", t = t, scale = 1, shape1 = .6, shape2 = .4)
+#' w <- acs("weibull", t = t, scale = 2, shape = 0.8)
+#' p <- acs("paretoII", t = t, scale = 3, shape = 0.3)
 #'
 #' ## visualize the ACS
-#' dta <- data.table(t, f, b, w, p)
-#'
-#' m.dta <- melt(dta, id.vars = 't')
+#' dta   <- data.table(t, f, b, w, p)
+#' m.dta <- melt(dta, id.vars = "t")
 #'
 #' ggplot(m.dta,
-#'        aes(x = t,
-#'            y = value,
-#'            group = variable,
+#'        aes(x      = t,
+#'            y      = value,
+#'            group  = variable,
 #'            colour = variable)) +
 #'   geom_point(size = 2.5) +
 #'   geom_line(lwd = 1) +
-#'   scale_color_manual(values = c('steelblue4', 'red4', 'green4', 'darkorange'),
-#'                      labels = c('FGN', 'Burr XII', 'Weibull', 'Pareto II'),
-#'                      name = '') +
+#'   scale_color_manual(values = c("steelblue4", "red4", "green4", "darkorange"),
+#'                      labels = c("FGN", "Burr XII", "Weibull", "Pareto II"),
+#'                      name   = "") +
 #'   labs(x = bquote(lag ~ tau),
-#'        y = 'Acf') +
+#'        y = "Acf") +
 #'   scale_x_continuous(breaks = t) +
 #'   theme_classic()
-#'
+
 acs <- function(id, ...) {
 
-  .args <- list(...)
+  args <- list(...)
 
-  do.call(paste0('acf', id), args = .args)
+  do.call(paste0("acf", id), args = args)
 }
 
-#' Autocorrelation structure functions
+
+#' Parametric autocorrelation structure functions
+#'
+#' @description
+#' Parametric functions used internally by \code{\link{acs}} to evaluate
+#' autocorrelation at lag \code{t}.  These are internal helpers and are not
+#' part of the public API; call them via \code{acs(id, ...)}.
+#'
+#' @param t     lag value (non-negative numeric).
+#' @param scale scale parameter (must be > 0).
+#' @param shape,shape1,shape2   shape parameters (must be > 0).
+#' @param H     Hurst exponent for the FGN model (0.5 < H < 1).
+#'
+#' @return A numeric value (or \code{NaN} if parameters are invalid).
 #'
 #' @keywords internal
 #' @name ACSfunctions
-#' @export
-#'
-#' @examples
-#'
-#' t <- 1
-#'
-#' H <- .75
-#' scale <- .2
-#' shape <- .3
-#' shape1 <- .5
-#' shape2 <- .2
-#'
-#' acfburrXII(t, scale, shape1, shape2)
-#'
-#' acfparetoII(t, scale, shape)
-#'
-#' acffgn(t, H)
-#'
-#' acfweibull(t, scale, shape)
-#'
 
 acfburrXII <- function(t, scale, shape1, shape2) {
 
-  if((shape1 <= 0) | (shape2 <= 0)) {
-
-    return(NaN)
+  if ((shape1 <= 0) | (shape2 <= 0)) {
+    NaN
   } else {
-
-    return((1 + shape2 * (t / scale) ^ shape1) ^ -(1 / shape1 * shape2))
+    (1 + shape2 * (t / scale) ^ shape1) ^ (-1 / (shape1 * shape2))
   }
 }
 
 #' @keywords internal
 #' @rdname ACSfunctions
-#' @export
 
 acfparetoII <- function(t, scale, shape) {
 
   if ((scale <= 0) | (shape <= 0)) {
-
-    return(NaN)
+    NaN
   } else {
-
-    return((1 + (shape * t) / scale) ^ (-shape ^ (-1)))
+    (1 + (shape * t) / scale) ^ (-1 / shape)
   }
 }
 
 #' @keywords internal
 #' @rdname ACSfunctions
-#' @export
-
 
 acffgn <- function(t, H) {
 
@@ -118,8 +114,8 @@ acffgn <- function(t, H) {
 
 #' @keywords internal
 #' @rdname ACSfunctions
-#' @export
 
 acfweibull <- function(t, scale, shape) {
+
   exp(-(t / scale) ^ shape)
 }

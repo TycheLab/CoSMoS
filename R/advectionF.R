@@ -25,7 +25,7 @@
 #' coord <- expand.grid(aux, aux)
 #'
 #' ## get the advection field
-#' af <- advectionF('spiral',
+#' af <- advectionF("spiral",
 #'                  spacepoints = coord,
 #'                  x0 = floor(m / 2),
 #'                  y0 = floor(m / 2),
@@ -42,7 +42,7 @@
 advectionF <- function(id, ...) {
 
   .args <- list(...)
-  do.call(paste0('advectionF', id), args = .args)
+  do.call(paste0("advectionF", id), args = .args)
 }
 
 
@@ -63,7 +63,7 @@ advectionF <- function(id, ...) {
 #'
 advectionF2 <- function(id, arglist) {
 
-  do.call(paste0('advectionF', id), args = arglist)
+  do.call(paste0("advectionF", id), args = arglist)
 }
 
 
@@ -106,7 +106,7 @@ advectionF2 <- function(id, arglist) {
 advectionFuniform <- function(spacepoints, u, v) {
 
   d <- nrow(spacepoints)
-  return( data.frame(u = rep(u, d), v = rep(v, d)) )
+  data.frame(u = rep(u, d), v = rep(v, d))
 }
 
 
@@ -155,14 +155,14 @@ advectionFuniform <- function(spacepoints, u, v) {
 #' ggplot(dta, aes(x = lon, y = lat, u = u, v = v)) +
 #' geom_quiver() +
 #' theme_light()
-#
+#'
 advectionFrotation <- function(spacepoints, x0, y0, a, b) {
 
   x <- spacepoints[,1] - x0
   y <- spacepoints[,2] - y0
   u <-    a * y
   v <- (-b * x)
-  return( data.frame(u = u, v = v) )
+  data.frame(u = u, v = v)
 }
 
 
@@ -213,7 +213,7 @@ advectionFrotation <- function(spacepoints, x0, y0, a, b) {
 #' ggplot(dta, aes(x = lon, y = lat, u = u, v = v)) +
 #' geom_quiver() +
 #' theme_light()
-#
+#'
 advectionFspiral <- function(spacepoints, x0, y0, a, b, rotation = 1) {
 
   x <- spacepoints[,1] - x0
@@ -226,14 +226,14 @@ advectionFspiral <- function(spacepoints, x0, y0, a, b, rotation = 1) {
     u <-  (-a * x - b * y)
     v <-  ( a * x - b * y)
   }
-  return( data.frame(u = u, v = v) )
+  data.frame(u = u, v = v)
 }
 
 
 
 #' Spiraling advection field satisfying continuity equation
 #'
-#' Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://github.com/johannesgerer/jburkardt-m/blob/master/spiral_data/spiral_data.html}{GitHub}).
+#' Provides an advection field corresponding to a spiral motion to/from a specified reference point (sink) satisfying continuity equation (from \href{https://github.com/johannesgerer/jburkardt-f/tree/2a3860f296af9ab0a07c6dc805b496bc75ad3935/spiral_data}{Git Mirror of John Burkardt's collection of FORTRAN 90 Software}).
 #'
 #' @param spacepoints vector of coordinates (2 x d), where d is the number of locations/grid points
 #' @param a parameter controlling the intensity of rotational velocity (a > 0 clokwise; a < 0 conter-clockwise)
@@ -265,7 +265,7 @@ advectionFspiral <- function(spacepoints, x0, y0, a, b, rotation = 1) {
 #' ggplot(dta, aes(x = lon, y = lat, u = u, v = v)) +
 #' geom_quiver() +
 #' theme_light()
-#
+#'
 advectionFspiralCE <- function(spacepoints, a, C) {
 
   xaux <- spacepoints[,1]
@@ -279,7 +279,7 @@ advectionFspiralCE <- function(spacepoints, a, C) {
   u <- -a * dPPdy
   v <- a * dPPdx
 
-  return( data.frame(u = u, v = v) )
+  data.frame(u = u, v = v)
 }
 
 
@@ -328,14 +328,14 @@ advectionFspiralCE <- function(spacepoints, a, C) {
 #' ggplot(dta, aes(x = lon, y = lat, u = u, v = v)) +
 #' geom_quiver() +
 #' theme_light()
-#
+#'
 advectionFradial <- function(spacepoints, x0, y0, a, b) {
 
   x <- spacepoints[,1] - x0
   y <- spacepoints[,2] - y0
   u <- a * x
   v <- b * y
-  return( data.frame(u = u, v = v) )
+  data.frame(u = u, v = v)
 }
 
 
@@ -384,13 +384,13 @@ advectionFradial <- function(spacepoints, x0, y0, a, b) {
 #' ggplot(dta, aes(x = lon, y = lat, u = u, v = v)) +
 #' geom_quiver() +
 #' theme_light()
-#
+#'
 advectionFhyperbolic <- function(spacepoints, x0, y0, a, b) {
 
   x <- spacepoints[,1] - x0
   y <- spacepoints[,2] - y0
   u <- a * y
   v <- b * x
-  return( data.frame(u = u, v = v) )
+  data.frame(u = u, v = v)
 }
 

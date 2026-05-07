@@ -24,19 +24,19 @@ aux <- seq(0, m - 1, length = m)
 coord <- expand.grid(aux, aux)
 
 ## get the anisotropy field
-at1 <- anisotropyT('affine',
+at1 <- anisotropyT("affine",
                  spacepoints = coord,
                  phi1 = 0.5,
                  phi2 = 2,
                  phi12 = 0,
                  theta = -pi/3)
-at2 <- anisotropyT('swirl',
+at2 <- anisotropyT("swirl",
                  spacepoints = coord,
                  x0 = floor(m / 2),
                  y0 = floor(m / 2),
                  b = 10,
                  alpha = 1.5 * pi)
-at3 <- anisotropyT('wave',
+at3 <- anisotropyT("wave",
                  spacepoints = coord,
                  phi1 = 0.5,
                  phi2 = 2,

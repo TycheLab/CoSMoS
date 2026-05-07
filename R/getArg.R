@@ -1,57 +1,75 @@
-#' Get names of distribution function arguments
+## getArg.R
+## Internal helpers to introspect argument names of distribution and ACS
+## functions by name.  Both functions look up targets from the CoSMoS
+## namespace directly so the target functions do not need to be exported.
+
+
+#' Get argument names of a distribution function
 #'
-#' @param dist distribution name
+#' @description
+#' Returns the non-standard argument names of the quantile function
+#' \code{q<dist>} (i.e. everything except \code{p}, \code{lower.tail},
+#' and \code{log.p}).
+#'
+#' @param dist  distribution name (character), e.g. \code{"paretoII"}.
+#'
+#' @return A character vector of argument names, or \code{NULL} (with a
+#'   message) if the distribution is not defined.
 #'
 #' @keywords internal
-#' @export
-#'
-#' @examples
-#'
-#' getDistArg('norm')
-#'
+
 getDistArg <- function(dist) {
 
-  if (exists(paste0('d', dist))) { ## see whether CDF is defined
+  fn_name <- paste0("q", dist)
+  ns      <- asNamespace("CoSMoS")
 
-    x <- unlist(strsplit(deparse(args(paste0('q', dist)))[1], ',')) ## get string of all arguments
-    out <- gsub(' |= [0-9]+', ## strip the arguments of the balast
-                '',
-                x[grep('function|lower.tail|log.p = FALSE|/',
-                       x,
-                       invert = TRUE)])
-
-    return(out)
-  } else {
-
-    message('Distribution in not defined')
+  if (!existsFunction(fn_name) &&
+      !exists(fn_name, envir = ns, inherits = FALSE)) {
+    message("Distribution is not defined")
+    return(NULL)
   }
+
+  ## prefer the package-namespace copy; fall back to search path
+  fn <- if (exists(fn_name, envir = ns, inherits = FALSE)) {
+    get(fn_name, envir = ns, inherits = FALSE)
+  } else {
+    get(fn_name, inherits = TRUE)
+  }
+
+  x <- unlist(strsplit(deparse(args(fn))[1L], ","))
+
+  gsub(" |= [0-9]+", "",
+       x[grep("function|lower\\.tail|log\\.p = FALSE|/",
+               x, invert = TRUE)])
 }
 
-#' Get names of autocorrelation structure (ACS) function arguments
+
+#' Get argument names of an ACS function
 #'
-#' @param id ACS id
+#' @description
+#' Returns the non-\code{t} argument names of the ACS function
+#' \code{acf<id>} (i.e. the parameter names only).
+#'
+#' @param id  ACS id (character), e.g. \code{"weibull"}.
+#'
+#' @return A character vector of parameter names, or \code{NULL} (with a
+#'   message) if the ACS is not defined.
 #'
 #' @keywords internal
-#' @export
-#'
-#' @examples
-#'
-#' getACSArg('weibull')
-#'
+
 getACSArg <- function(id) {
 
-  if (exists(paste0('acf', id))) { ## is the ACS function defined?
+  fn_name <- paste0("acf", id)
+  ns      <- asNamespace("CoSMoS")
 
-    x <- unlist(strsplit(deparse(args(paste0('acf', id)))[1], ',')) ## get string of all arguments
-    out <- gsub(' |= [0-9]+|)', ## get rid of the balast
-                '',
-                x[grep('function',
-                       x,
-                       invert = TRUE)])
-
-    return(out)
-  } else {
-
-    message('ACS in not defined')
+  if (!exists(fn_name, envir = ns, inherits = FALSE)) {
+    message("ACS is not defined")
+    return(NULL)
   }
+
+  fn <- get(fn_name, envir = ns, inherits = FALSE)
+  x  <- unlist(strsplit(deparse(args(fn))[1L], ","))
+
+  gsub(" |= [0-9]+|\\)", "",
+       x[grep("function", x, invert = TRUE)])
 }

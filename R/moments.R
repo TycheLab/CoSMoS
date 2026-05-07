@@ -1,16 +1,28 @@
 #' Numerical estimation of moments
 #'
-#' Uses numerical integration to caclulate the theoretical raw or central moments
+#' Uses numerical integration to compute the theoretical raw or central moments
 #' of the specified distribution.
 #'
-#' @param dist distribution
+#' @param dist character; distribution name (e.g. \code{"norm"},
+#'   \code{"paretoII"})
 #' @param distarg list of distribution arguments
-#' @param distbounds distribution bounds (default set to c(-Inf, Inf))
-#' @param p0 probability zero
-#' @param raw logical - calculate raw moments?
-#' @param central logical - calculate central moments?
-#' @param coef logical - calculate coefficients (coefficient of variation, skewness and kurtosis)?
-#' @param order vector of integers - raw moment orders
+#' @param distbounds numeric vector of length 2; distribution bounds (default
+#'   \code{c(-Inf, Inf)})
+#' @param p0 numeric; probability zero (default 0)
+#' @param raw logical; compute raw moments?
+#' @param central logical; compute central moments?
+#' @param coef logical; compute standardised coefficients (CV, skewness,
+#'   kurtosis)?
+#' @param order integer vector; raw moment orders (default \code{1:4})
+#'
+#' @return a named list with zero or more of:
+#'   \describe{
+#'     \item{\code{m}}{raw moments}
+#'     \item{\code{mu}}{central moments}
+#'     \item{\code{coefficients}}{CV, skewness, kurtosis}
+#'   }
+#'
+#' @seealso \code{\link{sample.moments}}, \code{\link{populationstat}}
 #'
 #' @import stats
 #' @export
@@ -21,94 +33,81 @@
 #'
 #' library(CoSMoS)
 #'
-#' ## Normal Distribution
-#' moments('norm', list(mean = 2, sd = 1))
+#' ## Normal distribution
+#' moments("norm", list(mean = 2, sd = 1))
 #'
 #' ## Pareto type II
-#' scale <- 1
-#' shape <- .2
+#' moments(dist    = "paretoII",
+#'         distarg = list(shape = 0.2, scale = 1))
 #'
-#' moments(dist = 'paretoII',
-#'         distarg = list(shape = shape,
-#'                        scale = scale))
-#'
-moments <- function(dist, distarg, p0 = 0, raw = T, central = T, coef = T, distbounds = c(-Inf, Inf), order = 1:4) {
+moments <- function(dist, distarg, p0 = 0, raw = TRUE, central = TRUE,
+                    coef = TRUE, distbounds = c(-Inf, Inf), order = 1:4) {
 
-  if((central | coef) & (max(order) < 4)) {
+  if ((central | coef) & (max(order) < 4)) order <- 1:4
 
-    order <- 1:4
+  if (existsFunction(paste0("m", dist), where = asNamespace("CoSMoS"))) {
+    m <- lapply(order, function(i) do.call(paste0("m", dist),
+                                           args = c(list(r = i), distarg)))
+  } else {
+    f <- function(x, dist, q, ...) {
+      .arg <- c(list(x), ...)
+      x^q * do.call(paste0("d", dist), args = .arg)
+    }
+    m <- vector("list", max(order))
+    for (i in order) {
+      m[[i]] <- integrate(f = f, distbounds[1], distbounds[2],
+                          q = i, distarg, dist = dist,
+                          stop.on.error = FALSE)$value
+    }
   }
 
-  # tryCatch({ ## error handeling
-    if(exists(paste0('m', dist))) { ## condition - if raw moments function is specified, use it
+  m        <- lapply(m, function(x) (1 - p0) * x)
+  names(m) <- paste0("m", order)
 
-      m <- lapply(order, function(i) do.call(paste0('m', dist), args = c(list(r = i), distarg)))
+  out <- list()
 
-    } else { ## - else integrate the PDF
+  if (raw) out$m <- unlist(m)
 
-      f <- function(x, dist, q, ...){
+  if (central | coef) {
+    mu <- data.frame(
+      mu1 = m$m1,
+      mu2 = m$m2 - m$m1^2,
+      mu3 = 2 * m$m1^3 - 3 * m$m2 * m$m1 + m$m3,
+      mu4 = -3 * m$m1^4 + 6 * m$m2 * m$m1^2 - 4 * m$m3 * m$m1 + m$m4
+    )
+    if (central) out$mu <- unlist(mu)
+  }
 
-        .arg <- c(list(x), ...) ## pull the distribution arguments
+  if (coef) {
+    coef_df <- data.frame(
+      cv = sqrt(mu$mu2) / mu$mu1,
+      cs = mu$mu3 / sqrt(mu$mu2)^3,
+      ck = mu$mu4 / mu$mu2^2
+    )
+    out$coefficients <- unlist(coef_df)
+  }
 
-        x^q * do.call(paste0('d', dist), args = .arg) ## function to integrate
-      }
-
-      m <- list()
-
-      for (i in order) {
-
-        m[[i]] <- integrate(f = f, distbounds[1], distbounds[2], q = i, distarg, dist = dist, stop.on.error = F)$value
-      }
-    }
-
-    m <- lapply(m, function(x) (1 - p0)*x)
-
-    names(m) <- paste0('m', order)
-
-    out <- list()
-
-    if (raw) {
-
-      out$m <- unlist(m)
-    }
-
-    if (central | coef) { ## central moments calculation
-
-      mu <- data.frame(mu1 = m$m1,
-                       mu2 = m$m2 - m$m1^2,
-                       mu3 = 2*m$m1^3 - 3*m$m2*m$m1 + m$m3,
-                       mu4 = -3*m$m1^4 + 6*m$m2*m$m1^2 - 4*m$m3*m$m1 + m$m4)
-
-      if (central) {
-
-        out$mu <- unlist(mu)
-      }
-    }
-
-    if (coef) { ## coeffitiens calculation
-
-      coef <- data.frame(cv = sqrt(mu$mu2)/mu$mu1,
-                         cs = mu$mu3/sqrt(mu$mu2)^3,
-                         ck = mu$mu4/mu$mu2^2)
-
-      out$coefficients <- unlist(coef)
-    }
-
-    return(out)
-  # },
-  # error = function(e) {
-  #   message('Please input a correct distribution name with valid parameters \n(ditributions have to be defined in form dxxx, pxxx, qxxx, etc...)')
-  # }
-  # )
+  out
 }
 
-#' Estimation of sample moments
+
+#' Sample moments
 #'
-#' Estimation of sample moments.
+#' Computes raw moments, central moments, and standardised coefficients (CV,
+#' skewness, kurtosis) from a numeric sample.
 #'
-#' @param x a numeric vector of values
-#' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds
+#' @param x numeric vector of values
+#' @param na.rm logical; strip \code{NA} values before computation?
 #' @inheritParams moments
+#'
+#' @return a named list with zero or more of:
+#'   \describe{
+#'     \item{\code{m}}{raw moments}
+#'     \item{\code{mu}}{central moments}
+#'     \item{\code{coefficients}}{CV, skewness, kurtosis}
+#'   }
+#'
+#' @seealso \code{\link{moments}}, \code{\link{checkTS}}
 #'
 #' @import stats
 #' @export
@@ -125,47 +124,35 @@ moments <- function(dist, distarg, p0 = 0, raw = T, central = T, coef = T, distb
 #' y <- rparetoII(1000, 10, .1)
 #' sample.moments(y)
 #'
-sample.moments <- function(x, na.rm = FALSE, raw = T, central = T, coef = T, order = 1:4) {
+sample.moments <- function(x, na.rm = FALSE, raw = TRUE, central = TRUE,
+                           coef = TRUE, order = 1:4) {
 
-  if((central | coef) & (max(order) < 4)) {
+  if ((central | coef) & (max(order) < 4)) order <- 1:4
 
-    order <- 1:4
-  }
-
-  n <- ifelse(na.rm, length(which(!is.na(x))), length(x))
-
-  mean <- mean(x, na.rm = na.rm)
-
-  out <- list()
+  n    <- if (na.rm) length(which(!is.na(x))) else length(x)
+  xbar <- mean(x, na.rm = na.rm)
+  out  <- list()
 
   if (raw) {
-
-    m <- lapply(order, function(i) (1/n * sum((x)^i)))
-    names(m) <- paste0('m', order)
-
-    out$m <- unlist(m)
+    m        <- lapply(order, function(i) 1 / n * sum(x^i))
+    names(m) <- paste0("m", order)
+    out$m    <- unlist(m)
   }
 
-  if (central | coef) { ## central moments calculation
-
-    mu <- lapply(order, function(i) 1/n * sum((x - mean)^i))
-    names(mu) <- paste0('mu', order)
-
-    if (central) {
-
-      out$mu <- unlist(mu)
-    }
+  if (central | coef) {
+    mu        <- lapply(order, function(i) 1 / n * sum((x - xbar)^i))
+    names(mu) <- paste0("mu", order)
+    if (central) out$mu <- unlist(mu)
   }
 
-  if (coef) { ## coeffitiens calculation
-
-    coef <- data.frame(cv = sqrt(mu$mu2)/mu$mu1,
-                       cs = mu$mu3/sqrt(mu$mu2)^3,
-                       ck = mu$mu4/mu$mu2^2)
-
-    out$coefficients <- unlist(coef)
+  if (coef) {
+    coef_df <- data.frame(
+      cv = sqrt(mu$mu2) / mu$mu1,
+      cs = mu$mu3 / sqrt(mu$mu2)^3,
+      ck = mu$mu4 / mu$mu2^2
+    )
+    out$coefficients <- unlist(coef_df)
   }
 
-  return(out)
+  out
 }
-

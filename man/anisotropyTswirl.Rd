@@ -40,6 +40,7 @@ geom_path(aes(group = id1)) +
 geom_path(aes(group = id2)) +
 geom_point(col = 2) +
 theme_light()
+
 }
 \references{
 Ligas, M., Banas, M., Szafarczyk, A. (2019). A method for local

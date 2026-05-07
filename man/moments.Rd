@@ -8,48 +8,58 @@ moments(
   dist,
   distarg,
   p0 = 0,
-  raw = T,
-  central = T,
-  coef = T,
+  raw = TRUE,
+  central = TRUE,
+  coef = TRUE,
   distbounds = c(-Inf, Inf),
   order = 1:4
 )
 }
 \arguments{
-\item{dist}{distribution}
+\item{dist}{character; distribution name (e.g. \code{"norm"},
+\code{"paretoII"})}
 
 \item{distarg}{list of distribution arguments}
 
-\item{p0}{probability zero}
+\item{p0}{numeric; probability zero (default 0)}
 
-\item{raw}{logical - calculate raw moments?}
+\item{raw}{logical; compute raw moments?}
 
-\item{central}{logical - calculate central moments?}
+\item{central}{logical; compute central moments?}
 
-\item{coef}{logical - calculate coefficients (coefficient of variation, skewness and kurtosis)?}
+\item{coef}{logical; compute standardised coefficients (CV, skewness,
+kurtosis)?}
 
-\item{distbounds}{distribution bounds (default set to c(-Inf, Inf))}
+\item{distbounds}{numeric vector of length 2; distribution bounds (default
+\code{c(-Inf, Inf)})}
 
-\item{order}{vector of integers - raw moment orders}
+\item{order}{integer vector; raw moment orders (default \code{1:4})}
+}
+\value{
+a named list with zero or more of:
+\describe{
+\item{\code{m}}{raw moments}
+\item{\code{mu}}{central moments}
+\item{\code{coefficients}}{CV, skewness, kurtosis}
+}
 }
 \description{
-Uses numerical integration to caclulate the theoretical raw or central moments
+Uses numerical integration to compute the theoretical raw or central moments
 of the specified distribution.
 }
 \examples{
 
 library(CoSMoS)
 
-## Normal Distribution
-moments('norm', list(mean = 2, sd = 1))
+## Normal distribution
+moments("norm", list(mean = 2, sd = 1))
 
 ## Pareto type II
-scale <- 1
-shape <- .2
+moments(dist    = "paretoII",
+        distarg = list(shape = 0.2, scale = 1))
 
-moments(dist = 'paretoII',
-        distarg = list(shape = shape,
-                       scale = scale))
-
+}
+\seealso{
+\code{\link{sample.moments}}, \code{\link{populationstat}}
 }
 \keyword{moments}

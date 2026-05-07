@@ -2,19 +2,20 @@
 % Please edit documentation in R/getArg.R
 \name{getDistArg}
 \alias{getDistArg}
-\title{Get names of distribution function arguments}
+\title{Get argument names of a distribution function}
 \usage{
 getDistArg(dist)
 }
 \arguments{
-\item{dist}{distribution name}
+\item{dist}{distribution name (character), e.g. \code{"paretoII"}.}
+}
+\value{
+A character vector of argument names, or \code{NULL} (with a
+message) if the distribution is not defined.
 }
 \description{
-Get names of distribution function arguments
-}
-\examples{
-
-getDistArg('norm')
-
+Returns the non-standard argument names of the quantile function
+\code{q<dist>} (i.e. everything except \code{p}, \code{lower.tail},
+and \code{log.p}).
 }
 \keyword{internal}

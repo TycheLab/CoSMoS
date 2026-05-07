@@ -25,7 +25,7 @@ aux <- seq(0, m - 1, length = m)
 coord <- expand.grid(aux, aux)
 
 ## get the advection field
-af <- advectionF('spiral',
+af <- advectionF("spiral",
                  spacepoints = coord,
                  x0 = floor(m / 2),
                  y0 = floor(m / 2),

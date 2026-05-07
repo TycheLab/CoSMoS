@@ -7,7 +7,7 @@
 #' * Elevation: 11.49 ft above North American Vertical Datum of 1988.
 #' * Measurement unit: cubic feet per second
 #'
-#' more details can be found \href{https://waterdata.usgs.gov/nwis/dv?referred_module=sw&site_no=01485500}{here}.
+#' more details can be found \href{https://waterdata.usgs.gov/monitoring-location/USGS-01485500/}{here}.
 #'
 #' @format A data.table with 23315 rows and 2 variables:
 #' \describe{

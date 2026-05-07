@@ -6,7 +6,7 @@
 \alias{acfparetoII}
 \alias{acffgn}
 \alias{acfweibull}
-\title{Autocorrelation structure functions}
+\title{Parametric autocorrelation structure functions}
 \usage{
 acfburrXII(t, scale, shape1, shape2)
 
@@ -16,26 +16,21 @@ acffgn(t, H)
 
 acfweibull(t, scale, shape)
 }
-\description{
-Autocorrelation structure functions
+\arguments{
+\item{t}{lag value (non-negative numeric).}
+
+\item{scale}{scale parameter (must be > 0).}
+
+\item{shape, shape1, shape2}{shape parameters (must be > 0).}
+
+\item{H}{Hurst exponent for the FGN model (0.5 < H < 1).}
 }
-\examples{
-
-t <- 1
-
-H <- .75
-scale <- .2
-shape <- .3
-shape1 <- .5
-shape2 <- .2
-
-acfburrXII(t, scale, shape1, shape2)
-
-acfparetoII(t, scale, shape)
-
-acffgn(t, H)
-
-acfweibull(t, scale, shape)
-
+\value{
+A numeric value (or \code{NaN} if parameters are invalid).
+}
+\description{
+Parametric functions used internally by \code{\link{acs}} to evaluate
+autocorrelation at lag \code{t}.  These are internal helpers and are not
+part of the public API; call them via \code{acs(id, ...)}.
 }
 \keyword{internal}

@@ -2,19 +2,19 @@
 % Please edit documentation in R/getArg.R
 \name{getACSArg}
 \alias{getACSArg}
-\title{Get names of autocorrelation structure (ACS) function arguments}
+\title{Get argument names of an ACS function}
 \usage{
 getACSArg(id)
 }
 \arguments{
-\item{id}{ACS id}
+\item{id}{ACS id (character), e.g. \code{"weibull"}.}
+}
+\value{
+A character vector of parameter names, or \code{NULL} (with a
+message) if the ACS is not defined.
 }
 \description{
-Get names of autocorrelation structure (ACS) function arguments
-}
-\examples{
-
-getACSArg('weibull')
-
+Returns the non-\code{t} argument names of the ACS function
+\code{acf<id>} (i.e. the parameter names only).
 }
 \keyword{internal}

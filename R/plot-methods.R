@@ -1,0 +1,340 @@
+# --- plot.fitDist -------------------------------------------------------------
+
+#' Plot method for \code{fitDist} objects
+#'
+#' Displays the empirical CDF against the fitted theoretical CDF on a
+#' log-exceedance-probability scale.
+#'
+#' @param x a \code{fitDist} object returned by \code{\link{fitDist}}
+#' @param ... currently unused
+#'
+#' @return a \code{ggplot} object (invisibly returned; also printed)
+#'
+#' @seealso \code{\link{fitDist}}
+#'
+#' @export
+#' @import ggplot2
+#' @method plot fitDist
+#'
+#' @examples
+#'
+#' x <- fitDist(rnorm(1000), "norm", 30, "N1", FALSE)
+#' plot(x)
+#'
+plot.fitDist <- function(x, ...) {
+
+  edf  <- attr(x, "edf")
+  dist <- attr(x, "dist")
+  nfo  <- attr(x, "nfo")
+
+  mm <- do.call(paste0("p", dist),
+                c(list(q = range(edf$value)), x))
+  p  <- exp(seq(log(mm[1]), log(mm[2]), length.out = 10000))
+
+  cdf <- data.frame(p     = p,
+                    value = do.call(paste0("q", dist), c(list(p = p), x)))
+
+  ggplot() +
+    geom_line(data = cdf,
+              aes(x = cdf$value, y = log(1 - cdf$p)),
+              colour = "grey25", lwd = 1, alpha = .75) +
+    geom_point(data = edf,
+               aes(x = edf$value, y = log(1 - edf$p)),
+               colour = "red4", alpha = .5) +
+    labs(x     = "Nonzero values",
+         y     = "Exceedance probability",
+         title = paste("Fitting norm (error) value =", round(nfo$objective, 5))) +
+    scale_y_continuous(
+      breaks = seq(-10, 0, length.out = 5),
+      labels = format(exp(seq(log(.0001), log(1), length.out = 5)),
+                      scientific = TRUE)) +
+    theme_grey()
+}
+
+
+# --- plot.fitACS --------------------------------------------------------------
+
+#' Plot method for \code{fitACS} objects
+#'
+#' Displays the empirical ACF alongside the fitted theoretical autocorrelation
+#' structure.
+#'
+#' @param x a \code{fitACS} object returned by \code{\link{fitACS}}
+#' @param ... currently unused
+#'
+#' @return a \code{ggplot} object (invisibly returned; also printed)
+#'
+#' @seealso \code{\link{fitACS}}
+#'
+#' @export
+#' @import ggplot2
+#' @method plot fitACS
+#'
+#' @examples
+#'
+#' x <- arima.sim(model = list(ar = 0.8), n = 1000)
+#' acsfit <- fitACS(acf(x, plot = FALSE)$acf, "weibull", c(1, 1))
+#' plot(acsfit)
+#'
+plot.fitACS <- function(x, ...) {
+
+  eACS <- attr(x, "eACS")
+  lag  <- 0:(length(eACS) - 1)
+  id   <- attr(x, "ID")
+
+  ACS <- do.call(acs, c(list(id = id, t = lag), x))
+
+  df <- data.frame(lag  = lag,
+                   ACS  = ACS,
+                   eACS = eACS)
+
+  ggplot(df) +
+    geom_line(aes(x = lag, y = ACS),
+              colour = "grey25", lwd = .75, alpha = .75) +
+    geom_point(aes(x = lag, y = eACS),
+               colour = "red4", alpha = .5) +
+    labs(x     = bquote(lag ~ tau),
+         y     = "Autocorrelation",
+         title = "") +
+    theme_grey()
+}
+
+
+# --- plot.acti ----------------------------------------------------------------
+
+#' Plot method for \code{acti} objects
+#'
+#' Visualises the autocorrelation transformation function (ACTF) fitted by
+#' \code{\link{fitactf}}.
+#'
+#' @param x an \code{acti} object returned by \code{\link{fitactf}}
+#' @param ... optional arguments; \code{main} sets the plot title
+#'
+#' @return a \code{ggplot} object (invisibly returned; also printed)
+#'
+#' @seealso \code{\link{fitactf}}, \code{\link{actpnts}}
+#'
+#' @export
+#' @import ggplot2 graphics utils methods
+#' @method plot acti
+#'
+#' @examples
+#'
+#' library(CoSMoS)
+#'
+#' p   <- actpnts(margdist = "paretoII",
+#'                margarg  = list(scale = 1, shape = .3),
+#'                p0 = 0)
+#' fit <- fitactf(p)
+#'
+#' plot(fit)
+#' plot(fit, main = "Pareto type II\nautocorrelation transformation")
+#'
+plot.acti <- function(x, ...) {
+
+  args <- list(...)
+  main <- if (!is.null(args[["main"]])) args[["main"]] else ""
+
+  temp <- seq(0, 1, .001)
+  dta  <- data.frame(x = temp,
+                     y = actf(temp, x$actfcoef[1], x$actfcoef[2]))
+
+  ggplot() +
+    geom_line(aes(x = dta$x, y = dta$y),
+              colour = "steelblue4", lwd = 1.5) +
+    geom_point(aes(x = x$actfpoints$rhox, y = x$actfpoints$rhoz),
+               colour = "grey35", size = 3.5) +
+    geom_abline(lty = 5) +
+    scale_x_continuous(limits = c(0, 1), expand = c(0.01, 0),
+                       breaks = seq(0, 1, .2)) +
+    scale_y_continuous(limits = c(0, 1), expand = c(0.01, 0),
+                       breaks = seq(0, 1, .2)) +
+    labs(x     = bquote(Autocorrelation ~ rho[x]),
+         y     = bquote(Gaussian ~ rho[z]),
+         title = main) +
+    theme_gray() +
+    theme(legend.position  = "bottom",
+          strip.background = element_rect(fill = "grey5"),
+          strip.text       = element_text(colour = "grey95"),
+          axis.text        = element_text(size = 10),
+          axis.title       = element_text(size = 15, face = "bold"))
+}
+
+
+# --- plot.cosmosts ------------------------------------------------------------
+
+#' Plot method for \code{cosmosts} objects
+#'
+#' Visualises time series generated by \code{\link{generateTS}} as bar charts,
+#' one panel per series.
+#'
+#' @param x a \code{cosmosts} object returned by \code{\link{generateTS}}
+#' @param ... currently unused
+#'
+#' @return a \code{ggplot} object (invisibly returned; also printed)
+#'
+#' @seealso \code{\link{generateTS}}, \code{\link{regenerateTS}}
+#'
+#' @export
+#' @import ggplot2 data.table
+#' @method plot cosmosts
+#'
+#' @examples
+#'
+#' library(CoSMoS)
+#'
+#' ts <- generateTS(margdist = "ggamma",
+#'                  margarg  = list(scale = 1, shape1 = .8, shape2 = .8),
+#'                  acsvalue = acs(id = "paretoII", t = 0:30,
+#'                                 scale = 1, shape = .75),
+#'                  n = 1000, p = 30, TSn = 2)
+#' plot(ts)
+#'
+plot.cosmosts <- function(x, ...) {
+
+  dta <- data.table(n = seq_along(x[[1]]),
+                    do.call(cbind, x))
+
+  names(dta)[2:(length(x) + 1)] <- paste("timeseries", seq_along(x), sep = "_")
+
+  m.dta <- melt(data = as.data.table(dta), id.vars = "n")
+
+  ggplot(data    = m.dta,
+         mapping = aes(x = m.dta$n, y = m.dta$value)) +
+    geom_col() +
+    labs(x = "", y = "value") +
+    facet_wrap(~variable, ncol = 1) +
+    theme_gray() +
+    theme(legend.position  = "bottom",
+          strip.background = element_rect(fill = "grey5"),
+          strip.text       = element_text(colour = "grey95"))
+}
+
+
+# --- quickTSPlot --------------------------------------------------------------
+
+#' Quick visualisation of basic time series properties
+#'
+#' Returns a composite figure showing the time series, empirical density
+#' function, and empirical autocorrelation function.
+#'
+#' @param TS numeric vector (or \code{data.frame}/\code{data.table}) of time
+#'   series values
+#' @param ci numeric; confidence level for the zero-autocorrelation band
+#'   (default \code{0.95})
+#'
+#' @return a \code{ggdraw} object (printed as a side effect)
+#'
+#' @seealso \code{\link{generateTS}}, \code{\link{plot.cosmosts}}
+#'
+#' @name quickTSPlot
+#'
+#' @export
+#'
+#' @examples
+#' ggamma_sim <- rggamma(n = 1000, scale = 1, shape1 = 1, shape2 = .5)
+#' quickTSPlot(ggamma_sim)
+#'
+quickTSPlot <- function(TS, ci = 0.95) {
+
+  value <- Lag <- ACF <- NULL
+
+  n   <- if (inherits(TS, c("data.frame", "data.table"))) nrow(TS) else length(TS)
+  dta <- data.frame(time = seq_len(n), value = TS)
+
+  p1 <- ggplot(dta, aes(x = time, y = value)) +
+    geom_line() +
+    theme_light() +
+    labs(x = "Time", y = "Value", title = "Time series plot")
+
+  p2 <- ggplot(dta[dta[, 2] != 0, ], aes(x = value, after_stat(density))) +
+    geom_histogram() +
+    theme_light() +
+    labs(x = "Nonzero values", y = "Density", title = "Empirical density function")
+
+  acf0 <- acf(TS, plot = FALSE)
+  acf1 <- data.frame(Lag = acf0$lag, ACF = acf0$acf)
+  clim <- qnorm((1 + ci) / 2) / sqrt(acf0$n.used)
+
+  p3 <- ggplot(data = acf1, aes(x = Lag, y = ACF)) +
+    geom_hline(aes(yintercept =  clim), linetype = 2) +
+    geom_hline(aes(yintercept = -clim), linetype = 2) +
+    geom_hline(aes(yintercept = 0)) +
+    geom_segment(mapping = aes(xend = Lag, yend = 0)) +
+    labs(title = "Autocorrelation function") +
+    theme_light()
+
+  p1 / (p2 | p3)
+
+}
+
+
+# --- plot.checkTS -------------------------------------------------------------
+
+#' Plot method for \code{checkTS} objects
+#'
+#' Displays boxplots of simulated statistics against theoretical expected values
+#' for each statistic tracked by \code{\link{checkTS}}.
+#'
+#' @param x a \code{checkTS} object returned by \code{\link{checkTS}}
+#' @param ... currently unused
+#'
+#' @return a \code{ggplot} object (invisibly returned; also printed)
+#'
+#' @seealso \code{\link{checkTS}}
+#'
+#' @export
+#' @import ggplot2 data.table
+#' @method plot checkTS
+#'
+#' @examples
+#'
+#' library(CoSMoS)
+#'
+#' x <- generateTS(margdist = "burrXII",
+#'                 margarg = list(scale = 1,
+#'                                shape1 = .75,
+#'                                shape2 = .15),
+#'                 acsvalue = acs(id = "weibull",
+#'                                t = 0:30,
+#'                                scale = 10,
+#'                                shape = .75),
+#'                 n = 1000, p = 30, p0 = .25, TSn = 100)
+#'
+#' chck <- checkTS(x)
+#' plot(chck)
+#'
+plot.checkTS <- function(x, ...) {
+
+  att      <- attributes(x)
+  margdist <- att$margdist
+  margarg  <- att$margarg
+  p0       <- att$p0
+
+  variable <- value <- NULL
+  dta   <- melt(as.data.table(x, keep.rownames = TRUE), id.vars = "rn")
+  dta.e <- dta[dta$rn == "expected", ]
+  dta.s <- dta[dta$rn != "expected", ]
+
+  ggplot() +
+    geom_boxplot(data = dta.s,
+                 aes(x = variable, y = value, group = variable)) +
+    geom_point(data = dta.e,
+               aes(x = variable, y = value, group = variable),
+               size = 2, colour = "red1") +
+    facet_wrap("variable", scales = "free", nrow = 1) +
+    labs(x        = "",
+         y        = "",
+         title    = paste("Marginal =", margdist),
+         subtitle = paste(
+           paste(names(margarg), "=", margarg, collapse = "; "),
+           paste("\np0 =", p0),
+           collapse = " ")) +
+    theme_gray() +
+    theme(legend.position  = "bottom",
+          strip.background = element_rect(fill = "grey5"),
+          strip.text       = element_text(colour = "grey95"),
+          axis.title.x     = element_blank(),
+          axis.text.x      = element_blank(),
+          axis.ticks.x     = element_blank())
+}
