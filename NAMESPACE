@@ -87,8 +87,10 @@ import(utils)
 importFrom(MBA,mba.surf)
 importFrom(Matrix,nearPD)
 importFrom(Rcpp,sourceCpp)
-importFrom(grDevices,colorRampPalette)
-importFrom(grDevices,n2mfrow)
+importFrom(grDevices,
+  colorRampPalette,
+  n2mfrow
+)
 importFrom(matrixcalc,is.positive.definite)
 importFrom(pracma,distmat)
 useDynLib(CoSMoS, .registration = TRUE)
