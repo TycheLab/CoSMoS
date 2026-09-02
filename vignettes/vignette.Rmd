@@ -28,6 +28,7 @@ knitr::opts_chunk$set(eval    = TRUE,
                       fig.retina = 1,
                       warning = FALSE,
                       message = FALSE)
+library(data.table)
 library(CoSMoS)
 library(plot3D)
 library(patchwork)
