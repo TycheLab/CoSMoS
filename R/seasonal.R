@@ -87,7 +87,7 @@ seasonalACF <- function(TS, season, lag.max = 50) {
 #'
 #' @seealso \code{\link{simulateTS}}, \code{\link{analyzeTS}}
 #' @keywords internal
-#' @import data.table
+#' @importFrom data.table := .I .N .SD as.data.table copy data.table melt month rbindlist setkey year
 seasonalAR <- function(x, ACS, season = "month") {
 
   time <- data.table(time = x)
@@ -195,7 +195,7 @@ seasonalAR <- function(x, ACS, season = "month") {
 #'
 #' @rdname analyzeTS
 #' @export
-#' @import ggplot2 data.table
+#' @import ggplot2
 #'
 #' @examples
 #'

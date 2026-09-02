@@ -176,7 +176,7 @@ plot.acti <- function(x, ...) {
 #' @seealso \code{\link{generateTS}}, \code{\link{regenerateTS}}
 #'
 #' @export
-#' @import ggplot2 data.table
+#' @import ggplot2
 #' @method plot cosmosts
 #'
 #' @examples
@@ -284,7 +284,7 @@ quickTSPlot <- function(TS, ci = 0.95) {
 #' @seealso \code{\link{checkTS}}
 #'
 #' @export
-#' @import ggplot2 data.table
+#' @import ggplot2
 #' @method plot checkTS
 #'
 #' @examples

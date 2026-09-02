@@ -50,7 +50,7 @@
 #'
 #' @seealso \code{\link{regenerateTS}}, \code{\link{ARp}}, \code{\link{actpnts}}
 #'
-#' @import data.table ggplot2
+#' @import ggplot2
 #' @export
 #'
 #' @references Papalexiou, S.M. (2018). Unified theory for stochastic modelling of
